@@ -1,0 +1,78 @@
+/* Global resets, fonts, and keyframes — ported from the design reference <style> blocks. */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #1a1712;
+  color: #ece6da;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: #bf6a41;
+  color: #1a1712;
+}
+
+/* Entrance + decorative keyframes (home + case study) */
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes hairline {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Home career-journey background SVG animations */
+@keyframes driftL {
+  from { transform: translateY(-0.8%) rotate(-0.6deg); }
+  to { transform: translateY(0.8%) rotate(0.5deg); }
+}
+@keyframes driftR {
+  from { transform: translateY(0.8%) rotate(0.4deg); }
+  to { transform: translateY(-0.8%) rotate(-0.5deg); }
+}
+@keyframes svgflow { to { stroke-dashoffset: -1; } }
+@keyframes svgsignal { to { stroke-dashoffset: -1; } }
+@keyframes svgpulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+@keyframes svgsway {
+  from { transform: translateX(-4px); }
+  to { transform: translateX(5px); }
+}
+@keyframes svgsweep {
+  from { transform: rotate(-6deg); }
+  to { transform: rotate(6deg); }
+}
+@keyframes svgspin { to { transform: rotate(360deg); } }
+@keyframes svgbreathe {
+  0%, 100% { opacity: 0.16; }
+  50% { opacity: 0.28; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
