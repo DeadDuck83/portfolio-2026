@@ -77,6 +77,30 @@ a {
   50% { opacity: 0.28; }
 }
 
+/* Career-path brain halves — tuck further off-canvas on narrow screens so they
+   frame the cards instead of crowding them. */
+.brain-half--creative {
+  left: clamp(-90px, -3vw, -20px);
+}
+.brain-half--analytical {
+  right: clamp(-90px, -3vw, -20px);
+}
+@media (max-width: 720px) {
+  .brain-half--creative {
+    left: clamp(-170px, -42vw, -72px);
+  }
+  .brain-half--analytical {
+    right: clamp(-170px, -42vw, -72px);
+  }
+}
+
+/* Path-section Creative / Analytical edge labels — desktop hover only. */
+@media (hover: none), (pointer: coarse) {
+  .brain-side-label {
+    display: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *,

@@ -97,17 +97,17 @@ function BrainBackground({
     >
       <div
         ref={creativeRef}
+        className="brain-half brain-half--creative"
         style={{
           ...brainBase,
-          left: 'clamp(-90px, -3vw, -20px)',
           transformOrigin: 'left center',
         }}
       />
       <div
         ref={analyticalRef}
+        className="brain-half brain-half--analytical"
         style={{
           ...brainBase,
-          right: 'clamp(-90px, -3vw, -20px)',
           transformOrigin: 'right center',
         }}
       />

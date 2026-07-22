@@ -19,6 +19,13 @@ const SIDE_HOVER_BAND = 0.2;
 
 type BrainSide = 'creative' | 'analytical' | null;
 
+function canUseBrainHover() {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  );
+}
+
 /**
  * "The path here" — the career-journey section. A draggable / keyboard /
  * click card slider over the six roles, with two decorative background SVGs
@@ -35,8 +42,11 @@ export default function CareerSlider() {
   const creativeLabelRef = useRef<HTMLDivElement | null>(null);
   const analyticalLabelRef = useRef<HTMLDivElement | null>(null);
   const brainSideRef = useRef<BrainSide>(null);
+  const hoverEnabledRef = useRef(false);
   const vpRef = useRef<HTMLDivElement | null>(null);
   const startX = useRef(0);
+  const draggingRef = useRef(false);
+  const dragDeltaRef = useRef(0);
   const suppressClick = useRef(false);
 
   // Track viewport width for responsive card sizing.
@@ -47,6 +57,21 @@ export default function CareerSlider() {
     measure();
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
+  }, []);
+
+  useEffect(() => {
+    hoverEnabledRef.current = canUseBrainHover();
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const sync = () => {
+      hoverEnabledRef.current = mq.matches;
+      if (!mq.matches) {
+        brainSideRef.current = null;
+        if (creativeLabelRef.current) creativeLabelRef.current.style.opacity = '0';
+        if (analyticalLabelRef.current) analyticalLabelRef.current.style.opacity = '0';
+      }
+    };
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
   }, []);
 
   const clamp = (i: number) => Math.max(0, Math.min(roles.length - 1, i));
@@ -68,7 +93,11 @@ export default function CareerSlider() {
   };
 
   const onDown = (e: PointerEvent<HTMLDivElement>) => {
+    // Only primary button / touch / pen — ignore right-click etc.
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
     startX.current = e.clientX;
+    draggingRef.current = true;
+    dragDeltaRef.current = 0;
     setDragging(true);
     setDragDelta(0);
     try {
@@ -78,12 +107,14 @@ export default function CareerSlider() {
     }
   };
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
-    setDragDelta(e.clientX - startX.current);
+    if (!draggingRef.current) return;
+    const d = e.clientX - startX.current;
+    dragDeltaRef.current = d;
+    setDragDelta(d);
   };
-  const onUp = () => {
-    if (!dragging) return;
-    const d = dragDelta;
+  const onUp = (e?: PointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return;
+    const d = dragDeltaRef.current;
     suppressClick.current = Math.abs(d) > CLICK_SUPPRESS_PX;
     if (suppressClick.current) setTimeout(() => (suppressClick.current = false), 60);
     setActive((a) => {
@@ -92,8 +123,17 @@ export default function CareerSlider() {
       else if (d < -DRAG_THRESHOLD) next += 1;
       return clamp(next);
     });
+    draggingRef.current = false;
+    dragDeltaRef.current = 0;
     setDragging(false);
     setDragDelta(0);
+    if (e) {
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {
+        /* ignore */
+      }
+    }
   };
 
   const cardW = Math.max(238, Math.min(354, vw - 90));
@@ -123,6 +163,7 @@ export default function CareerSlider() {
   };
 
   const onSectionPointerMove = (e: PointerEvent<HTMLElement>) => {
+    if (!hoverEnabledRef.current) return;
     const el = sectionRef.current;
     if (!el) return;
     const { left, width } = el.getBoundingClientRect();
@@ -205,7 +246,7 @@ export default function CareerSlider() {
                 color: colors.textFaint,
               }}
             >
-              Drag · step · or tap a role
+              Swipe · step · or tap a role
             </span>
             <div style={{ display: 'flex', gap: '0.6rem' }}>
               <ArrowButton label="Previous role" glyph="←" onClick={goPrev} disabled={active === 0} />
@@ -226,13 +267,20 @@ export default function CareerSlider() {
           onKeyDown={onKey}
           onPointerDown={onDown}
           onPointerMove={onMove}
-          onPointerUp={onUp}
-          onPointerLeave={onUp}
+          onPointerUp={(e) => onUp(e)}
+          onPointerCancel={(e) => onUp(e)}
+          onPointerLeave={(e) => {
+            // Touch shouldn't end on leave (capture holds); mouse should.
+            if (e.pointerType === 'mouse') onUp(e);
+          }}
           style={{
             marginTop: 'clamp(2.5rem, 6vh, 4rem)',
             overflow: 'hidden',
             outline: 'none',
+            // Allow vertical page scroll; claim horizontal gestures for the carousel.
             touchAction: 'pan-y',
+            WebkitUserSelect: 'none',
+            userSelect: 'none',
             WebkitMaskImage:
               'linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%)',
             maskImage: 'linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%)',
@@ -349,6 +397,7 @@ function BrainSideLabel({
         userSelect: 'none',
         transition: 'opacity 0.55s ease',
       }}
+      className="brain-side-label"
     >
       {isCreative ? 'Creative' : 'Analytical'}
     </div>
