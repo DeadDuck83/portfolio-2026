@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { getCaseStudy } from '../data/caseStudies';
 import { border, colors, fonts, layout } from '../theme/tokens';
 import { useScrollProgress } from '../hooks/useScrollProgress';
@@ -67,7 +67,9 @@ export default function CaseStudy() {
         background: colors.bg,
         color: colors.text,
         fontFamily: fonts.mono,
-        overflowX: 'hidden',
+        // `clip` (not `hidden`) so this div doesn't become a scroll container
+        // and steal the sticky header's viewport anchoring.
+        overflowX: 'clip',
       }}
     >
       {/* Progress bar */}

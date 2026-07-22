@@ -26,7 +26,9 @@ export default function Home() {
         background: colors.bg,
         color: colors.text,
         fontFamily: fonts.mono,
-        overflowX: 'hidden',
+        // `clip` (not `hidden`) so this div doesn't become a scroll container
+        // and steal the sticky header's viewport anchoring.
+        overflowX: 'clip',
       }}
     >
       <Grain enabled />
