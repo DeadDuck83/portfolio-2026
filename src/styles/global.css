@@ -87,10 +87,10 @@ a {
 }
 @media (max-width: 720px) {
   .brain-half--creative {
-    left: clamp(-170px, -42vw, -72px);
+    left: clamp(-238px, -59vw, -101px);
   }
   .brain-half--analytical {
-    right: clamp(-170px, -42vw, -72px);
+    right: clamp(-238px, -59vw, -101px);
   }
 }
 
