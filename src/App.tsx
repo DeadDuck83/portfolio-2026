@@ -1,5 +1,6 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router';
 import ScrollManager from './components/ScrollManager';
+import PageTransition from './components/PageTransition';
 import Home from './pages/Home';
 import CaseStudy from './pages/CaseStudy';
 
@@ -13,11 +14,13 @@ export default function App() {
   return (
     <>
       <ScrollManager />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/work/:slug" element={<CaseStudy />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <PageTransition>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/work/:slug" element={<CaseStudy />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </PageTransition>
     </>
   );
 }

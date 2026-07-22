@@ -37,6 +37,17 @@ a {
   to { transform: scaleX(1); }
 }
 
+/* Route-change slides — the incoming page slides in, giving navigation a clear
+   spatial direction (from the right going deeper, from the left going back). */
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
 /* Home career-journey background SVG animations */
 @keyframes driftL {
   from { transform: translateY(-0.8%) rotate(-0.6deg); }
