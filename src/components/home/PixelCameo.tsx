@@ -18,6 +18,12 @@ const PEEK_THREE_QUARTERS = '-25%';
 const FIGURE_HEIGHT = 'min(54.6vh, 504px)';
 /** Fraction of figure height that sits behind the next section. */
 const SUBMERGE_FACTOR = 0.4;
+/** Eye glance distance in SVG user units (~5px of the 500-wide artboard). */
+const EYE_LOOK_PX = 5;
+const EYE_LOOK_MIN_MS = 500;
+const EYE_LOOK_MAX_MS = 3000;
+
+let cachedDerekSvg: string | null = null;
 
 function wait(ms: number, signal?: { aborted: boolean }) {
   return new Promise<void>((resolve, reject) => {
@@ -34,11 +40,22 @@ function nextFrame() {
   });
 }
 
+function randomEyeDelay() {
+  return EYE_LOOK_MIN_MS + Math.random() * (EYE_LOOK_MAX_MS - EYE_LOOK_MIN_MS);
+}
+
+async function loadDerekSvg() {
+  if (cachedDerekSvg) return cachedDerekSvg;
+  const res = await fetch('/derek-pixels.svg');
+  cachedDerekSvg = await res.text();
+  return cachedDerekSvg;
+}
+
 /**
  * Tiny camera easter egg in the hero corner. One click peeks pixel Derek in from
  * the left browser edge (50% of his width → pause → 75% → flash → exit left).
  * If the pointer moves toward him mid-sequence, he bolts left immediately.
- * Plays only once.
+ * Plays only once. Eyes on Layer_2 glance L/R on a random 1–4s cadence.
  */
 export default function PixelCameo() {
   const [spent, setSpent] = useState(false);
@@ -48,10 +65,11 @@ export default function PixelCameo() {
   const [slideMs, setSlideMs] = useState(0);
   const [bottomPx, setBottomPx] = useState(0);
 
-  const imgRef = useRef<HTMLImageElement | null>(null);
+  const figureRef = useRef<HTMLDivElement | null>(null);
   const playing = useRef(false);
   const abortRef = useRef({ aborted: false });
   const scareArmed = useRef(false);
+  const eyeTimerRef = useRef(0);
 
   const placeOnHeroBottom = () => {
     const hero = document.getElementById('top');
@@ -59,6 +77,11 @@ export default function PixelCameo() {
     const rect = hero.getBoundingClientRect();
     setBottomPx(Math.max(0, window.innerHeight - rect.bottom));
   };
+
+  useEffect(() => {
+    void loadDerekSvg();
+    return () => window.clearTimeout(eyeTimerRef.current);
+  }, []);
 
   useEffect(() => {
     if (!showFigure) return;
@@ -69,6 +92,48 @@ export default function PixelCameo() {
       window.removeEventListener('resize', placeOnHeroBottom);
       window.removeEventListener('scroll', placeOnHeroBottom);
     };
+  }, [showFigure]);
+
+  const startEyeLook = (eyes: SVGGElement) => {
+    window.clearTimeout(eyeTimerRef.current);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    eyes.style.transition = 'transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)';
+    eyes.style.transformBox = 'fill-box';
+    eyes.style.transformOrigin = 'center';
+    let lookingRight = Math.random() < 0.5;
+
+    const glance = () => {
+      lookingRight = !lookingRight;
+      eyes.style.transform = `translateX(${lookingRight ? EYE_LOOK_PX : -EYE_LOOK_PX}px)`;
+      eyeTimerRef.current = window.setTimeout(glance, randomEyeDelay());
+    };
+
+    eyes.style.transform = `translateX(${lookingRight ? EYE_LOOK_PX : -EYE_LOOK_PX}px)`;
+    eyeTimerRef.current = window.setTimeout(glance, randomEyeDelay());
+  };
+
+  const mountFigureSvg = async () => {
+    const host = figureRef.current;
+    if (!host) return;
+    const markup = await loadDerekSvg();
+    if (!figureRef.current) return;
+    figureRef.current.innerHTML = markup;
+    const svg = figureRef.current.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('aria-hidden', 'true');
+      svg.style.display = 'block';
+      svg.style.height = '100%';
+      svg.style.width = 'auto';
+      svg.style.overflow = 'visible';
+    }
+    const eyes = figureRef.current.querySelector('#Layer_2') as SVGGElement | null;
+    if (eyes) startEyeLook(eyes);
+  };
+
+  useEffect(() => {
+    if (showFigure) return;
+    window.clearTimeout(eyeTimerRef.current);
   }, [showFigure]);
 
   const scareAway = () => {
@@ -89,7 +154,7 @@ export default function PixelCameo() {
 
     const onMove = (e: PointerEvent) => {
       if (!scareArmed.current || abortRef.current.aborted) return;
-      const el = imgRef.current;
+      const el = figureRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
       // Only the top 60% is visible above #about — scare against that band.
@@ -118,6 +183,8 @@ export default function PixelCameo() {
     setSlideMs(0);
     setTx(OFF_LEFT);
     await nextFrame();
+    if (abortRef.current.aborted) return;
+    await mountFigureSvg();
     if (abortRef.current.aborted) return;
 
     scareArmed.current = true;
@@ -194,12 +261,9 @@ export default function PixelCameo() {
       </button>
 
       {showFigure && (
-        <img
-          ref={imgRef}
-          src="/derek-pixels.svg"
-          alt=""
+        <div
+          ref={figureRef}
           aria-hidden="true"
-          draggable={false}
           style={{
             position: 'fixed',
             left: 0,
