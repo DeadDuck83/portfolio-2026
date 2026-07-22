@@ -56,8 +56,8 @@ export const work: WorkItem[] = [
   },
   {
     n: '04',
-    title: 'Metagenics',
-    roleTag: 'Frontend Dev / Sr. UX · Clinic & Commerce',
+    title: 'PLMC',
+    roleTag: 'Frontend Dev / Sr. UX · Metagenics',
     description:
       'Owned UX and product-facing work for the PLMC clinic app and e-commerce platforms — a zero-to-one build — researching CMS and commerce integrations and validating designs for technical feasibility.',
     tags: ['E-commerce', 'Clinic App', 'Frontend', 'User Research'],
