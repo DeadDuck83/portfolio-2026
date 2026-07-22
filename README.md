@@ -101,11 +101,11 @@ Every figure renders a gray placeholder labeled with its required export size.
 This is a static SPA. `public/_redirects` (`/* /index.html 200`) makes
 client-side routes resolve on deep-link/refresh.
 
-**Connect the GitLab repo to Cloudflare Pages:**
+**Connect the GitHub repo to Cloudflare Pages:**
 
-1. Push this folder to GitLab (see below).
+1. Push this folder to GitHub (see below).
 2. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
-   **Connect to Git** → authorize GitLab → pick the repo.
+   **Connect to Git** → authorize GitHub → pick the repo.
 3. Build settings:
    - **Framework preset:** Vite (or None)
    - **Build command:** `npm run build`
@@ -121,9 +121,11 @@ client-side routes resolve on deep-link/refresh.
    `CNAME` (or the apex records Cloudflare specifies) pointing at the
    `*.pages.dev` target. DNS propagation + TLS issuance take a few minutes.
 
-## Push to GitLab
+## Push to GitHub
+
+Already wired up — the remote is `git@github.com:DeadDuck83/portfolio-2026.git`
+and `main` tracks `origin/main`:
 
 ```bash
-git remote add origin git@gitlab.com:<you>/<repo>.git
-git push -u origin main
+git push        # subsequent pushes
 ```
