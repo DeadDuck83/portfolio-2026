@@ -2,7 +2,7 @@
 
 Personal portfolio site (Product Manager). Built from the Claude Design handoff
 in `../reference`. Vite + React + TypeScript, deployed as a static site on
-Cloudflare Pages.
+Cloudflare Workers (static assets).
 
 ## Stack
 
@@ -96,30 +96,33 @@ Every figure renders a gray placeholder labeled with its required export size.
 (and `alt`) — the aspect ratio is already set. Sizes are in each case study's
 `figure` entries.
 
-## Deployment — Cloudflare Pages
+## Deployment — Cloudflare Workers (static assets)
 
-This is a static SPA. `public/_redirects` (`/* /index.html 200`) makes
-client-side routes resolve on deep-link/refresh.
+This is a static SPA deployed via Cloudflare Workers static assets. Config
+lives in `wrangler.jsonc`: it uploads `./dist/` and sets
+`not_found_handling: "single-page-application"` so client-side routes (e.g.
+`/work/plmc`) serve `index.html` instead of 404ing. (This replaces the Pages
+`_redirects` SPA-fallback convention.)
 
-**Connect the GitHub repo to Cloudflare Pages:**
+**Connect the GitHub repo (Workers build):**
 
-1. Push this folder to GitHub (see below).
-2. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
-   **Connect to Git** → authorize GitHub → pick the repo.
-3. Build settings:
-   - **Framework preset:** Vite (or None)
+1. Cloudflare dashboard → **Compute (Workers)** → **Create** → **Import a
+   repository** → authorize GitHub → pick `portfolio-2026`.
+2. Build settings:
+   - **Root directory:** leave default (`/`) — the repo root *is* the app.
    - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Root directory:** `portfolio` (if the repo root is `design_handoff_portfolio`)
-     — or leave blank if this `portfolio/` folder is the repo root.
-4. Deploy. Every push to the default branch triggers a rebuild.
+   - **Deploy command:** `npx wrangler deploy`
+3. No environment variables or secrets are needed (fully static, no API calls).
+4. Deploy. Every push to `main` triggers a rebuild + deploy.
+
+Deploy locally instead: `npm run build && npx wrangler deploy`.
 
 **Custom domain (GoDaddy):**
 
-1. In Cloudflare Pages → your project → **Custom domains** → add your domain.
+1. In the Worker → **Settings** → **Domains & Routes** → add your custom domain.
 2. Cloudflare shows the DNS records to create. In GoDaddy DNS, add the
-   `CNAME` (or the apex records Cloudflare specifies) pointing at the
-   `*.pages.dev` target. DNS propagation + TLS issuance take a few minutes.
+   records Cloudflare specifies (typically a `CNAME` to the `workers.dev`
+   target, or apex records). DNS propagation + TLS issuance take a few minutes.
 
 ## Push to GitHub
 

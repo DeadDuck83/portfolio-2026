@@ -1,0 +1,12 @@
+{
+  // Cloudflare Workers static-assets deploy (no server-side Worker code).
+  // `npx wrangler deploy` uploads ./dist as static assets.
+  "name": "portfolio-2026",
+  "compatibility_date": "2026-07-22",
+  "assets": {
+    "directory": "./dist/",
+    // Client-side routing: any path that isn't a real file serves index.html
+    // (200), so routes like /work/plmc load the SPA instead of 404ing.
+    "not_found_handling": "single-page-application"
+  }
+}
