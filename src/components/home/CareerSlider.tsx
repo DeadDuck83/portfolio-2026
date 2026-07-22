@@ -141,6 +141,7 @@ export default function CareerSlider() {
       onPointerLeave={() => setBrainSide(null)}
       style={{
         position: 'relative',
+        zIndex: 1,
         borderTop: `1px solid ${border.hairline}`,
         background: colors.bgAlt,
         overflow: 'hidden',

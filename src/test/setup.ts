@@ -23,3 +23,17 @@ vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);
 // jsdom leaves these unimplemented; stub them so navigation/scroll code is quiet.
 window.scrollTo = vi.fn();
 Element.prototype.scrollIntoView = vi.fn();
+
+// jsdom has no matchMedia. Default every query to "not matching" (so pointer /
+// reduced-motion feature detection resolves to the interactive path); individual
+// tests override window.matchMedia when they need a specific media state.
+window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+  matches: false,
+  media: query,
+  onchange: null,
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  addListener: vi.fn(),
+  removeListener: vi.fn(),
+  dispatchEvent: vi.fn(),
+}));
