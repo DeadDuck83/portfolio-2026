@@ -32,4 +32,11 @@ describe('CareerSlider', () => {
       pointerEvents: 'auto',
     });
   });
+
+  it('keeps Creative / Analytical side labels in the tree as ambient aria-hidden text', () => {
+    const { container } = render(<CareerSlider />);
+    const labels = container.querySelectorAll('[aria-hidden="true"]');
+    const texts = Array.from(labels).map((el) => el.textContent);
+    expect(texts).toEqual(expect.arrayContaining(['Creative', 'Analytical']));
+  });
 });

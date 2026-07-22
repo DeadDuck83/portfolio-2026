@@ -5,6 +5,7 @@ import {
   type CSSProperties,
   type KeyboardEvent,
   type PointerEvent,
+  type Ref,
 } from 'react';
 import { roles } from '../../data/roles';
 import { border, colors, fonts } from '../../theme/tokens';
@@ -13,6 +14,10 @@ import BrainBackground from './BrainBackground';
 const GAP = 20;
 const DRAG_THRESHOLD = 55;
 const CLICK_SUPPRESS_PX = 6;
+/** Far-side hover band as a fraction of section width (each edge). */
+const SIDE_HOVER_BAND = 0.2;
+
+type BrainSide = 'creative' | 'analytical' | null;
 
 /**
  * "The path here" — the career-journey section. A draggable / keyboard /
@@ -26,6 +31,10 @@ export default function CareerSlider() {
   const [dragging, setDragging] = useState(false);
   const [dragDelta, setDragDelta] = useState(0);
 
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const creativeLabelRef = useRef<HTMLDivElement | null>(null);
+  const analyticalLabelRef = useRef<HTMLDivElement | null>(null);
+  const brainSideRef = useRef<BrainSide>(null);
   const vpRef = useRef<HTMLDivElement | null>(null);
   const startX = useRef(0);
   const suppressClick = useRef(false);
@@ -101,9 +110,35 @@ export default function CareerSlider() {
 
   const cur = roles[active];
 
+  const setBrainSide = (next: BrainSide) => {
+    if (brainSideRef.current === next) return;
+    brainSideRef.current = next;
+    // Imperative opacity only — avoid React re-renders that restart the SVG CSS animations.
+    if (creativeLabelRef.current) {
+      creativeLabelRef.current.style.opacity = next === 'creative' ? '0.1' : '0';
+    }
+    if (analyticalLabelRef.current) {
+      analyticalLabelRef.current.style.opacity = next === 'analytical' ? '0.1' : '0';
+    }
+  };
+
+  const onSectionPointerMove = (e: PointerEvent<HTMLElement>) => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const { left, width } = el.getBoundingClientRect();
+    if (width <= 0) return;
+    const x = (e.clientX - left) / width;
+    if (x <= SIDE_HOVER_BAND) setBrainSide('creative');
+    else if (x >= 1 - SIDE_HOVER_BAND) setBrainSide('analytical');
+    else setBrainSide(null);
+  };
+
   return (
     <section
       id="about"
+      ref={sectionRef}
+      onPointerMove={onSectionPointerMove}
+      onPointerLeave={() => setBrainSide(null)}
       style={{
         position: 'relative',
         borderTop: `1px solid ${border.hairline}`,
@@ -112,6 +147,8 @@ export default function CareerSlider() {
       }}
     >
       <BrainBackground designW={cur.designW} devW={cur.devW} />
+      <BrainSideLabel ref={creativeLabelRef} side="creative" />
+      <BrainSideLabel ref={analyticalLabelRef} side="analytical" />
 
       <div
         style={{
@@ -274,6 +311,46 @@ export default function CareerSlider() {
         </div>
       </div>
     </section>
+  );
+}
+
+/** Ambient corner label revealed when the pointer sits on a far side of #about. */
+function BrainSideLabel({
+  side,
+  ref,
+}: {
+  side: 'creative' | 'analytical';
+  ref?: Ref<HTMLDivElement>;
+}) {
+  const isCreative = side === 'creative';
+  return (
+    <div
+      ref={ref}
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        top: 'clamp(1.25rem, 3vh, 2.5rem)',
+        ...(isCreative
+          ? { left: 'clamp(1rem, 3vw, 2.5rem)' }
+          : { right: 'clamp(1rem, 3vw, 2.5rem)' }),
+        zIndex: 2,
+        margin: 0,
+        fontFamily: isCreative ? fonts.display : fonts.mono,
+        fontSize: isCreative ? 'clamp(1.25rem, 2.4vw, 2em)' : '1em',
+        fontWeight: 400,
+        letterSpacing: isCreative ? '-0.01em' : '0.04em',
+        lineHeight: 1,
+        color: colors.text,
+        opacity: 0,
+        textShadow:
+          '0 0 24px rgba(0,0,0,0.85), 0 0 48px rgba(0,0,0,0.7), 0 0 80px rgba(0,0,0,0.55)',
+        pointerEvents: 'none',
+        userSelect: 'none',
+        transition: 'opacity 0.55s ease',
+      }}
+    >
+      {isCreative ? 'Creative' : 'Analytical'}
+    </div>
   );
 }
 
