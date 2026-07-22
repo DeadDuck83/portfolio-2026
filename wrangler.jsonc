@@ -3,6 +3,11 @@
   // `npx wrangler deploy` uploads ./dist as static assets.
   "name": "portfolio-2026",
   "compatibility_date": "2026-07-22",
+  // Keep the free *.workers.dev URL live for now. Set to false once the custom
+  // (GoDaddy) domain is attached if you want only that domain public.
+  "workers_dev": true,
+  // No per-version preview URLs — this project deploys straight to production.
+  "preview_urls": false,
   "assets": {
     "directory": "./dist/",
     // Client-side routing: any path that isn't a real file serves index.html
