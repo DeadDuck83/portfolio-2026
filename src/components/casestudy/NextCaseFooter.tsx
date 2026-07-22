@@ -1,5 +1,5 @@
 import { type MouseEvent, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import type { CaseStudy } from '../../data/caseStudies/types';
 import { border, colors, fonts } from '../../theme/tokens';
 

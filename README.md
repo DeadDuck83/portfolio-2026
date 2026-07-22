@@ -8,7 +8,10 @@ Cloudflare Pages.
 
 - **Vite** (build + dev server)
 - **React 19** + **TypeScript**
-- **React Router 7** — `/` home, `/work/:slug` case studies
+- **React Router 7** — `/` home, `/work/:slug` case studies. Imports come from
+  the unified `react-router` package (not the legacy `react-router-dom` shim),
+  which is the current v7 convention and keeps a v8 upgrade small.
+- **Vitest + React Testing Library** for component tests.
 - No CSS framework: design tokens in `src/theme/tokens.ts`, styles applied
   inline to match the design reference 1:1 (all reference styling was inline).
 
@@ -20,7 +23,26 @@ npm run dev       # http://localhost:5173
 npm run build     # type-check (tsc -b) + production build → dist/
 npm run preview   # serve the built dist/ locally
 npm run lint      # oxlint
+npm test          # run the Vitest suite once
+npm run test:watch # re-run tests on change
 ```
+
+## Testing
+
+Component tests live next to what they cover (`*.test.tsx`) and run on
+**Vitest** in a **jsdom** environment with **React Testing Library**. Setup and
+helpers are in `src/test/`:
+
+- `setup.ts` — registers jest-dom matchers, auto-cleanup, and jsdom polyfills
+  (IntersectionObserver, `scrollTo`/`scrollIntoView`).
+- `renderWithRouter.tsx` — wraps components that use router primitives.
+
+Current coverage is deliberately focused on behavior that would break silently:
+work-list link targets (internal vs. external vs. unlinked), the decision-log
+accordion, the context-panel tidy/scatter toggle, the career-slider arrow
+states, and case-study routing (slug → content, unknown slug → redirect). Test
+files are excluded from the production build (`tsconfig.app.json`) and
+type-checked separately via `tsconfig.test.json`.
 
 ## Project structure
 

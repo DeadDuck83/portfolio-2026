@@ -1,5 +1,5 @@
 import { type MouseEvent, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
 import { border, colors, fonts } from '../../theme/tokens';
 

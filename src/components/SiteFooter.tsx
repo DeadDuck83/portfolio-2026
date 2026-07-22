@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Wordmark from './Wordmark';
 import { border, colors, layout } from '../theme/tokens';
 import { accentLinkHover } from '../lib/hover';
