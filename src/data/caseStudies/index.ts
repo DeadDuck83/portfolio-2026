@@ -1,5 +1,8 @@
 import type { CaseStudy } from './types';
 import { plmc } from './plmc';
+import { sage } from './sage';
+import { bexa } from './bexa';
+import { parkerAce } from './parker-ace';
 
 /**
  * Registry of published case studies, keyed by slug.
@@ -11,6 +14,9 @@ import { plmc } from './plmc';
  * `nextCase.to`.
  */
 export const caseStudies: Record<string, CaseStudy> = {
+  [sage.slug]: sage,
+  [bexa.slug]: bexa,
+  [parkerAce.slug]: parkerAce,
   [plmc.slug]: plmc,
 };
 

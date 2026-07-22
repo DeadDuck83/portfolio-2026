@@ -235,8 +235,8 @@ export const plmc: CaseStudy = {
   },
 
   nextCase: {
-    label: 'Parker & Ace',
-    note: '— the vet one. Brewing.',
-    // No `to` yet — Parker & Ace case study is not built.
+    label: 'Sage Healthspan',
+    note: '— the longevity one.',
+    to: '/work/sage',
   },
 };

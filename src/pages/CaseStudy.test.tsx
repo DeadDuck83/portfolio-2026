@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import CaseStudy from './CaseStudy';
 import { plmc } from '../data/caseStudies/plmc';
+import { sage } from '../data/caseStudies/sage';
 
 function renderAt(path: string) {
   return render(
@@ -29,6 +30,12 @@ describe('CaseStudy page', () => {
     renderAt('/work/plmc');
     expect(screen.getByText(plmc.meta.role)).toBeInTheDocument();
     expect(screen.getByText(plmc.process.decisions[0].title)).toBeInTheDocument();
+  });
+
+  it('renders the Sage case study for its slug', () => {
+    renderAt('/work/sage');
+    expect(screen.getByText(sage.eyebrowRight)).toBeInTheDocument();
+    expect(screen.getByText(sage.headlineAccent)).toBeInTheDocument();
   });
 
   it('redirects an unknown slug back to home', () => {
