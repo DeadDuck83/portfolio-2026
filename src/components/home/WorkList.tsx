@@ -1,6 +1,7 @@
 import { type MouseEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
+import { track } from '../../lib/analytics';
 import { border, colors, fonts } from '../../theme/tokens';
 
 /**
@@ -155,10 +156,25 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
     </>
   );
 
+  const onWorkClick = () => {
+    track('WorkItemClick', {
+      title: item.title,
+      numeral: item.n,
+      ...(item.to ? { route: item.to } : {}),
+      ...(item.href ? { href: item.href } : {}),
+    });
+  };
+
   // Internal case-study route.
   if (item.to) {
     return (
-      <Link to={item.to} style={rowStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+      <Link
+        to={item.to}
+        style={rowStyle}
+        onClick={onWorkClick}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+      >
         {inner}
       </Link>
     );
@@ -171,6 +187,7 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
         target="_blank"
         rel="noopener"
         style={rowStyle}
+        onClick={onWorkClick}
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
       >
