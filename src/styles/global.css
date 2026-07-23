@@ -80,17 +80,17 @@ a {
 /* Career-path brain halves — tuck further off-canvas on narrow screens so they
    frame the cards instead of crowding them. */
 .brain-half--creative {
-  left: clamp(-90px, -3vw, -20px);
+  left: clamp(-90px, -5vw, -20px);
 }
 .brain-half--analytical {
-  right: clamp(-90px, -3vw, -20px);
+  right: clamp(-390px, -18vw, -120px);
 }
 @media (max-width: 720px) {
   .brain-half--creative {
-    left: clamp(-170px, -42vw, -72px);
+    left: calc(clamp(-238px, -59vw, -101px) - 300px);
   }
   .brain-half--analytical {
-    right: clamp(-170px, -42vw, -72px);
+    right: calc(clamp(-438px, -59vw, -101px) - 800px);
   }
 }
 

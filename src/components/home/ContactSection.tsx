@@ -51,8 +51,8 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             maxWidth: '16ch',
           }}
         >
-          Have a tangled system worth{' '}
-          <span style={{ fontStyle: 'italic', color: colors.accentBright }}>untangling?</span>
+          Got something complex worth{' '}
+          <span style={{ fontStyle: 'italic', color: colors.accentBright }}>simplifying?</span>
         </h2>
         <p
           style={{

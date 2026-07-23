@@ -77,8 +77,8 @@ export default function Hero({ openToWork = true }: { openToWork?: boolean }) {
           animation: 'floatIn 0.8s 0.08s ease both',
         }}
       >
-        I turn tangled product systems into things that{' '}
-        <span style={{ fontStyle: 'italic', color: colors.accentBright }}>actually work.</span>
+        Making complex products feel{' '}
+        <span style={{ fontStyle: 'italic', color: colors.accentBright }}>refreshingly simple.</span>
       </h1>
 
       <p
