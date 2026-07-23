@@ -232,8 +232,7 @@ export default function CareerSlider() {
                 letterSpacing: '-0.005em',
               }}
             >
-              A decade spanning graphic design, front-end engineering, and product ownership —
-              each role widening the scope. Comfortable in an architecture diagram and a design
+              A decade spanning graphic design, development, and product ownership. Each role widening my scope of work and knowledge. Comfortable in an architecture diagram and a design
               file alike.
             </p>
           </div>
