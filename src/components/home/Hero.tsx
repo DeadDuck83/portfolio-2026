@@ -1,4 +1,5 @@
 import { useEffect, useRef, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { track } from '../../lib/analytics';
 import { colors, fonts } from '../../theme/tokens';
 import { accentLinkHover, solidCtaHover } from '../../lib/hover';
 import PixelCameo from './PixelCameo';
@@ -110,7 +111,11 @@ export default function Hero({ openToWork = true }: { openToWork?: boolean }) {
           animation: 'floatIn 0.8s 0.24s ease both',
         }}
       >
-        <MagneticCta href="#contact" {...solidCtaHover}>
+        <MagneticCta
+          href="#contact"
+          onClick={() => track('GetInTouchClick')}
+          {...solidCtaHover}
+        >
           Get in touch{' '}
           <span style={{ fontFamily: fonts.display, fontSize: '1.1rem', transform: 'translateY(-1px)' }}>
             →
@@ -197,11 +202,13 @@ const ctaStyle: CSSProperties = {
 function MagneticCta({
   href,
   children,
+  onClick,
   onMouseEnter,
   onMouseLeave,
 }: {
   href: string;
   children: ReactNode;
+  onClick?: () => void;
   onMouseEnter?: (e: MouseEvent<HTMLElement>) => void;
   onMouseLeave?: (e: MouseEvent<HTMLElement>) => void;
 }) {
@@ -332,6 +339,7 @@ function MagneticCta({
         ref={btnRef}
         href={href}
         style={ctaStyle}
+        onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >

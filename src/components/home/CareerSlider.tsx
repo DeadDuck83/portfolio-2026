@@ -8,8 +8,11 @@ import {
   type Ref,
 } from 'react';
 import { roles } from '../../data/roles';
+import { track } from '../../lib/analytics';
 import { border, colors, fonts } from '../../theme/tokens';
 import BrainBackground from './BrainBackground';
+
+type PathMethod = 'arrow' | 'swipe' | 'keyboard' | 'card';
 
 const GAP = 20;
 const DRAG_THRESHOLD = 55;
@@ -75,20 +78,47 @@ export default function CareerSlider() {
   }, []);
 
   const clamp = (i: number) => Math.max(0, Math.min(roles.length - 1, i));
+
+  const trackPathMove = (from: number, to: number, method: PathMethod) => {
+    if (from === to) return;
+    track('PathNavigate', {
+      direction: to < from ? 'left' : 'right',
+      method,
+      fromIndex: from,
+      toIndex: to,
+      fromCompany: roles[from].company,
+      toCompany: roles[to].company,
+    });
+  };
+
   const goTo = (i: number) => {
     if (suppressClick.current) return;
-    setActive(clamp(i));
+    setActive((a) => {
+      const next = clamp(i);
+      trackPathMove(a, next, 'card');
+      return next;
+    });
   };
-  const goPrev = () => setActive((a) => clamp(a - 1));
-  const goNext = () => setActive((a) => clamp(a + 1));
+  const goPrev = (method: PathMethod = 'arrow') =>
+    setActive((a) => {
+      const next = clamp(a - 1);
+      trackPathMove(a, next, method);
+      return next;
+    });
+  const goNext = (method: PathMethod = 'arrow') =>
+    setActive((a) => {
+      const next = clamp(a + 1);
+      trackPathMove(a, next, method);
+      return next;
+    });
 
   const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      goPrev();
+      goPrev('keyboard');
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
-      goNext();
+      goNext('keyboard');
     }
   };
 
@@ -121,7 +151,9 @@ export default function CareerSlider() {
       let next = a;
       if (d > DRAG_THRESHOLD) next -= 1;
       else if (d < -DRAG_THRESHOLD) next += 1;
-      return clamp(next);
+      next = clamp(next);
+      trackPathMove(a, next, 'swipe');
+      return next;
     });
     draggingRef.current = false;
     dragDeltaRef.current = 0;
