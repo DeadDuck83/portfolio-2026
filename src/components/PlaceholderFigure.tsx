@@ -20,6 +20,8 @@ export default function PlaceholderFigure({
   alt?: string;
 }) {
   const [hover, setHover] = useState(false);
+  const imageSrc = src ?? figure.src;
+  const imageAlt = alt ?? figure.alt ?? figure.innerLabel;
 
   const blockStyle: CSSProperties = {
     position: 'relative',
@@ -42,11 +44,11 @@ export default function PlaceholderFigure({
   return (
     <figure style={{ margin: 0 }}>
       <div style={blockStyle} {...hoverProps}>
-        {src ? (
+        {imageSrc ? (
           <img
-            src={src}
-            alt={alt ?? figure.innerLabel}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            src={imageSrc}
+            alt={imageAlt}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
           />
         ) : (
           <>

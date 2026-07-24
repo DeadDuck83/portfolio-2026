@@ -20,6 +20,10 @@ export interface Figure {
   hoverLift?: boolean;
   /** Optional caption rendered beneath the figure. */
   caption?: FigureCaption;
+  /** Final image path under /public when the asset is ready. */
+  src?: string;
+  /** Accessible alt text; defaults to `innerLabel` when omitted. */
+  alt?: string;
 }
 
 export interface FigureCaption {

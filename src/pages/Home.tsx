@@ -10,8 +10,9 @@ import { colors, fonts } from '../theme/tokens';
 
 /**
  * Home page: hero → career journey → selected work → contact → footer.
- * Content toggles (openToWork, showResume, grain) live here as simple flags —
- * flip them to hide the "open to work" pill, the résumé button, or the grain.
+ * Content toggles (showResume, grain) live here as simple flags —
+ * flip them to hide the résumé button or the grain.
+ * Résumé URL lives in `src/data/site.ts`.
  */
 export default function Home() {
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function Home() {
     >
       <Grain enabled />
       <SiteHeader />
-      <Hero openToWork />
+      <Hero />
       <CareerSlider />
       <WorkList />
       <ContactSection showResume />

@@ -124,9 +124,11 @@ export const plmc: CaseStudy = {
     figures: [
       {
         placeholder: 'Fig. A',
-        dims: '2400 × 1400',
-        aspect: '12/7',
+        dims: '1024 × 423',
+        aspect: '1024/423',
         innerLabel: 'Data-flow / visit journey map',
+        src: '/case-studies/plmc/process-visit-journey.png',
+        alt: 'PLMC visit journey service blueprint across vitals through comprehensive review',
         caption: {
           tag: 'FIG. A',
           desc: 'Every source, every hand-off, mapped against the moment a clinician actually needs it.',
@@ -134,9 +136,11 @@ export const plmc: CaseStudy = {
       },
       {
         placeholder: 'Fig. B',
-        dims: '1600 × 1200',
-        aspect: '4/3',
+        dims: '1010 × 758',
+        aspect: '1010/758',
         innerLabel: 'Early sketches / whiteboard',
+        src: '/case-studies/plmc/process-whiteboard.png',
+        alt: 'Whiteboard sketch of the PLMC visit flow with red annotations for errors and wait times',
         caption: {
           tag: 'FIG. B',
           desc: 'The whiteboard phase — first layout died here, cheaply.',
@@ -144,12 +148,14 @@ export const plmc: CaseStudy = {
       },
       {
         placeholder: 'Fig. C',
-        dims: '1600 × 1200',
-        aspect: '4/3',
-        innerLabel: 'Mid-fi wireframes',
+        dims: '1010 × 758',
+        aspect: '1010/758',
+        innerLabel: 'Session journey map',
+        src: '/case-studies/plmc/process-session-map.png',
+        alt: 'Session 1 visit journey frame mapping patient display, examiner iPad, and PLMx data',
         caption: {
           tag: 'FIG. C',
-          desc: 'Wireframes annotated with the integration payload each region draws from.',
+          desc: 'Patient display, examiner iPad, and PLMx — annotated with what each layer does while blood runs in the background.',
         },
       },
     ],

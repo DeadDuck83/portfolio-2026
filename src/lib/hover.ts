@@ -22,7 +22,7 @@ export function accentLinkHover(rest: string) {
 /** Outlined CTA: tinted background + accent-tint text on hover. */
 export const outlinedCtaHover = {
   onMouseEnter: (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = 'rgba(191,106,65,0.14)';
+    e.currentTarget.style.background = 'rgba(132,137,69,0.14)';
     e.currentTarget.style.color = colors.accentTint;
   },
   onMouseLeave: (e: MouseEvent<HTMLElement>) => {
