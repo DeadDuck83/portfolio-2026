@@ -1,5 +1,7 @@
 import { border, colors, fonts } from '../../theme/tokens';
+import EmailLink from '../EmailLink';
 import { outlinedCtaHover, solidCtaHover } from '../../lib/hover';
+import { RESUME_URL } from '../../data/site';
 
 const outlinedCta = {
   display: 'inline-flex',
@@ -16,9 +18,11 @@ const outlinedCta = {
 /**
  * Contact section — eyebrow, serif headline with an italic accent word, short
  * paragraph, and CTA row (solid email, outlined LinkedIn, optional Résumé).
- * The résumé href is a stub until the file is added.
+ * Résumé opens the Google Doc share link from `RESUME_URL` when set.
  */
 export default function ContactSection({ showResume = true }: { showResume?: boolean }) {
+  const resumeHref = RESUME_URL.trim();
+  const showResumeLink = showResume && Boolean(resumeHref);
   return (
     <section
       id="contact"
@@ -51,8 +55,8 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             maxWidth: '16ch',
           }}
         >
-          Got something complex worth{' '}
-          <span style={{ fontStyle: 'italic', color: colors.accentBright }}>simplifying?</span>
+          Got a prpoduct that needs{' '}
+          <span style={{ fontStyle: 'italic', color: colors.accentBright }}>focus?</span>
         </h2>
         <p
           style={{
@@ -75,8 +79,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             marginTop: 'clamp(2.2rem, 6vh, 3.2rem)',
           }}
         >
-          <a
-            href="mailto:moore8577@gmail.com"
+          <EmailLink
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -92,7 +95,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             {...solidCtaHover}
           >
             moore8577@gmail.com
-          </a>
+          </EmailLink>
           <a
             href="https://linkedin.com/in/derekjmoore1"
             target="_blank"
@@ -102,9 +105,15 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
           >
             LinkedIn
           </a>
-          {showResume && (
-            <a href="#" style={outlinedCta} {...outlinedCtaHover}>
-              Résumé ↓
+          {showResumeLink && (
+            <a
+              href={resumeHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={outlinedCta}
+              {...outlinedCtaHover}
+            >
+              Résumé ↗
             </a>
           )}
         </div>

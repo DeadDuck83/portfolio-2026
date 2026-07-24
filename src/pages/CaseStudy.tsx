@@ -173,7 +173,7 @@ export default function CaseStudy() {
                 gap: '1rem',
                 alignItems: 'baseline',
                 padding: '1.1rem 1.3rem',
-                border: '1px dashed rgba(191,106,65,0.45)',
+                border: '1px dashed rgba(132,137,69,0.45)',
                 animation: 'floatIn 0.8s 0.24s ease both',
               }}
             >

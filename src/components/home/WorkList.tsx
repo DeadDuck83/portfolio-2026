@@ -8,6 +8,7 @@ import { border, colors, fonts } from '../../theme/tokens';
  * "Selected work" — four full-width rows (numeral · title/desc/tags · date).
  * Rows link externally, to an internal case study, or nowhere yet. Hovering a
  * row tints its background and shifts the numeral to the accent color.
+ * On mobile, numeral + end label stack above the body so copy can use full width.
  */
 export default function WorkList() {
   return (
@@ -66,6 +67,7 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
   const rowStyle = {
     display: 'grid',
     gridTemplateColumns: '3.5rem 1fr auto',
+    gridTemplateAreas: '"numeral body end"',
     gap: 'clamp(1rem, 4vw, 3rem)',
     alignItems: 'start' as const,
     padding: 'clamp(2rem, 5vh, 3rem) 0',
@@ -74,27 +76,45 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
   };
 
   const onEnter = (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = 'rgba(191,106,65,0.05)';
-    const numeral = e.currentTarget.querySelector('span');
+    e.currentTarget.style.background = 'rgba(132,137,69,0.05)';
+    const numeral = e.currentTarget.querySelector('.work-row__numeral');
     if (numeral) (numeral as HTMLElement).style.color = colors.accentBright;
   };
   const onLeave = (e: MouseEvent<HTMLElement>) => {
     e.currentTarget.style.background = 'transparent';
-    const numeral = e.currentTarget.querySelector('span');
+    const numeral = e.currentTarget.querySelector('.work-row__numeral');
     if (numeral) (numeral as HTMLElement).style.color = colors.textMuted;
   };
 
   const inner: ReactNode = (
     <>
-      <span style={{ fontFamily: fonts.display, fontSize: '1.5rem', color: colors.textMuted }}>
+      <span
+        className="work-row__numeral"
+        style={{
+          gridArea: 'numeral',
+          fontFamily: fonts.display,
+          fontSize: '1.5rem',
+          color: colors.textMuted,
+        }}
+      >
         {item.n}
       </span>
-      <div style={{ minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}>
-          <span style={{ fontFamily: fonts.display, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', lineHeight: 1.05 }}>
+      <div className="work-row__body" style={{ gridArea: 'body', minWidth: 0 }}>
+        <div
+          className="work-row__title-row"
+          style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}
+        >
+          <span
+            style={{
+              fontFamily: fonts.display,
+              fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+              lineHeight: 1.05,
+            }}
+          >
             {item.title}
           </span>
           <span
+            className="work-row__role"
             style={{
               fontSize: '0.66rem',
               letterSpacing: '0.14em',
@@ -106,6 +126,7 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
           </span>
         </div>
         <p
+          className="work-row__desc"
           style={{
             maxWidth: '60ch',
             margin: '0.9rem 0 0',
@@ -116,7 +137,10 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
         >
           {item.description}
         </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
+        <div
+          className="work-row__tags"
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}
+        >
           {item.tags.map((t) => (
             <span
               key={t}
@@ -135,7 +159,9 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
         </div>
       </div>
       <span
+        className="work-row__end"
         style={{
+          gridArea: 'end',
           fontSize: '0.68rem',
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
@@ -170,6 +196,7 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
     return (
       <Link
         to={item.to}
+        className="work-row"
         style={rowStyle}
         onClick={onWorkClick}
         onMouseEnter={onEnter}
@@ -186,6 +213,7 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
         href={item.href}
         target="_blank"
         rel="noopener"
+        className="work-row"
         style={rowStyle}
         onClick={onWorkClick}
         onMouseEnter={onEnter}
@@ -197,7 +225,12 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
   }
   // Not yet linked.
   return (
-    <div style={rowStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+    <div
+      className="work-row"
+      style={rowStyle}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
       {inner}
     </div>
   );

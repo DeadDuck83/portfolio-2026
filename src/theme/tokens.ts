@@ -14,10 +14,10 @@ export const colors = {
   textMuted: '#8f8674', // labels, eyebrows
   textFaint: '#6f6858', // metadata, italic asides
   textFaintest: '#5c5648', // inactive card tags
-  accent: '#bf6a41', // buttons, rules, dots
-  accentBright: '#d67f4f', // italic emphasis, hover, chapter numerals
-  accentTint: '#e7b596', // active nav, outlined-CTA text
-  success: '#7fae6b', // "open to work" dot
+  accent: '#848945', // buttons, rules, dots (warm olive)
+  accentBright: '#9da767', // italic emphasis, hover, chapter numerals
+  accentTint: '#b0b48a', // active nav, outlined-CTA text
+  success: '#5a9a6e', // "open to work" — soft forest, not neon
   placeholderBg: '#c9c7c2', // image placeholder fill
   placeholderX: '#b0aea9', // placeholder corner-to-corner X
   placeholderDims: '#55524c', // placeholder pixel dims
@@ -32,9 +32,9 @@ export const border = {
   hairlineFaint: 'rgba(236,230,218,0.06)',
   chip: 'rgba(236,230,218,0.22)',
   menuButton: 'rgba(236,230,218,0.18)',
-  accentSoft: 'rgba(191,106,65,0.4)',
-  accentMed: 'rgba(191,106,65,0.5)',
-  accentStrong: 'rgba(191,106,65,0.6)',
+  accentSoft: 'rgba(132,137,69,0.4)',
+  accentMed: 'rgba(132,137,69,0.5)',
+  accentStrong: 'rgba(132,137,69,0.6)',
   gridBg: 'rgba(236,230,218,0.1)',
   gridBgFaint: 'rgba(236,230,218,0.08)',
 } as const;

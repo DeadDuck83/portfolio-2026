@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import Wordmark from '../Wordmark';
+import EmailLink from '../EmailLink';
 import { border, colors } from '../../theme/tokens';
 import { outlinedCtaHover } from '../../lib/hover';
 
@@ -59,8 +60,7 @@ export default function CaseStudyHeader({
           >
             ← All work
           </Link>
-          <a
-            href="mailto:moore8577@gmail.com"
+          <EmailLink
             style={{
               fontSize: '0.7rem',
               letterSpacing: '0.18em',
@@ -73,7 +73,7 @@ export default function CaseStudyHeader({
             {...outlinedCtaHover}
           >
             Contact
-          </a>
+          </EmailLink>
         </nav>
       </div>
 

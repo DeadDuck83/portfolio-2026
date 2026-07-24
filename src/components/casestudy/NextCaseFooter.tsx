@@ -10,7 +10,7 @@ import { border, colors, fonts } from '../../theme/tokens';
  */
 export default function NextCaseFooter({ nextCase }: { nextCase: CaseStudy['nextCase'] }) {
   const onEnter = (e: MouseEvent<HTMLElement>) =>
-    (e.currentTarget.style.background = 'rgba(191,106,65,0.05)');
+    (e.currentTarget.style.background = 'rgba(132,137,69,0.05)');
   const onLeave = (e: MouseEvent<HTMLElement>) => (e.currentTarget.style.background = 'transparent');
 
   const inner: ReactNode = (

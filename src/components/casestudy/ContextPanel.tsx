@@ -102,7 +102,7 @@ export default function ContextPanel({
             padding: '0.6rem 1rem',
             cursor: 'pointer',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(191,106,65,0.14)')}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(132,137,69,0.14)')}
           onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
         >
           {herded ? '← Scatter it again' : 'Tidy it up →'}

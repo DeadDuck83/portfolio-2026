@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import Wordmark from './Wordmark';
+import EmailLink from './EmailLink';
 import { border, colors, layout } from '../theme/tokens';
 import { accentLinkHover } from '../lib/hover';
 
@@ -54,13 +55,9 @@ export default function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'c
               <Link to="/#work" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
                 All work
               </Link>
-              <a
-                href="mailto:moore8577@gmail.com"
-                style={linkStyle}
-                {...accentLinkHover(colors.textMuted)}
-              >
+              <EmailLink style={linkStyle} {...accentLinkHover(colors.textMuted)}>
                 Contact
-              </a>
+              </EmailLink>
             </>
           )}
         </div>

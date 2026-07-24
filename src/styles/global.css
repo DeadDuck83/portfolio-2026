@@ -23,7 +23,7 @@ a {
 }
 
 ::selection {
-  background: #bf6a41;
+  background: #848945;
   color: #1a1712;
 }
 
@@ -92,6 +92,132 @@ a {
   .brain-half--analytical {
     right: calc(clamp(-438px, -59vw, -101px) - 800px);
   }
+
+  /* Selected work — stack numeral + end label above body so copy uses full width. */
+  .work-row {
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      'numeral end'
+      'body body' !important;
+    gap: 0.65rem 1rem !important;
+    padding: 1.6rem 0 !important;
+  }
+  .work-row__numeral {
+    font-size: 1.15rem !important;
+    line-height: 1.2;
+  }
+  .work-row__end {
+    justify-self: end;
+    align-self: center;
+  }
+  .work-row__title-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem !important;
+  }
+  .work-row__desc {
+    max-width: none !important;
+    margin-top: 0.7rem !important;
+    font-size: 0.84rem !important;
+    line-height: 1.55 !important;
+  }
+  .work-row__tags {
+    margin-top: 0.75rem !important;
+    gap: 0.4rem !important;
+  }
+}
+
+/* Hero — statement-led. Quiet role signature + bare availability footnote. */
+.hero__grid {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 46rem;
+}
+
+.hero__meta {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 1.1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  color: #8f8674;
+  animation: floatIn 0.65s ease both;
+}
+
+.hero__meta-sep {
+  margin: 0 0.45em;
+  color: #6f6858;
+}
+
+.hero__title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 7.5vw, 6.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  margin: 0;
+  max-width: 14ch;
+  color: #ece6da;
+  overflow: visible;
+  animation: floatIn 0.85s 0.06s ease both;
+}
+
+@media (max-width: 720px) {
+  /* Must follow the base .hero__title rule or the desktop clamp wins */
+  .hero__title {
+    font-size: clamp(3.35rem, 11.5vw, 4.4rem);
+    max-width: 12ch;
+  }
+}
+
+.hero__title-canvas-host {
+  display: block;
+  width: 100%;
+  min-height: 1.1em;
+  overflow: visible;
+}
+
+.hero__title-canvas {
+  display: block;
+  max-width: none;
+}
+
+.hero__body {
+  max-width: 42ch;
+  margin: 1.05rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #b3a996;
+  animation: floatIn 0.8s 0.14s ease both;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1.6rem;
+  margin-top: clamp(2.4rem, 7vh, 3.8rem);
+  animation: floatIn 0.8s 0.22s ease both;
+}
+
+.hero__secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b3a996;
+  border-bottom: 1px solid rgba(179, 169, 150, 0.35);
+  padding: 0.55rem 0 0.2rem;
+}
+
+.hero a:focus-visible {
+  outline: 2px solid #9da767;
+  outline-offset: 3px;
 }
 
 /* Path-section Creative / Analytical edge labels — desktop hover only. */
