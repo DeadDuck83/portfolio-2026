@@ -1,7 +1,7 @@
 import { border, colors, fonts } from '../../theme/tokens';
 import EmailLink from '../EmailLink';
 import { outlinedCtaHover, solidCtaHover } from '../../lib/hover';
-import { RESUME_URL } from '../../data/site';
+import { CONTACT_EMAIL, RESUME_URL } from '../../data/site';
 
 const outlinedCta = {
   display: 'inline-flex',
@@ -17,7 +17,7 @@ const outlinedCta = {
 
 /**
  * Contact section — eyebrow, serif headline with an italic accent word, short
- * paragraph, and CTA row (solid email, outlined LinkedIn, optional Résumé).
+ * paragraph, and CTA row (copy-email, outlined LinkedIn, optional Résumé).
  * Résumé opens the Google Doc share link from `RESUME_URL` when set.
  */
 export default function ContactSection({ showResume = true }: { showResume?: boolean }) {
@@ -55,7 +55,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             maxWidth: '16ch',
           }}
         >
-          Got a prpoduct that needs{' '}
+          Got a product that needs{' '}
           <span style={{ fontStyle: 'italic', color: colors.accentBright }}>focus?</span>
         </h2>
         <p
@@ -67,8 +67,8 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             color: colors.textBody,
           }}
         >
-          I'm always up for a good product puzzle. The fastest way to reach me is email — I read
-          everything.
+          I'm always up for a good product puzzle. The fastest way to reach me is email — click
+          the address to copy it.
         </p>
 
         <div
@@ -94,7 +94,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             }}
             {...solidCtaHover}
           >
-            moore8577@gmail.com
+            {CONTACT_EMAIL}
           </EmailLink>
           <a
             href="https://linkedin.com/in/derekjmoore1"

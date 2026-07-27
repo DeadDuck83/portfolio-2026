@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   captureFirstTouchAttribution,
   getAttributionLabel,
-  getMailtoHref,
   SOURCE_LABELS,
 } from './attribution';
 
@@ -30,20 +29,11 @@ describe('attribution', () => {
     expect(getAttributionLabel()).toBe('Indeed');
   });
 
-  it('builds mailto with subject only when no source', () => {
-    expect(getMailtoHref()).toBe(
-      `mailto:moore8577@gmail.com?subject=${encodeURIComponent(
-        'You are exactly who I was looking for',
-      )}`,
-    );
-  });
-
-  it('adds a source body when attribution is present', () => {
-    captureFirstTouchAttribution('?greenhouse');
-    const href = getMailtoHref();
-    expect(href).toContain(encodeURIComponent('You are exactly who I was looking for'));
-    expect(href).toContain(
-      encodeURIComponent(`ahh, I see you found me from ${SOURCE_LABELS.greenhouse}`),
-    );
+  it('maps every known source key to a label', () => {
+    for (const [key, label] of Object.entries(SOURCE_LABELS)) {
+      sessionStorage.clear();
+      captureFirstTouchAttribution(`?${key}`);
+      expect(getAttributionLabel()).toBe(label);
+    }
   });
 });

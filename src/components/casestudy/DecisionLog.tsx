@@ -6,9 +6,17 @@ import { border, colors, fonts } from '../../theme/tokens';
  * The 03 Process decision log: accordion rows (numeral, serif title, rotating
  * chevron). One open at a time — opening another closes the first; clicking the
  * open one closes it. First row (index 0) is open initially. Each body is a
- * two-column "The call" / "What it cost" grid.
+ * two-column call / payoff (or cost) grid.
  */
-export default function DecisionLog({ decisions }: { decisions: Decision[] }) {
+export default function DecisionLog({
+  decisions,
+  choiceLabel = 'The call',
+  costLabel = 'What it cost',
+}: {
+  decisions: Decision[];
+  choiceLabel?: string;
+  costLabel?: string;
+}) {
   const [open, setOpen] = useState(0);
 
   return (
@@ -63,7 +71,7 @@ export default function DecisionLog({ decisions }: { decisions: Decision[] }) {
             <div
               style={{
                 overflow: 'hidden',
-                maxHeight: isOpen ? 420 : 0,
+                maxHeight: isOpen ? 900 : 0,
                 opacity: isOpen ? 1 : 0,
                 transition: 'max-height 0.55s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease',
               }}
@@ -76,8 +84,8 @@ export default function DecisionLog({ decisions }: { decisions: Decision[] }) {
                   padding: '0.2rem 0 1.7rem',
                 }}
               >
-                <Column label="The call" text={d.choice} />
-                <Column label="What it cost" text={d.cost} />
+                <Column label={choiceLabel} text={d.choice} />
+                <Column label={costLabel} text={d.cost} />
               </div>
             </div>
           </div>

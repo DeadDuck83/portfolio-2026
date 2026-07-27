@@ -307,7 +307,11 @@ export default function CaseStudy() {
             <p style={{ ...bodyP, margin: '1.4rem 0 0' }}>{cs.process.paragraph}</p>
           </Reveal>
           <Reveal style={{ marginTop: 'clamp(2.2rem, 5vh, 3.2rem)' }}>
-            <DecisionLog decisions={cs.process.decisions} />
+            <DecisionLog
+              decisions={cs.process.decisions}
+              choiceLabel={cs.process.decisionChoiceLabel}
+              costLabel={cs.process.decisionCostLabel}
+            />
           </Reveal>
 
           {/* Fig. A (prominent) */}

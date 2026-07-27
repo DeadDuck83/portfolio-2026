@@ -1,8 +1,6 @@
-const EMAIL = 'moore8577@gmail.com';
-const SUBJECT = 'You are exactly who I was looking for';
 const STORAGE_KEY = 'portfolio_attribution_source';
 
-/** First-touch acquisition flags → display label in the mailto body. */
+/** First-touch acquisition flags → display label. */
 export const SOURCE_LABELS: Record<string, string> = {
   linkedin: 'LinkedIn',
   wellfound: 'WellFound',
@@ -13,7 +11,7 @@ export const SOURCE_LABELS: Record<string, string> = {
 /**
  * On first load of a session, remember how the visitor arrived
  * (`?linkedin`, `?utm_source=linkedin`, etc.). Later navigations keep the
- * original source so mailto personalization still works after they click around.
+ * original source for analytics / future personalization.
  */
 export function captureFirstTouchAttribution(
   search: string = typeof window !== 'undefined' ? window.location.search : '',
@@ -53,16 +51,4 @@ export function getAttributionSource(): string | null {
 export function getAttributionLabel(): string | null {
   const key = getAttributionSource();
   return key ? (SOURCE_LABELS[key] ?? null) : null;
-}
-
-/** Shared mailto with witty subject; body only when a known source was captured. */
-export function getMailtoHref(email: string = EMAIL): string {
-  const parts = [`subject=${encodeURIComponent(SUBJECT)}`];
-  const label = getAttributionLabel();
-  if (label) {
-    parts.push(
-      `body=${encodeURIComponent(`ahh, I see you found me from ${label}`)}`,
-    );
-  }
-  return `mailto:${email}?${parts.join('&')}`;
 }
