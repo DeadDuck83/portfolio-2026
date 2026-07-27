@@ -124,6 +124,10 @@ export interface CaseStudy {
     chapter: ChapterMeta;
     h2: string;
     paragraph: string;
+    /** Override for the left decision column label. Defaults to "The call". */
+    decisionChoiceLabel?: string;
+    /** Override for the right decision column label. Defaults to "What it cost". */
+    decisionCostLabel?: string;
     decisions: Decision[];
     figures: Figure[];
   };

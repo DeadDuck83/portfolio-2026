@@ -95,43 +95,44 @@ export const plmc: CaseStudy = {
     h2: 'Sat in on visits, mapped every data source to the moment it’s needed — then made four calls that shaped everything.',
     paragraph:
       'Because I was also the one building it, every sketch was checked against the real integration payloads before it earned a second iteration. Slower ideation, zero "we can’t build that" later.',
+    decisionCostLabel: 'The payoff',
     decisions: [
       {
-        title: 'One scroll, not tabs.',
+        title: 'Five functions, not fifty tests.',
         choice:
-          'A single vertical summary over a tabbed dashboard. Prep is linear reading, not lookup — a clinician shouldn’t have to remember where anything lives.',
-        cost: 'Fought information density the whole way. Every module had to earn its vertical space or get collapsed.',
+          'Turned a sprawling range of inputs (blood panels, cognitive quizzes, balance and strength tests, functional-health clinicals, behavioral habits) into five clear functions any doctor or patient could read at a glance: Physical, Cognitive, Emotional, Metabolic, Behavioral.',
+        cost: 'Every practitioner brought strong, well-earned opinions on what belonged where. My job was to hold the whole conversation, find the common ground, and hand both sides one shared language they trusted. It became the foundation the entire scoring system still runs on.',
       },
       {
-        title: 'Plot ranges, not numbers.',
+        title: 'Eight steps, one payoff screen.',
         choice:
-          'Every value drawn against its healthy range — a shape you read before a number you parse. This is what made the screen work for patients.',
-        cost: 'Real engineering cost: reference ranges per data type, per lab, per demographic. Worth every hour.',
+          'Designed every step (history, biometrics, motor skills) to feed a single culminating summary, so the visit builds toward one rewarding moment instead of scattering into disconnected screens.',
+        cost: 'The real win was keeping that summary effortless to read even as eight steps of data poured into it. Smart drill-downs let the top stay clean and scannable while every detail stayed one tap away.',
       },
       {
-        title: 'Feasibility at the sketch.',
+        title: 'Let them watch it arrive.',
         choice:
-          'Every sketch reviewed against the real integration payloads before iteration two. If the data couldn’t arrive, the layout didn’t survive.',
-        cost: 'Slower ideation, and some pretty concepts died early. In exchange: zero “we can’t build that” rework.',
+          'Populated results live as the lab returned them, letting patients see their own numbers land in real time rather than waiting for a finished dashboard.',
+        cost: "Research showed patients so captivated watching their data appear that nurses noticed they'd never look away from the screen. That pull was the signal, so I leaned into the live reveal and built a richer, more engaging screen experience around it.",
       },
       {
-        title: 'Two reading levels, one layout.',
+        title: 'Sequenced the visit so the data compounds.',
         choice:
-          'Clinical labels with plain-language subtitles, instead of a separate simplified patient view.',
-        cost: 'Denser rows and harder copywriting — but one codebase, and both people point at the same pixel.',
+          'Ordered all eight steps to calm the patient and feed the finale at once. Vitals under a meditation video, a quick blood draw as it ends for early processing, then profile, history, biometrics, and motor skills while the panel runs in the background. By the summary screen, every data point has arrived right on time, and patients leave with their protocol supplements in hand.',
+        cost: 'This was design beyond the screen. Lab timing, room flow, and staff handoffs all choreographed so the data lands exactly when it’s needed and no one makes a second trip.',
       },
     ],
     figures: [
       {
         placeholder: 'Fig. A',
-        dims: '1024 × 423',
-        aspect: '1024/423',
-        innerLabel: 'Data-flow / visit journey map',
-        src: '/case-studies/plmc/process-visit-journey.png',
-        alt: 'PLMC visit journey service blueprint across vitals through comprehensive review',
+        dims: '2480 × 1480',
+        aspect: '2480/1480',
+        innerLabel: 'Patient TV + examiner iPad — live screens',
+        src: '/case-studies/plmc/step3_plmc_2x.jpg',
+        alt: 'PLMC patient TV and examiner iPad screens for Motor Skills and Biometric Screening, with sticky notes about cognitive load and design review',
         caption: {
           tag: 'FIG. A',
-          desc: 'Every source, every hand-off, mapped against the moment a clinician actually needs it.',
+          desc: 'Two surfaces, one visit — the 60″ patient display keeps cognitive load low while the examiner iPad captures what the scribe misses.',
         },
       },
       {
