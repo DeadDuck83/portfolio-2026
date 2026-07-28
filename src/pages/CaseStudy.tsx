@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import { getCaseStudy } from '../data/caseStudies';
+import { collectCaseStudyImages } from '../data/caseStudies/figures';
 import { border, colors, fonts, layout } from '../theme/tokens';
 import { useScrollProgress } from '../hooks/useScrollProgress';
 import Grain from '../components/Grain';
@@ -14,6 +15,7 @@ import DecisionLog from '../components/casestudy/DecisionLog';
 import StatBand from '../components/casestudy/StatBand';
 import NextCaseFooter from '../components/casestudy/NextCaseFooter';
 import Reveal from '../components/casestudy/Reveal';
+import ImageCollage from '../components/casestudy/ImageCollage';
 
 // Shared section-level style fragments.
 const sectionInner = {
@@ -42,12 +44,16 @@ export default function CaseStudy() {
   const cs = getCaseStudy(slug);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { barRef, chapter } = useScrollProgress(rootRef);
+  const [collageOpen, setCollageOpen] = useState(false);
+  const closeCollage = useCallback(() => setCollageOpen(false), []);
 
   useEffect(() => {
     if (cs) document.title = `${cs.eyebrowRight} — Derek Moore`;
   }, [cs]);
 
   if (!cs) return <Navigate to="/" replace />;
+
+  const collageImages = collectCaseStudyImages(cs);
 
   const chapters: Chapter[] = [
     { id: 'c0', label: '00 Brief' },
@@ -188,9 +194,39 @@ export default function CaseStudy() {
               >
                 TL;DR
               </span>
-              <p style={{ margin: 0, fontSize: '0.76rem', lineHeight: 1.7, color: colors.textBody }}>
-                {cs.tldr}
-              </p>
+              <div style={{ minWidth: 0 }}>
+                <p style={{ margin: 0, fontSize: '0.76rem', lineHeight: 1.7, color: colors.textBody }}>
+                  {cs.tldr}
+                </p>
+                {collageImages.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setCollageOpen(true)}
+                    style={{
+                      display: 'inline',
+                      margin: '0.55rem 0 0',
+                      padding: 0,
+                      border: 'none',
+                      background: 'none',
+                      fontFamily: fonts.display,
+                      fontStyle: 'italic',
+                      fontSize: '0.95rem',
+                      lineHeight: 1.4,
+                      color: colors.accentBright,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = colors.accentTint;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = colors.accentBright;
+                    }}
+                  >
+                    Show me the images →
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -346,7 +382,7 @@ export default function CaseStudy() {
           <Reveal
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: 1,
               marginTop: 'clamp(2rem, 5vh, 3rem)',
               background: border.gridBg,
@@ -358,7 +394,27 @@ export default function CaseStudy() {
                 <div style={{ fontFamily: fonts.display, fontSize: '1.2rem', color: colors.accentBright }}>
                   {pr.numeral}
                 </div>
-                <div style={{ fontSize: '0.78rem', lineHeight: 1.65, color: colors.textBody, marginTop: '0.6rem' }}>
+                {pr.title && (
+                  <div
+                    style={{
+                      fontFamily: fonts.display,
+                      fontSize: '1.05rem',
+                      lineHeight: 1.3,
+                      color: colors.text,
+                      marginTop: '0.55rem',
+                    }}
+                  >
+                    {pr.title}
+                  </div>
+                )}
+                <div
+                  style={{
+                    fontSize: '0.78rem',
+                    lineHeight: 1.65,
+                    color: colors.textBody,
+                    marginTop: pr.title ? '0.55rem' : '0.6rem',
+                  }}
+                >
                   {pr.text}
                 </div>
               </div>
@@ -418,6 +474,14 @@ export default function CaseStudy() {
 
       <NextCaseFooter nextCase={cs.nextCase} />
       <SiteFooter variant="case" />
+
+      {collageOpen && (
+        <ImageCollage
+          title={cs.eyebrowRight}
+          figures={collageImages}
+          onClose={closeCollage}
+        />
+      )}
     </div>
   );
 }
