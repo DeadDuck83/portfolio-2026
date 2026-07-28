@@ -48,7 +48,13 @@ export default function PlaceholderFigure({
           <img
             src={imageSrc}
             alt={imageAlt}
-            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: figure.objectFit ?? 'contain',
+              objectPosition: figure.objectPosition ?? 'center',
+              display: 'block',
+            }}
           />
         ) : (
           <>

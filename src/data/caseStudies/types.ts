@@ -20,10 +20,22 @@ export interface Figure {
   hoverLift?: boolean;
   /** Optional caption rendered beneath the figure. */
   caption?: FigureCaption;
-  /** Final image path under /public when the asset is ready. */
+  /** Final image/video path under /public when the asset is ready. */
   src?: string;
   /** Accessible alt text; defaults to `innerLabel` when omitted. */
   alt?: string;
+  /**
+   * Media type for collage/lightbox. Defaults to image; use "video" for
+   * looping mp4/webm demos (also auto-detected from `.mp4` / `.webm` / `.mov`).
+   */
+  kind?: 'image' | 'video';
+  /**
+   * In-page framing only (PlaceholderFigure). Gallery / lightbox always show
+   * the full asset. Defaults to "contain".
+   */
+  objectFit?: 'contain' | 'cover';
+  /** CSS object-position when cropping in-page (e.g. "center top"). */
+  objectPosition?: string;
 }
 
 export interface FigureCaption {
@@ -135,7 +147,7 @@ export interface CaseStudy {
   // 04 Solution
   solution: {
     chapter: ChapterMeta;
-    principles: { numeral: string; text: string }[];
+    principles: { numeral: string; title?: string; text: string }[];
     figures: Figure[];
   };
 
@@ -146,6 +158,13 @@ export interface CaseStudy {
     closingParagraph: string;
     ifIDidItAgain: string;
   };
+
+  /**
+   * Extra images for the TL;DR collage only — not placed in the page body.
+   * Drop the file under `public/case-studies/{slug}/`, then list it here
+   * with `src` (and optional caption / alt).
+   */
+  gallery?: Figure[];
 
   // Next-case footer
   nextCase: {

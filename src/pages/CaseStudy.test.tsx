@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import CaseStudy from './CaseStudy';
 import { plmc } from '../data/caseStudies/plmc';
@@ -36,6 +37,18 @@ describe('CaseStudy page', () => {
     renderAt('/work/sage');
     expect(screen.getByText(sage.eyebrowRight)).toBeInTheDocument();
     expect(screen.getByText(sage.headlineAccent)).toBeInTheDocument();
+  });
+
+  it('offers an image collage when the case study has assets', async () => {
+    const user = userEvent.setup();
+    renderAt('/work/plmc');
+    await user.click(screen.getByRole('button', { name: /show me the images/i }));
+    expect(screen.getByRole('dialog', { name: plmc.eyebrowRight })).toBeInTheDocument();
+  });
+
+  it('hides the collage CTA when there are no image assets yet', () => {
+    renderAt('/work/sage');
+    expect(screen.queryByRole('button', { name: /show me the images/i })).toBeNull();
   });
 
   it('redirects an unknown slug back to home', () => {

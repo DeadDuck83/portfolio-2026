@@ -13,7 +13,7 @@ export const plmc: CaseStudy = {
   headlineAccent: 'one screen.',
   intro:
     "A functional-medicine clinic was drowning in its own thoroughness — blood panels, body scans, questionnaires, motor tests, phone data. I designed and built the clinic app that reads it all in one sitting, so clinicians and patients don't have to.",
-  tldr: 'Clinic collects everything → nobody can read everything → one screen that does → shorter prep, smarter visits.',
+  tldr: 'Seven systems of patient data, one screen both clinician and patient can read in the room — shorter prep, smarter visits.',
   meta: {
     role: 'Frontend Dev / Sr. UX',
     org: 'Metagenics · PLMC',
@@ -22,9 +22,11 @@ export const plmc: CaseStudy = {
   },
   heroFigure: {
     placeholder: 'Hero',
-    dims: '2880 × 1260',
-    aspect: '16/7',
+    dims: '2760 × 1208',
+    aspect: '2760/1208',
     innerLabel: 'Health Summary UI — wide crop',
+    src: '/case-studies/plmc/caseStudy_PLMC_hero.jpg',
+    alt: 'PLMC health summary UI — wide crop of the clinic app dashboard',
   },
 
   context: {
@@ -171,27 +173,32 @@ export const plmc: CaseStudy = {
     principles: [
       {
         numeral: 'i.',
-        text: 'Glanceable first, precise second — shape and color answer before numbers do.',
+        title: 'One language everyone speaks.',
+        text: "Blood, brain, balance, strength, habits — it all rolls up into five clear scores. The doctor still has every detail underneath; you get a picture you can actually hold onto. Same five functions, whether you've read charts for years or you're seeing your health for the first time.",
       },
       {
         numeral: 'ii.',
-        text: 'Every value carries its context — plotted against its healthy range, never floating alone.',
+        title: 'The full picture, already put together.',
+        text: 'The whole visit was built to feed one screen, so nothing gets pieced together at the end. By the time you sit down together, every result is in place and in context. Nothing to decode, nothing to chase down — just your health, all in one view.',
       },
       {
         numeral: 'iii.',
-        text: 'One screen, two reading levels — clinical labels with plain-language subtitles, one codebase.',
+        title: "The experience does what a screen can't.",
+        text: 'Your results fill in live as the lab reads them, and it’s genuinely hard to look away — that pull is the point. People lean in when the data feels like theirs. And the visit is built around that moment: calm to start, blood drawn early, results ready by the end, protocol in hand on the way out. The design reaches past the screen and into the room itself.',
       },
     ],
     figures: [
       {
         placeholder: 'Screen 01',
-        dims: '2880 × 1800',
-        aspect: '8/5',
+        dims: '2752 × 1536',
+        aspect: '2752/1536',
         innerLabel: 'Health Summary — full dashboard',
-        hoverLift: true,
+        hoverLift: false,
+        src: '/case-studies/plmc/PLMC-04-solution_hero.png',
+        alt: 'PLMC Health Summary dashboard — full scroll of vitals, labs, and 5 Functions of Health',
         caption: {
           tag: '01',
-          lead: 'Health Summary — everything, one scroll.',
+          lead: 'Health Summary — Everything visible, nothing left unchecked.',
           desc: 'Vitals, blood panel, questionnaires, lifestyle data, and the 5 Functions of Health score — the whole patient before the doorknob turns.',
         },
       },
@@ -201,24 +208,30 @@ export const plmc: CaseStudy = {
         aspect: '4/3',
         innerLabel: 'Biometric Screening detail',
         hoverLift: true,
+        src: '/case-studies/plmc/PLMC-04-solution_website.png',
+        alt: 'PLMC marketing website homepage — Holistic Functional Medicine, Personalized',
         caption: {
           tag: '02',
-          lead: 'Biometric Screening.',
+          lead: 'The clinic website.',
           leadInline: true,
-          desc: ' InBody scan data plotted against healthy ranges — "how am I doing?" mostly answers itself.',
+          desc: ' I designed and developed the website as well — the public face of the same personalized-care story.',
         },
       },
       {
         placeholder: 'Screen 03',
-        dims: '1400 × 1050',
+        dims: '3008 × 1799',
         aspect: '4/3',
-        innerLabel: 'Motor Skills results',
+        innerLabel: 'Health Summary — full dashboard',
         hoverLift: true,
+        src: '/case-studies/plmc/PLMC-04-solution-dashboard2.gif',
+        alt: 'PLMC Health Summary TV dashboard with biometrics, blood panel, lifestyle, and 5 Functions of Health',
+        objectFit: 'cover',
+        objectPosition: 'center top',
         caption: {
           tag: '03',
-          lead: 'Motor Skills.',
+          lead: 'Health Summary on the room display.',
           leadInline: true,
-          desc: ' Balance, dexterity, and strength a clinician can read from across the room.',
+          desc: ' The full picture already put together — biometrics, labs, lifestyle, and the five functions in one view.',
         },
       },
     ],
@@ -240,6 +253,37 @@ export const plmc: CaseStudy = {
     ifIDidItAgain:
       'Involve the front-desk staff even earlier. They knew where the paper piled up long before we did.',
   },
+
+  // Collage-only images (file in public/case-studies/plmc/, not placed in-page).
+  gallery: [
+    {
+      placeholder: 'Gallery',
+      dims: '980 × 980',
+      aspect: '1/1',
+      innerLabel: 'Early concept art',
+      src: '/case-studies/plmc/plmc-concept-art.jpg',
+      alt: 'PLMC early concept art',
+      caption: {
+        tag: 'CONCEPT',
+        lead: 'Early concept art.',
+        desc: 'Exploratory visual direction before the clinic screens locked in.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '1900 × 806',
+      aspect: '1900/806',
+      innerLabel: 'Data filling the summary live',
+      kind: 'video',
+      src: '/case-studies/plmc/plmc-gif-1_1.mp4',
+      alt: 'Animation of PLMC results filling into the health summary as lab data returns',
+      caption: {
+        tag: 'MOTION',
+        lead: 'Watch the data arrive.',
+        desc: 'Results populate live as the lab returns them — the pull that keeps patients watching their own numbers land.',
+      },
+    },
+  ],
 
   nextCase: {
     label: 'Sage Healthspan',
