@@ -35,7 +35,7 @@ export const plmc: CaseStudy = {
       label: 'Context',
       subtitle: 'the clinic that measured everything',
     },
-    h2: "The data wasn't missing. It was hiding — in seven different systems.",
+    h2: "The data wasn't missing. It just wasn't in a single place that worked together.",
     paragraphs: [
       "A visit at PLMC starts with genuine mountains of signal: a full blood panel, an InBody composition scan, intake questionnaires, motor and balance testing, lifestyle data straight from the patient's phone. All useful. All in different systems, formats, and — occasionally — printouts.",
       'Clinicians prepped by tab-hopping. Patients heard their results in fragments. Nobody, at any point, saw the whole person at once.',
@@ -207,7 +207,7 @@ export const plmc: CaseStudy = {
         dims: '1400 × 1050',
         aspect: '4/3',
         innerLabel: 'Biometric Screening detail',
-        hoverLift: true,
+        hoverLift: false,
         src: '/case-studies/plmc/PLMC-04-solution_website.png',
         alt: 'PLMC marketing website homepage — Holistic Functional Medicine, Personalized',
         caption: {
@@ -222,7 +222,7 @@ export const plmc: CaseStudy = {
         dims: '3008 × 1799',
         aspect: '4/3',
         innerLabel: 'Health Summary — full dashboard',
-        hoverLift: true,
+        hoverLift: false,
         src: '/case-studies/plmc/PLMC-04-solution-dashboard2.gif',
         alt: 'PLMC Health Summary TV dashboard with biometrics, blood panel, lifestyle, and 5 Functions of Health',
         objectFit: 'cover',

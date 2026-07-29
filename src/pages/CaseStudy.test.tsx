@@ -51,6 +51,13 @@ describe('CaseStudy page', () => {
     expect(screen.queryByRole('button', { name: /show me the images/i })).toBeNull();
   });
 
+  it('skips the Users chapter when a case study omits it', () => {
+    renderAt('/work/parker-ace');
+    expect(screen.getByText('02 Process')).toBeInTheDocument();
+    expect(screen.queryByText(/Two sides/i)).toBeNull();
+    expect(screen.getByText(/Four calls did most of the work/i)).toBeInTheDocument();
+  });
+
   it('redirects an unknown slug back to home', () => {
     renderAt('/work/does-not-exist');
     expect(screen.getByText('HOME')).toBeInTheDocument();
