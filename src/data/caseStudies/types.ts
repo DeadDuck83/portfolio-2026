@@ -2,8 +2,9 @@
  * Content model for a case study. Every case study is one object of this
  * shape rendered by <CaseStudyLayout>; new case studies (Parker & Ace, Bexa,
  * Sage) are new data files, not new layouts. Structure mirrors the chapter
- * flow: 00 Brief → 01 Context → 02 Users → 03 Process → 04 Solution →
- * 05 Outcome → Next-case footer.
+ * flow: 00 Brief → 01 Context → (optional Users) → Process → Solution →
+ * Outcome → Next-case footer. Optional chapters let case studies vary without
+ * forking the layout.
  */
 
 /** A gray placeholder figure block. Final imagery drops in at `dims` later. */
@@ -122,8 +123,8 @@ export interface CaseStudy {
     captionAfter: string;
   };
 
-  // 02 Users
-  users: {
+  // Optional Users / Two sides — omit when the case study doesn't need it
+  users?: {
     chapter: ChapterMeta;
     h2: string;
     personas: [Persona, Persona];
@@ -131,7 +132,7 @@ export interface CaseStudy {
     pullAccent: string;
   };
 
-  // 03 Process
+  // Process
   process: {
     chapter: ChapterMeta;
     h2: string;
@@ -144,19 +145,30 @@ export interface CaseStudy {
     figures: Figure[];
   };
 
-  // 04 Solution
+  // Solution
   solution: {
     chapter: ChapterMeta;
     principles: { numeral: string; title?: string; text: string }[];
     figures: Figure[];
   };
 
-  // 05 Outcome
+  // Outcome
   outcome: {
     chapter: ChapterMeta;
-    stats: OutcomeStat[];
-    closingParagraph: string;
-    ifIDidItAgain: string;
+    /** Optional — omit for 0→1 stories without vanity metrics. */
+    stats?: OutcomeStat[];
+    /** Optional lead under the chapter heading. */
+    lead?: string;
+    /** Body copy when there are multiple paragraphs. */
+    paragraphs?: string[];
+    /** Single closing paragraph (used with the classic aside layout). */
+    closingParagraph?: string;
+    /** Aside heading; defaults to "If I did it again". */
+    asideLabel?: string;
+    /** Single aside paragraph (classic layout with closingParagraph). */
+    ifIDidItAgain?: string;
+    /** Structured takeaways; when set, renders instead of the single aside. */
+    lessons?: { title: string; text: string }[];
   };
 
   /**

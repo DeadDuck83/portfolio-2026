@@ -36,8 +36,9 @@ const bodyP = { fontSize: '0.86rem', lineHeight: 1.75, color: colors.textBody };
 /**
  * Data-driven case study page. Everything renders from the CaseStudy object
  * looked up by URL slug — new case studies are new data files, not new layouts.
- * Chapter flow: 00 Brief → 01 Context → 02 Users → 03 Process → 04 Solution →
- * 05 Outcome → Next-case footer.
+ * Chapter flow: 00 Brief → 01 Context → (optional Users) → Process → Solution →
+ * Outcome → Next-case footer. Section order is data-driven so case studies can
+ * omit chapters (e.g. no Two Sides) without breaking scroll-spy or nav.
  */
 export default function CaseStudy() {
   const { slug } = useParams();
@@ -58,11 +59,15 @@ export default function CaseStudy() {
   const chapters: Chapter[] = [
     { id: 'c0', label: '00 Brief' },
     { id: 'c1', label: `${cs.context.chapter.numeral} ${cs.context.chapter.label}` },
-    { id: 'c2', label: `${cs.users.chapter.numeral} ${cs.users.chapter.label}` },
-    { id: 'c3', label: `${cs.process.chapter.numeral} ${cs.process.chapter.label}` },
-    { id: 'c4', label: `${cs.solution.chapter.numeral} ${cs.solution.chapter.label}` },
-    { id: 'c5', label: `${cs.outcome.chapter.numeral} ${cs.outcome.chapter.label}` },
+    ...(cs.users
+      ? [{ id: 'c-users', label: `${cs.users.chapter.numeral} ${cs.users.chapter.label}` }]
+      : []),
+    { id: 'c-process', label: `${cs.process.chapter.numeral} ${cs.process.chapter.label}` },
+    { id: 'c-solution', label: `${cs.solution.chapter.numeral} ${cs.solution.chapter.label}` },
+    { id: 'c-outcome', label: `${cs.outcome.chapter.numeral} ${cs.outcome.chapter.label}` },
   ];
+
+  const chapterIndex = (id: string) => chapters.findIndex((c) => c.id === id);
 
   return (
     <div
@@ -258,7 +263,7 @@ export default function CaseStudy() {
       {/* 01 CONTEXT */}
       <section
         id="c1"
-        data-chapter="1"
+        data-chapter={chapterIndex('c1')}
         style={{ borderTop: `1px solid ${border.hairline}`, background: colors.bgAlt, marginTop: 'clamp(3rem, 8vh, 5.5rem)', ...scrollMargin }}
       >
         <div style={sectionInner}>
@@ -292,49 +297,58 @@ export default function CaseStudy() {
         </div>
       </section>
 
-      {/* 02 USERS */}
-      <section id="c2" data-chapter="2" style={{ borderTop: `1px solid ${border.hairline}`, ...scrollMargin }}>
-        <div style={sectionInner}>
-          <Reveal>
-            <ChapterHeading meta={cs.users.chapter} />
-          </Reveal>
-          <Reveal style={{ maxWidth: '60ch', marginTop: 'clamp(1.8rem, 4vh, 2.8rem)' }}>
-            <h2 style={h2Style}>{cs.users.h2}</h2>
-          </Reveal>
-          <Reveal
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 1,
-              marginTop: 'clamp(2.2rem, 5vh, 3.2rem)',
-              background: border.gridBg,
-              border: `1px solid ${border.gridBg}`,
-            }}
-          >
-            <PersonaCard persona={cs.users.personas[0]} />
-            <PersonaCard persona={cs.users.personas[1]} />
-          </Reveal>
-          <Reveal>
-            <p
+      {/* USERS (optional) */}
+      {cs.users && (
+        <section
+          id="c-users"
+          data-chapter={chapterIndex('c-users')}
+          style={{ borderTop: `1px solid ${border.hairline}`, ...scrollMargin }}
+        >
+          <div style={sectionInner}>
+            <Reveal>
+              <ChapterHeading meta={cs.users.chapter} />
+            </Reveal>
+            <Reveal style={{ maxWidth: '60ch', marginTop: 'clamp(1.8rem, 4vh, 2.8rem)' }}>
+              <h2 style={h2Style}>{cs.users.h2}</h2>
+            </Reveal>
+            <Reveal
               style={{
-                fontFamily: fonts.display,
-                fontSize: 'clamp(1.2rem, 2.4vw, 1.6rem)',
-                lineHeight: 1.4,
-                color: colors.textMuted,
-                margin: 'clamp(1.8rem, 4vh, 2.6rem) 0 0',
-                maxWidth: '50ch',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: 1,
+                marginTop: 'clamp(2.2rem, 5vh, 3.2rem)',
+                background: border.gridBg,
+                border: `1px solid ${border.gridBg}`,
               }}
             >
-              {cs.users.pullLead}
-              <span style={{ fontStyle: 'italic', color: colors.accentBright }}>{cs.users.pullAccent}</span>
-            </p>
-          </Reveal>
-        </div>
-      </section>
+              <PersonaCard persona={cs.users.personas[0]} />
+              <PersonaCard persona={cs.users.personas[1]} />
+            </Reveal>
+            <Reveal>
+              <p
+                style={{
+                  fontFamily: fonts.display,
+                  fontSize: 'clamp(1.2rem, 2.4vw, 1.6rem)',
+                  lineHeight: 1.4,
+                  color: colors.textMuted,
+                  margin: 'clamp(1.8rem, 4vh, 2.6rem) 0 0',
+                  maxWidth: '50ch',
+                }}
+              >
+                {cs.users.pullLead}
+                <span style={{ fontStyle: 'italic', color: colors.accentBright }}>{cs.users.pullAccent}</span>
+              </p>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
-      {/* 03 PROCESS */}
-      <section id="c3" data-chapter="3" style={{ borderTop: `1px solid ${border.hairline}`, background: colors.bgAlt, ...scrollMargin }}>
-        <div style={sectionInner}>
+      {/* PROCESS */}
+      <section
+        id="c-process"
+        data-chapter={chapterIndex('c-process')}
+        style={{ borderTop: `1px solid ${border.hairline}`, background: colors.bgAlt, ...scrollMargin }}
+      >        <div style={sectionInner}>
           <Reveal>
             <ChapterHeading meta={cs.process.chapter} />
           </Reveal>
@@ -351,30 +365,37 @@ export default function CaseStudy() {
           </Reveal>
 
           {/* Fig. A (prominent) */}
-          <Reveal style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)' }}>
-            <PlaceholderFigure figure={cs.process.figures[0]} prominent />
-          </Reveal>
+          {cs.process.figures[0] && (
+            <Reveal style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)' }}>
+              <PlaceholderFigure figure={cs.process.figures[0]} prominent />
+            </Reveal>
+          )}
           {/* Fig. B / C */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 'clamp(1.4rem, 3vw, 2.4rem)',
-              marginTop: 'clamp(2rem, 5vh, 3rem)',
-            }}
-          >
-            {cs.process.figures.slice(1).map((fig) => (
-              <Reveal key={fig.placeholder}>
-                <PlaceholderFigure figure={fig} />
-              </Reveal>
-            ))}
-          </div>
+          {cs.process.figures.length > 1 && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: 'clamp(1.4rem, 3vw, 2.4rem)',
+                marginTop: 'clamp(2rem, 5vh, 3rem)',
+              }}
+            >
+              {cs.process.figures.slice(1).map((fig) => (
+                <Reveal key={fig.placeholder}>
+                  <PlaceholderFigure figure={fig} />
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* 04 SOLUTION */}
-      <section id="c4" data-chapter="4" style={{ borderTop: `1px solid ${border.hairline}`, ...scrollMargin }}>
-        <div style={sectionInner}>
+      {/* SOLUTION */}
+      <section
+        id="c-solution"
+        data-chapter={chapterIndex('c-solution')}
+        style={{ borderTop: `1px solid ${border.hairline}`, ...scrollMargin }}
+      >        <div style={sectionInner}>
           <Reveal>
             <ChapterHeading meta={cs.solution.chapter} />
           </Reveal>
@@ -422,53 +443,129 @@ export default function CaseStudy() {
           </Reveal>
 
           {/* Screen 01 (prominent) */}
-          <Reveal style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)' }}>
-            <PlaceholderFigure figure={cs.solution.figures[0]} prominent />
-          </Reveal>
-          {/* Screens 02 / 03 */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 'clamp(1.4rem, 3vw, 2.4rem)',
-              marginTop: 'clamp(2.4rem, 6vh, 3.6rem)',
-            }}
-          >
-            {cs.solution.figures.slice(1).map((fig) => (
-              <Reveal key={fig.placeholder}>
-                <PlaceholderFigure figure={fig} />
-              </Reveal>
-            ))}
-          </div>
+          {cs.solution.figures[0] && (
+            <Reveal style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)' }}>
+              <PlaceholderFigure figure={cs.solution.figures[0]} prominent />
+            </Reveal>
+          )}
+          {/* Remaining screens */}
+          {cs.solution.figures.length > 1 && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: 'clamp(1.4rem, 3vw, 2.4rem)',
+                marginTop: 'clamp(2.4rem, 6vh, 3.6rem)',
+              }}
+            >
+              {cs.solution.figures.slice(1).map((fig) => (
+                <Reveal key={fig.placeholder}>
+                  <PlaceholderFigure figure={fig} />
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* 05 OUTCOME */}
-      <section id="c5" data-chapter="5" style={{ borderTop: `1px solid ${border.hairline}`, background: colors.bgAlt, ...scrollMargin }}>
+      {/* OUTCOME */}
+      <section
+        id="c-outcome"
+        data-chapter={chapterIndex('c-outcome')}
+        style={{ borderTop: `1px solid ${border.hairline}`, background: colors.bgAlt, ...scrollMargin }}
+      >
         <div style={sectionInner}>
           <Reveal>
             <ChapterHeading meta={cs.outcome.chapter} />
           </Reveal>
-          <Reveal style={{ marginTop: 'clamp(1.8rem, 4vh, 2.8rem)' }}>
-            <StatBand stats={cs.outcome.stats} />
-          </Reveal>
-          <Reveal
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: 'clamp(2rem, 5vw, 4rem)',
-              marginTop: 'clamp(2.2rem, 5vh, 3.2rem)',
-              alignItems: 'start',
-            }}
-          >
-            <p style={{ ...bodyP, margin: 0 }}>{cs.outcome.closingParagraph}</p>
-            <div style={{ borderLeft: `1px solid ${border.accentMed}`, paddingLeft: '1.4rem' }}>
-              <div style={{ fontSize: '0.62rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: colors.accentBright }}>
-                If I did it again
+          {cs.outcome.stats && cs.outcome.stats.length > 0 && (
+            <Reveal style={{ marginTop: 'clamp(1.8rem, 4vh, 2.8rem)' }}>
+              <StatBand stats={cs.outcome.stats} />
+            </Reveal>
+          )}
+          {(cs.outcome.lead || (cs.outcome.paragraphs && cs.outcome.paragraphs.length > 0)) && (
+            <Reveal
+              style={{
+                maxWidth: '62ch',
+                marginTop: 'clamp(1.8rem, 4vh, 2.8rem)',
+              }}
+            >
+              {cs.outcome.lead && <h2 style={h2Style}>{cs.outcome.lead}</h2>}
+              {cs.outcome.paragraphs?.map((para, i) => (
+                <p
+                  key={i}
+                  style={{
+                    ...bodyP,
+                    margin: i === 0 && cs.outcome.lead ? '1.4rem 0 0' : i === 0 ? 0 : '1.1rem 0 0',
+                  }}
+                >
+                  {para}
+                </p>
+              ))}
+            </Reveal>
+          )}
+          {cs.outcome.lessons && cs.outcome.lessons.length > 0 ? (
+            <Reveal style={{ marginTop: 'clamp(2.4rem, 5vh, 3.4rem)', maxWidth: '62ch' }}>
+              <div
+                style={{
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: colors.accentBright,
+                }}
+              >
+                {cs.outcome.asideLabel ?? 'What I learned'}
               </div>
-              <p style={{ ...bodyP, margin: '0.8rem 0 0' }}>{cs.outcome.ifIDidItAgain}</p>
-            </div>
-          </Reveal>
+              <div style={{ display: 'grid', gap: '1.6rem', marginTop: '1.2rem' }}>
+                {cs.outcome.lessons.map((lesson) => (
+                  <div
+                    key={lesson.title}
+                    style={{ borderLeft: `1px solid ${border.accentMed}`, paddingLeft: '1.4rem' }}
+                  >
+                    <div
+                      style={{
+                        fontFamily: fonts.display,
+                        fontSize: '1.05rem',
+                        lineHeight: 1.35,
+                        color: colors.text,
+                      }}
+                    >
+                      {lesson.title}
+                    </div>
+                    <p style={{ ...bodyP, margin: '0.55rem 0 0' }}>{lesson.text}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          ) : (
+            cs.outcome.closingParagraph &&
+            cs.outcome.ifIDidItAgain && (
+              <Reveal
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                  gap: 'clamp(2rem, 5vw, 4rem)',
+                  marginTop: 'clamp(2.2rem, 5vh, 3.2rem)',
+                  alignItems: 'start',
+                }}
+              >
+                <p style={{ ...bodyP, margin: 0 }}>{cs.outcome.closingParagraph}</p>
+                <div style={{ borderLeft: `1px solid ${border.accentMed}`, paddingLeft: '1.4rem' }}>
+                  <div
+                    style={{
+                      fontSize: '0.62rem',
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: colors.accentBright,
+                    }}
+                  >
+                    {cs.outcome.asideLabel ?? 'If I did it again'}
+                  </div>
+                  <p style={{ ...bodyP, margin: '0.8rem 0 0' }}>{cs.outcome.ifIDidItAgain}</p>
+                </div>
+              </Reveal>
+            )
+          )}
         </div>
       </section>
 
