@@ -34,7 +34,7 @@ export default function WorkList() {
             lineHeight: 1,
           }}
         >
-          Selected work
+          The work
         </h2>
         <span
           style={{

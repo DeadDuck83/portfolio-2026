@@ -442,6 +442,34 @@ export default function CaseStudy() {
             ))}
           </Reveal>
 
+          {cs.solution.feature && (
+            <Reveal
+              style={{
+                display: 'flex',
+                gap: '1rem',
+                alignItems: 'baseline',
+                marginTop: 'clamp(2rem, 5vh, 3rem)',
+                padding: '1.1rem 1.3rem',
+                border: '1px dashed rgba(132,137,69,0.45)',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: colors.accentBright,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {cs.solution.feature.label ?? 'Feature this'}
+              </span>
+              <p style={{ margin: 0, fontSize: '0.76rem', lineHeight: 1.7, color: colors.textBody }}>
+                {cs.solution.feature.text}
+              </p>
+            </Reveal>
+          )}
+
           {/* Screen 01 (prominent) */}
           {cs.solution.figures[0] && (
             <Reveal style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)' }}>
