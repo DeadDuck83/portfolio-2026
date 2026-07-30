@@ -38,8 +38,8 @@ export const work: WorkItem[] = [
     title: 'Bexa Suite',
     roleTag: 'UX / Product Designer · Bexa',
     description:
-      'Designed four connected products around an FDA-cleared breast-cancer screening device: patient app, clinical review tool, scheduling ops, and a device-analytics portal.',
-    tags: ['0 → 1', 'Software + Hardware', 'Multi-product', 'Analytics Portal'],
+      'Designed four connected systems around an FDA-cleared breast-cancer screening device: patient app, scheduling ops, examiner clinical, and device quality — turning one exam into a working medical service.',
+    tags: ['0 → 1', 'Software + Hardware', 'Multi-product', 'FDA / Quality'],
     to: '/work/bexa',
     endLabel: 'Case study',
     endGlyph: '→',

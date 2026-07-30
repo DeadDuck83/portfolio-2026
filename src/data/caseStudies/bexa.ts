@@ -2,34 +2,31 @@ import type { CaseStudy } from './types';
 
 /**
  * Case study 02 — Bexa Suite (UX / product designer, contract).
- *
- * DRAFT: grounded facts (FDA-cleared breast-screening device; a suite of four
- * connected products — patient app, clinical review tool, examiner scheduling
- * ops, device-analytics portal that flagged drift; software + hardware, 0 → 1)
- * come from the real role. Personas, the four decisions, figure captions, and
- * the "if I did it again" are plausible narrative for Derek to review/correct.
+ * Structure: Brief → Context → Process → Solution → Outcome (no Users chapter).
+ * Images still pending — figures are placeholders until assets land in
+ * `public/case-studies/bexa/`.
  */
 export const bexa: CaseStudy = {
   slug: 'bexa',
   caseNumber: '02',
   eyebrowRight: 'Bexa · FDA-cleared Breast Screening',
 
-  headlineLead: 'Four products, ',
-  headlineAccent: 'one screening.',
+  headlineLead: 'One device screens for cancer. ',
+  headlineAccent: 'Four systems turn it into a service.',
   intro:
-    "Bexa's FDA-cleared device makes breast screening painless and radiation-free — but a device is only as good as the software around it. I designed a suite of four connected products — a patient app, a clinical review tool, examiner scheduling, and a device-analytics portal — that turn one exam into a coordinated experience for everyone who touches it.",
-  tldr: 'One FDA-cleared device → four different users → a connected suite (patient · clinician · examiner ops · device analytics) that stays in sync.',
+    "Bexa screens for breast cancer with a handheld device that reads tissue density — no radiation, no compression. But a device isn't a service. Scaling it means scheduling exams, running them, delivering results, and proving the whole thing holds up. I came in as a contractor to review the exam service, reporting, and patient experience, and stayed to design the four systems that turn one device into a working medical service.",
+  tldr: 'One FDA-cleared device, four kinds of users, and reporting that had to go from placeholder data to something a clinician could stake a call on. Four systems: patient, scheduling ops, examiner clinical, and device quality.',
   meta: {
     role: 'UX / Product Designer · contract',
     org: 'Bexa',
-    timeline: '2023 — Now · 0 → 1',
-    scope: 'UX/UI · Multi-product · SW + HW',
+    timeline: '2023 to present · 0 → 1',
+    scope: 'Audit · Product Design · Multi-product · Software + Hardware',
   },
   heroFigure: {
     placeholder: 'Hero',
     dims: '2880 × 1260',
     aspect: '16/7',
-    innerLabel: 'The Bexa Suite — four surfaces',
+    innerLabel: 'The Bexa Suite — four systems',
   },
 
   context: {
@@ -38,91 +35,59 @@ export const bexa: CaseStudy = {
       label: 'Context',
       subtitle: 'a device is only half the product',
     },
-    h2: 'The exam took minutes. Coordinating the four people around it took everything else.',
+    h2: 'The exam is the easy part. The service around it is the design problem.',
     paragraphs: [
-      'A patient books, preps, and waits for results. An examiner performs the scan on a schedule. A clinician reviews the images and signs off. And someone has to watch the device itself — is the hardware performing, is it drifting, across every site it runs in? Four jobs, four tools, none of them talking.',
-      'Data got re-keyed between systems, scheduling lived in spreadsheets, and no one had a clear view of device health until something looked wrong. A cleared device deserved better plumbing.',
+      'A Bexa exam looks like this: an examiner brings the handheld device and an ultrasound on site, screens with Bexa, and confirms a flagged mass with ultrasound. Every exam produces two files — the Bexa reading and the ultrasound report — and those feed the analytics.',
+      "A device runs an exam, not a service, and the parts meant to connect them weren't holding up. Reporting was the clearest tell: dashboards that looked finished but ran on broken filters and placeholder data. The numbers meant to prove the device worked couldn't be trusted.",
+      "It went deeper than reporting. Underneath was legacy code, built years ago by a team long gone, quietly holding scheduling, exams, results, and quality checks together. A new service on old plumbing isn't a patch job. It needed four systems, one for each person who touches an exam.",
     ],
     panelLabel: 'One exam, four systems',
     chips: [
-      'Patient app',
-      'Booking',
-      'Examiner scan',
-      'Image capture',
-      'Clinical review',
-      'Result delivery',
-      'Device analytics',
+      'Patient · MyBexa',
+      'Ops · BexaSupport',
+      'Examiner · BexaClinical',
+      'Quality · BexaQuality',
+      'Bexa reading',
+      'Ultrasound report',
+      'Device metrics',
     ],
-    captionBefore: 'The "before" state.',
-    captionAfter: 'One connected suite.',
-  },
-
-  users: {
-    chapter: {
-      numeral: '02',
-      label: 'Four roles',
-      subtitle: 'one device, opposite ends',
-    },
-    h2: 'Four roles touch one exam — and the two furthest apart, the patient and the clinician, never see the same screen.',
-    personas: [
-      {
-        label: 'Role 01',
-        name: 'The patient',
-        subtitle: 'here for peace of mind',
-        needs: [
-          'Book, prep, and get results without friction',
-          'Plain-language findings, not a radiology report',
-          'Trust that the exam and the device are sound',
-        ],
-      },
-      {
-        label: 'Role 02',
-        name: 'The clinician',
-        subtitle: 'reads images between patients',
-        needs: [
-          'Review and sign off quickly, with full context',
-          'Confidence the images came from a healthy device',
-          'A queue that reflects real scheduling, not guesswork',
-        ],
-      },
-    ],
-    pullLead: 'The examiner and the ops team sit between them — ',
-    pullAccent: 'four products that had to feel like one.',
+    captionBefore: 'Legacy app, placeholder data.',
+    captionAfter: 'Four systems, real numbers.',
   },
 
   process: {
     chapter: {
-      numeral: '03',
+      numeral: '02',
       label: 'Process',
       subtitle: 'the decision log',
     },
-    h2: 'Designing four products at once means the connections matter more than any one screen.',
+    h2: 'Diagnose first, then build a tool for each person who touches an exam.',
     paragraph:
-      'On a regulated device, every flow was designed within the FDA-cleared workflow and against how the hardware actually captures and reports — no pattern that changed how a cleared device is used.',
+      'Every call came back to two rules. On a cleared device the data has to be provable, and each user needs a tool shaped around their job — not one screen that half-fits everyone.',
     decisions: [
       {
-        title: 'Design the seams, not the screens.',
+        title: 'Audit before adding.',
         choice:
-          'Start from the hand-offs between the four products — booking → scan → review → result — before polishing any single app.',
-        cost: 'Less shine on individual screens early. In exchange, the suite actually held together end to end.',
+          "Before designing anything new, I traced what was actually running. That's how the placeholder-data problem surfaced. You can't fix reporting you haven't followed end to end.",
+        cost: "It slowed the start and turned up news nobody wanted. It also meant everything after got built on what was real instead of decorating what wasn't.",
       },
       {
-        title: 'One shared language, four surfaces.',
+        title: 'One service became four.',
         choice:
-          'A single design system and shared terminology so a "scan status" means exactly the same thing in the patient app, the examiner tool, and the clinician review.',
-        cost: 'Heavier upfront system work and constant cross-product coordination — paid back every time two surfaces had to agree.',
+          'Split the overloaded system into four, each for a distinct user: patient, ops, examiner, and quality. One tool per job instead of one tool pretending to serve everyone.',
+        cost: 'Four systems is far more to design, connect, and keep in sync. Worth it — each one finally did its job well instead of all of them doing theirs badly.',
       },
       {
-        title: 'Make the device a user.',
+        title: 'Make the device prove itself.',
         choice:
-          'A device-analytics portal that surfaces hardware performance and flags drift before it can affect a result.',
-        cost: 'Close work with engineering on telemetry and a whole new surface to design — but the device stopped being a black box.',
+          'FDA-cleared output needs constant watching. With the medical team I defined the data points that confirm a good evaluation for every metric, plus alerts the moment a device drifts out of spec.',
+        cost: 'Pinning down what "good" means for each metric is slow, exacting work. It\'s the difference between hoping a device is fine and knowing it.',
       },
       {
-        title: 'Respect the regulated path.',
+        title: 'Two report formats, one pipeline you can trust.',
         choice:
-          'Design within the cleared workflow; never a shortcut that changes how the device is operated.',
-        cost: 'Some ideal UX patterns were simply off-limits. Traded flexibility for a suite that stays compliant.',
+          'The Bexa reading and ultrasound report had to merge into one analytics pipeline people could rely on, replacing the placeholder plumbing underneath.',
+        cost: "Two formats from two sources is real integration work, not a mapping table. It's also the only way the numbers add up to something a clinician can stand behind.",
       },
     ],
     figures: [
@@ -130,30 +95,30 @@ export const bexa: CaseStudy = {
         placeholder: 'Fig. A',
         dims: '2400 × 1400',
         aspect: '12/7',
-        innerLabel: 'Suite architecture / four-product map',
+        innerLabel: 'Audit map — what was actually running',
         caption: {
           tag: 'FIG. A',
-          desc: 'The four products and every hand-off between them, mapped against one patient exam from booking to result.',
+          desc: 'Tracing the legacy service end to end — where placeholder data was dressing up as finished reporting.',
         },
       },
       {
         placeholder: 'Fig. B',
         dims: '1600 × 1200',
         aspect: '4/3',
-        innerLabel: 'Patient + examiner flows',
+        innerLabel: 'One service → four systems',
         caption: {
           tag: 'FIG. B',
-          desc: 'Where the patient and examiner journeys meet — the scheduling seam that had to stay in sync.',
+          desc: 'Splitting the overloaded app into patient, ops, examiner, and quality — one tool per job.',
         },
       },
       {
         placeholder: 'Fig. C',
         dims: '1600 × 1200',
         aspect: '4/3',
-        innerLabel: 'Clinician review wireframes',
+        innerLabel: 'Quality metrics / drift alerts',
         caption: {
           tag: 'FIG. C',
-          desc: 'Review-tool wireframes annotated with the device telemetry behind each image.',
+          desc: 'Defining what "good" means for each device metric, and where alerts fire when it drifts.',
         },
       },
     ],
@@ -161,61 +126,59 @@ export const bexa: CaseStudy = {
 
   solution: {
     chapter: {
-      numeral: '04',
+      numeral: '03',
       label: 'Solution',
-      subtitle: 'the part with the pictures',
+      subtitle: 'four systems, one exam',
     },
     principles: [
       {
         numeral: 'i.',
-        text: 'Continuity over polish — the hand-off between products matters more than any single screen.',
+        title: "MyBexa, the patient's side.",
+        text: 'Book, fill in surveys and forms, and read results in plain language. One calm place for the whole screening instead of a scavenger hunt.',
       },
       {
         numeral: 'ii.',
-        text: 'One shared language — a status or term means the same thing on every surface.',
+        title: 'BexaSupport, the operation behind the events.',
+        text: 'Create clients, set up locations, schedule examiners, and see the business clearly: volume, no-shows versus completions, promotions. Everything that runs the service but isn\'t the exam.',
       },
       {
         numeral: 'iii.',
-        text: 'The device is a user too — its health is surfaced, monitored, and designed for.',
+        title: "BexaClinical, the examiner's workspace.",
+        text: 'Where examiners run the exam, record the outcome, and fold in ultrasound findings. Built around how the exam happens on site, not a generic form bent to fit.',
+      },
+      {
+        numeral: 'iv.',
+        title: "BexaQuality, the device's watchdog.",
+        text: 'The FDA side. Every metric has defined pass conditions, and alerts fire when a device drifts out of spec — before a bad reading reaches a result.',
       },
     ],
+    feature: {
+      text: "The rebuild traces to one finding: the numbers couldn't be trusted. BexaQuality exists so that never happens quietly again, and every other system feeds it clean, real data.",
+    },
     figures: [
       {
         placeholder: 'Screen 01',
         dims: '2880 × 1800',
         aspect: '8/5',
-        innerLabel: 'Patient app — booking to result',
+        innerLabel: 'Four systems, one exam',
         hoverLift: true,
         caption: {
           tag: '01',
-          lead: 'The patient app — booking to result, one thread.',
-          desc: 'Scheduling, prep, and plain-language findings in a single flow, so the person being screened never has to chase a portal.',
+          lead: 'The four systems, one exam.',
+          desc: 'How patient, ops, examiner, and quality connect around a single screening — and where each hand-off has to stay in sync.',
         },
       },
       {
         placeholder: 'Screen 02',
         dims: '1400 × 1050',
         aspect: '4/3',
-        innerLabel: 'Clinical review tool',
+        innerLabel: 'BexaQuality — proof, not hope',
         hoverLift: true,
         caption: {
           tag: '02',
-          lead: 'Clinical review.',
+          lead: 'BexaQuality: proof, not hope.',
           leadInline: true,
-          desc: ' Images, context, and sign-off in one queue — each case tagged with the health of the device that captured it.',
-        },
-      },
-      {
-        placeholder: 'Screen 03',
-        dims: '1400 × 1050',
-        aspect: '4/3',
-        innerLabel: 'Device-analytics portal',
-        hoverLift: true,
-        caption: {
-          tag: '03',
-          lead: 'Device analytics.',
-          leadInline: true,
-          desc: ' Hardware performance across every site, with drift flagged before it reaches a result.',
+          desc: ' Metrics that confirm a healthy evaluation, and alerts when a device drifts — so a problem surfaces before it reaches a patient\'s result.',
         },
       },
     ],
@@ -223,24 +186,34 @@ export const bexa: CaseStudy = {
 
   outcome: {
     chapter: {
-      numeral: '05',
+      numeral: '04',
       label: 'Outcome',
-      subtitle: 'receipts, where available',
+      subtitle: 'shipped, and still shipping',
     },
-    stats: [
-      { kind: 'count', to: 4, label: 'Connected products, one suite' },
-      { kind: 'static', display: '0 → 1', label: 'Designed and shipped from scratch' },
-      { kind: 'static', display: 'FDA', label: 'Cleared device — designed within the lines' },
+    lead: "All four are live. I'm still building them.",
+    paragraphs: [
+      "The four systems are deployed and in active use. This isn't a write-up I finished and moved on from — I'm still shipping updates on agile cycles as real usage comes in. Reporting that started on placeholder data now runs on checked device output, and quality catches drift before it becomes a bad result.",
     ],
-    closingParagraph:
-      'The four products shipped as one coherent suite: a status meant the same thing everywhere, scheduling stopped living in spreadsheets, and the device-analytics portal finally gave ops a live view of hardware health across sites.',
-    ifIDidItAgain:
-      'Pull the examiner into design reviews earlier — they caught real workflow constraints on the device that no amount of remote research surfaced.',
+    asideLabel: 'What I actually learned',
+    lessons: [
+      {
+        title: 'On a regulated device, trust is the product.',
+        text: "A clean dashboard means nothing if the data under it isn't real. Proving the numbers was as much design work as any screen — and the most important work on the project.",
+      },
+      {
+        title: 'One tool for everyone serves no one.',
+        text: "Four systems, each shaped around one user's real job, beat the single overloaded service on every measure that mattered.",
+      },
+      {
+        title: 'Diagnose before you design.',
+        text: "The most valuable thing I did early was refuse to build until I understood what was actually running. The audit wasn't a delay. It was the work.",
+      },
+    ],
   },
 
   nextCase: {
     label: 'Parker & Ace',
-    note: '— the vet marketplace.',
+    note: '— the community vet.',
     to: '/work/parker-ace',
   },
 };

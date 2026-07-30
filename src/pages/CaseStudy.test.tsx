@@ -58,6 +58,15 @@ describe('CaseStudy page', () => {
     expect(screen.getByText(/Four calls did most of the work/i)).toBeInTheDocument();
   });
 
+  it('renders Bexa without a Users chapter and with the feature callout', () => {
+    renderAt('/work/bexa');
+    expect(screen.getByText(/Four systems turn it into a service/i)).toBeInTheDocument();
+    expect(screen.getByText('02 Process')).toBeInTheDocument();
+    expect(screen.queryByText(/Four roles/i)).toBeNull();
+    expect(screen.getByText(/The numbers couldn't be trusted/i)).toBeInTheDocument();
+    expect(screen.getByText(/All four are live/i)).toBeInTheDocument();
+  });
+
   it('redirects an unknown slug back to home', () => {
     renderAt('/work/does-not-exist');
     expect(screen.getByText('HOME')).toBeInTheDocument();

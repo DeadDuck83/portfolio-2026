@@ -149,6 +149,8 @@ export interface CaseStudy {
   solution: {
     chapter: ChapterMeta;
     principles: { numeral: string; title?: string; text: string }[];
+    /** Optional callout between principles and figures ("Feature this"). */
+    feature?: { label?: string; text: string };
     figures: Figure[];
   };
 

@@ -72,7 +72,7 @@ export const roles: Role[] = [
     disc: 'Product + Design',
     dates: '2023 — Now',
     loc: 'Remote · Contract',
-    desc: 'Designed four connected products for an FDA-cleared screening device — patient app, clinical review tool, scheduling ops, and a device-analytics portal.',
+    desc: 'Designed four connected systems for an FDA-cleared screening device — patient, scheduling ops, examiner clinical, and device quality.',
     tags: ['Software + Hardware', 'Multi-product'],
     designW: 0.88,
     devW: 0.5,
