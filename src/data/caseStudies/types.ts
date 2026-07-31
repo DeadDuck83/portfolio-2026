@@ -37,6 +37,11 @@ export interface Figure {
   objectFit?: 'contain' | 'cover';
   /** CSS object-position when cropping in-page (e.g. "center top"). */
   objectPosition?: string;
+  /**
+   * When true, render full-width in Solution (stacked under Screen 01)
+   * instead of joining the smaller card grid. First figure is always full-width.
+   */
+  fullWidth?: boolean;
 }
 
 export interface FigureCaption {
