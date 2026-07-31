@@ -55,6 +55,8 @@ export default function CaseStudy() {
   if (!cs) return <Navigate to="/" replace />;
 
   const collageImages = collectCaseStudyImages(cs);
+  const solutionFullWidth = cs.solution.figures.filter((f, i) => i === 0 || f.fullWidth);
+  const solutionCards = cs.solution.figures.filter((f, i) => i !== 0 && !f.fullWidth);
 
   const chapters: Chapter[] = [
     { id: 'c0', label: '00 Brief' },
@@ -470,14 +472,13 @@ export default function CaseStudy() {
             </Reveal>
           )}
 
-          {/* Screen 01 (prominent) */}
-          {cs.solution.figures[0] && (
-            <Reveal style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)' }}>
-              <PlaceholderFigure figure={cs.solution.figures[0]} prominent />
+          {/* Solution figures: full-width leads, then optional card grid */}
+          {solutionFullWidth.map((fig) => (
+            <Reveal key={fig.placeholder} style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)' }}>
+              <PlaceholderFigure figure={fig} prominent />
             </Reveal>
-          )}
-          {/* Remaining screens */}
-          {cs.solution.figures.length > 1 && (
+          ))}
+          {solutionCards.length > 0 && (
             <div
               style={{
                 display: 'grid',
@@ -486,7 +487,7 @@ export default function CaseStudy() {
                 marginTop: 'clamp(2.4rem, 6vh, 3.6rem)',
               }}
             >
-              {cs.solution.figures.slice(1).map((fig) => (
+              {solutionCards.map((fig) => (
                 <Reveal key={fig.placeholder}>
                   <PlaceholderFigure figure={fig} />
                 </Reveal>
