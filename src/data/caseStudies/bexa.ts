@@ -41,7 +41,7 @@ export const bexa: CaseStudy = {
     paragraphs: [
       'A Bexa exam looks like this: an examiner brings the handheld device and an ultrasound on site, screens with Bexa, and confirms a flagged mass with ultrasound. Every exam produces two files — the Bexa reading and the ultrasound report — and those feed the analytics.',
       "A device runs an exam, not a service, and the parts meant to connect them weren't holding up. Reporting was the clearest tell: dashboards that looked finished but ran on broken filters and placeholder data. The numbers meant to prove the device worked couldn't be trusted.",
-      "It went deeper than reporting. Underneath was legacy code, built years ago by a team long gone, quietly holding scheduling, exams, results, and quality checks together. A new service on old plumbing isn't a patch job. It needed four systems, one for each person who touches an exam.",
+      "It went deeper than reporting. Underneath was legacy code, built years ago by a team long gone, holding scheduling, exams, results, and quality checks together. A new service on old plumbing isn't a patch job. It needed four systems, one for each person who touches an exam.",
     ],
     panelLabel: 'One exam, four systems',
     chips: [
@@ -49,12 +49,10 @@ export const bexa: CaseStudy = {
       'Ops · BexaSupport',
       'Examiner · BexaClinical',
       'Quality · BexaQuality',
-      'Bexa reading',
-      'Ultrasound report',
-      'Device metrics',
+      'Rebranding'
     ],
     captionBefore: 'Legacy app, placeholder data.',
-    captionAfter: 'Four systems, real numbers.',
+    captionAfter: 'Four systems, new position.',
   },
 
   process: {
@@ -65,7 +63,7 @@ export const bexa: CaseStudy = {
     },
     h2: 'Diagnose first, then build a tool for each person who touches an exam.',
     paragraph:
-      'Every call came back to two rules. On a cleared device the data has to be provable, and each user needs a tool shaped around their job — not one screen that half-fits everyone.',
+      'Every call came back to two foundations. 1, on a bexa device the data has to be provable/accurate, and 2, each user needs a tool shaped around their job — not one screen that half-fits everyone.',
     decisions: [
       {
         title: 'Audit before adding.',
@@ -182,15 +180,15 @@ export const bexa: CaseStudy = {
         placeholder: 'Screen 02',
         dims: '2800 × 1800',
         aspect: '2800/1800',
-        innerLabel: 'The device in the room',
+        innerLabel: 'Photo shoot for new branded look',
         hoverLift: true,
         fullWidth: true,
         src: '/case-studies/bexa/Bexa-04-b.jpg',
         alt: 'Bexa handheld device and charging base in clinical and product photography',
         caption: {
           tag: '02',
-          lead: 'Hardware in the room.',
-          desc: 'The cleared device and its dock — the physical half of a service that also had to feel calm on site.',
+          lead: 'People needed to see it.',
+          desc: 'I ran a photo shoot for the new branded look for Bexa. It is replacing an uncomfortable process so I wanted it to look inviting.',
         },
       },
       {
@@ -205,7 +203,7 @@ export const bexa: CaseStudy = {
           tag: '03',
           lead: 'The public face.',
           leadInline: true,
-          desc: ' Partner pages that book the exam in plain language — same promise as MyBexa, out where patients first land.',
+          desc: ' We updated the look and feel of the entire myBexa brand. Targeting a more feminine and welcoming color palette.',
         },
       },
       {
@@ -220,7 +218,7 @@ export const bexa: CaseStudy = {
           tag: '04',
           lead: 'What is Bexa.',
           leadInline: true,
-          desc: ' Painless, radiation-free, immediate results — the patient story next to the hardware and SureView that make it real.',
+          desc: ' We put the product out in front. Our customers do not know much about Bexa, so we wanted to make sure it was accessable and easy to see what an exam looks like.',
         },
       },
     ],
@@ -234,17 +232,17 @@ export const bexa: CaseStudy = {
     },
     lead: "All four are live. I'm still building them.",
     paragraphs: [
-      "The four systems are deployed and in active use. This isn't a write-up I finished and moved on from — I'm still shipping updates on agile cycles as real usage comes in. Reporting that started on placeholder data now runs on checked device output, and quality catches drift before it becomes a bad result.",
+      "The four systems are deployed and in active use. This isn't a write-up I finished and moved on from — I'm still shipping updates on agile cycles as real usage comes in. With 0-1 creations there are always new things that need to be built as soon as it gets in the hands of users.",
     ],
     asideLabel: 'What I actually learned',
     lessons: [
       {
         title: 'On a regulated device, trust is the product.',
-        text: "A clean dashboard means nothing if the data under it isn't real. Proving the numbers was as much design work as any screen — and the most important work on the project.",
+        text: "A clean dashboard means nothing if the data under it isn't real. Proving the numbers was as much design work as any screen — and the most important work on the project. I took away from this that I should never trust the data until I have proven it.",
       },
       {
         title: 'One tool for everyone serves no one.',
-        text: "Four systems, each shaped around one user's real job, beat the single overloaded service on every measure that mattered.",
+        text: "Splitting the system into 4 separate systems was a big win at a cost. If I could do it again, I would have spent more time with the Business team to explain the value of each system and how they fit into the overall process. More buy in from the business side would have been helpful.",
       },
       {
         title: 'Diagnose before you design.',
