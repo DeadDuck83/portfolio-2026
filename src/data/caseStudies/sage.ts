@@ -1,158 +1,136 @@
 import type { CaseStudy } from './types';
 
 /**
- * Case study 01 — Sage Healthspan (founding product owner).
- *
- * DRAFT: grounded facts (0 → 6k+ members, unified Quest lab-ordering +
- * payments + app checkout, AI health timeline, HIPAA, founding hire) come from
- * the real role; the personas, the four decisions, figure captions, and the
- * "if I did it again" are plausible narrative to be reviewed/corrected by Derek.
+ * Case study 01 — Sage Healthspan (founding product hire / product owner).
+ * Structure: Brief → Context → Process → Solution → Outcome (no Users chapter).
  */
 export const sage: CaseStudy = {
   slug: 'sage',
   caseNumber: '01',
   eyebrowRight: 'Sage Healthspan · Consumer Longevity Platform',
 
-  headlineLead: 'From a lab result to a ',
-  headlineAccent: 'life change.',
+  headlineLead: 'Your health has been telling a story. ',
+  headlineAccent: 'Now you can read it.',
   intro:
-    'Sage Healthspan promises to add healthy years to your life — but that promise was buried under lab orders, a separate payment portal, and PDF results nobody could act on. As the founding product hire, I unified lab ordering, payments, and the app into one checkout, then built an AI health timeline that turns a pile of scattered results into a next step you can actually take.',
-  tldr: 'Fragmented longevity journey → one integrated checkout + an AI health timeline → 0 → 6,000+ members who can act on their data.',
+    "Sage set out to make personalized health work for everyday people. The insight underneath it: most of us already carry years of health data, old lab results and records, that we can't actually read or use. As the founding product hire, I helped turn that into something usable. You scan your old results, Sage reads them and builds a personal health timeline, and the AI reads the trends to show you where to look deeper: a question for your doctor, a follow-up test you can order through Sage, or a supplement worth a closer look. We grew it past 6,000 users.",
+  tldr: "A consumer health app built on one idea: you already have the data, you just can't use it. Scan old lab results, get a health timeline and AI insight you can act on. Zero to 6,000+ users.",
   meta: {
-    role: 'Product Owner · founding hire',
+    role: 'Founding Product Hire · Product Owner',
     org: 'Sage Healthspan',
-    timeline: '2023 — Now · 0 → 1',
-    scope: 'Product · Systems · AI',
+    timeline: '2023 to present · 0 → 1',
+    scope: 'Product Design · Product Ownership · AI · Consumer Health',
   },
   heroFigure: {
     placeholder: 'Hero',
-    dims: '2880 × 1260',
-    aspect: '16/7',
-    innerLabel: 'Health timeline — hero view',
+    dims: '1440 × 630',
+    aspect: '1440/630',
+    innerLabel: 'Healthspan hero — lifespan to healthspan',
+    src: '/case-studies/sage/Sage-01.jpg',
+    alt: 'Sage Healthspan hero — lifespan to healthspan with app screens',
   },
 
   context: {
     chapter: {
       numeral: '01',
       label: 'Context',
-      subtitle: 'the longevity promise, buried in busywork',
+      subtitle: 'the data was already there',
     },
-    h2: 'The science was sound. The experience was three logins and a stack of PDFs.',
+    h2: "The raw material for personalized health is sitting in everyone's files, unread.",
     paragraphs: [
-      'Getting a single healthspan reading meant ordering a panel through Quest, clearing eligibility, paying in a separate portal, going in for a blood draw, and finally receiving results as a PDF with no context. Powerful data, delivered like a utility bill.',
-      'Members signed up motivated and churned confused. Without a way to see whether anything was improving over time, the core promise — more healthy years — was impossible to feel.',
+      "Most people have a trail of old lab results and records, but it shows up as PDFs and numbers with no context. You can't tell what your bloodwork means, whether anything is trending the wrong way, or what to do about it. The ingredients for real, personalized health are already in the drawer. They're just unreadable.",
+      "Sage's job was to make them legible. Take what someone already has and turn it into a picture they can understand and act on, without making them start over with a new test and a new bill.",
     ],
-    panelLabel: "One member's first panel",
+    panelLabel: 'From unread files to a next step',
     chips: [
-      'Quest lab order',
-      'Eligibility check',
-      'Payment portal',
-      'Blood draw',
-      'PDF results',
-      'Manual tracking',
+      'Old lab PDFs',
+      'No context',
+      'No trends',
       'Guesswork',
+      'Scan',
+      'Health timeline',
+      'Gap analysis',
+      'Next step',
     ],
     captionBefore: 'The "before" state.',
-    captionAfter: 'All of this became one flow.',
-  },
-
-  users: {
-    chapter: {
-      numeral: '02',
-      label: 'Two members',
-      subtitle: 'same goal, opposite starting lines',
-    },
-    h2: 'The same screens had to satisfy the quantified-self veteran and the first-timer who has never seen an ApoB number.',
-    personas: [
-      {
-        label: 'Member 01',
-        name: 'The optimizer',
-        subtitle: 'tracks everything, trusts the data',
-        needs: [
-          'Raw values and trends, not just a green "normal" checkmark',
-          'Compared against optimal ranges, not population averages',
-          'A way to export and go deeper on their own',
-        ],
-      },
-      {
-        label: 'Member 02',
-        name: 'The first-timer',
-        subtitle: 'first blood panel, a little anxious',
-        needs: [
-          '"Am I okay?" answered in plain language, not lab jargon',
-          'One clear next step instead of forty numbers',
-          'Reassurance about what is actually worth attention',
-        ],
-      },
-    ],
-    pullLead: 'Every screen had to work for both — ',
-    pullAccent: 'precise for one, human for the other.',
+    captionAfter: 'Readable, and actionable.',
   },
 
   process: {
     chapter: {
-      numeral: '03',
+      numeral: '02',
       label: 'Process',
       subtitle: 'the decision log',
     },
-    h2: 'As the founding PM I owned research, roadmap, and the build — four calls shaped everything.',
+    h2: 'We made our bets. The data moved them.',
     paragraph:
-      'Working with a small design-and-engineering team, every flow was checked against the real vendor constraints — Quest ordering, payments, and HIPAA — before it earned a second iteration. Slower to design, but nothing died in integration later.',
+      'As the founding product hire I owned research, roadmap, and a lot of the build, working alongside a small design and engineering team.',
     decisions: [
       {
-        title: 'One checkout, three vendors.',
+        title: 'Start from the data people already have.',
         choice:
-          'Unify lab ordering, payment, and account setup into a single in-app flow instead of handing members off to Quest and a separate payment portal.',
-        cost: 'Heavy integration work across three systems and eligibility rules — but it is the line between members finishing signup and abandoning it.',
+          "Don't make people begin from zero. Start with the results already in their files, scan them, and build from there. The fastest path to value is the data they already own, not another test.",
+        cost: 'Old results arrive in every format imaginable. A lot of the work lived in the OCR and review layer that turns a messy PDF into clean, structured data you can build on.',
       },
       {
         title: 'A timeline, not a dashboard.',
         choice:
-          'Organize health data as a longitudinal timeline — what changed and when — rather than a snapshot of the latest panel.',
-        cost: 'Required normalizing results across labs and dates into one model. Harder to build; also the only thing that makes progress visible.',
+          'Show results as a personal health timeline, not a one-time readout. Healthspan is about which way things are trending, so the product had to make change over time the main event.',
+        cost: 'A timeline only works if you have history and can line up results that were never meant to sit together. More plumbing than a snapshot, and worth it.',
       },
       {
-        title: 'AI that guides, never diagnoses.',
+        title: "Don't just show results. Show the gaps worth chasing.",
         choice:
-          'Use AI to summarize trends and surface one plain-language next step, behind hard guardrails against anything that reads as a medical diagnosis.',
-        cost: 'Constant review of prompts and outputs plus clinical guardrails. Slower to ship, but the only responsible way to put AI on health data.',
+          "Reading a number isn't the goal, knowing what to do about it is. Sage runs a gap analysis across your results and trends, flags the gaps worth a closer look, and turns each one into a next step: a question for your doctor, a follow-up test you can order through Sage, or a supplement worth considering. You get an action, not just a value.",
+        cost: "On health data, the line that matters is guidance versus diagnosis. Gap analysis had to point people to where to look and help them ask sharper questions, never tell them what's wrong. The first version keeps it simple on purpose, surfacing the gaps that matter, with plenty of room to grow.",
       },
       {
-        title: 'Ship the smallest honest loop.',
+        title: 'We bet on the trends. Users bet on the scanner.',
         choice:
-          'Launch the order → result → insight → retest loop before adding breadth, and measure whether members came back for a second panel.',
-        cost: 'Said no to a lot of requested features early. In exchange, the team stayed on the loop that actually retains members.',
+          "We shipped the scan and the trending views, then headed straight for the lab-panel purchase, sure the trends would be the draw. The data said otherwise. People went wild for scanning. We let them store up to 100 results free, then charged a flat $10 for unlimited, and at peak we were seeing hundreds of scans a day. So we followed them and treated scanning as the front door, not a step on the way to something else.",
+        cost: "Leaning into the thing people actually loved meant setting down some of what we'd assumed they'd want. But a product that guesses wrong and won't adjust is worse than one that gets surprised and follows the evidence.",
+      },
+      {
+        title: 'Keep a human in the loop, without touching their data.',
+        choice:
+          "Not every scan came back clean, and on health data a wrong number isn't an acceptable default. So we built the Document For Review flow. When a scan wasn't confident enough for someone to approve, it went to a review queue stripped of everything identifying. A team member saw only the scanned values, checked them, and sent the corrected scan back to the user's device.",
+        cost: "A de-identified review loop is more to design and run than trusting the OCR and moving on. It's also the difference between a number a person can rely on and one they have to second-guess.",
       },
     ],
     figures: [
       {
         placeholder: 'Fig. A',
-        dims: '2400 × 1400',
-        aspect: '12/7',
-        innerLabel: 'Member journey / data-flow map',
+        dims: '1400 × 900',
+        aspect: '1400/900',
+        innerLabel: 'Lab results pipeline architecture',
+        src: '/case-studies/sage/Sage-02.jpg',
+        alt: 'Sage lab-results ingestion architecture — S3, EventBridge, Textract, and status updates',
         caption: {
           tag: 'FIG. A',
-          desc: 'Every vendor, hand-off, and data source mapped against the moment a member actually needs it.',
+          desc: 'The scan pipeline end to end — OCR, review, and status updates that turn a messy PDF into data someone can trust.',
         },
       },
       {
         placeholder: 'Fig. B',
-        dims: '1600 × 1200',
-        aspect: '4/3',
-        innerLabel: 'Early checkout sketches',
+        dims: '800 × 600',
+        aspect: '800/600',
+        innerLabel: 'Purchase → lab status flow',
+        src: '/case-studies/sage/Sage-03.jpg',
+        alt: 'Sage app flow from how to purchase through lab test status tracking',
         caption: {
           tag: 'FIG. B',
-          desc: 'The first unified-checkout concepts — where the three-vendor flow got collapsed into one.',
+          desc: 'When a gap pointed to a follow-up test, the purchase path stayed in-app — order to draw to results as one status trail.',
         },
       },
       {
         placeholder: 'Fig. C',
-        dims: '1600 × 1200',
-        aspect: '4/3',
-        innerLabel: 'Timeline wireframes',
+        dims: '800 × 600',
+        aspect: '800/600',
+        innerLabel: 'User research synthesis',
+        src: '/case-studies/sage/Sage-04.jpg',
+        alt: 'Sage user research synthesis — survey themes on results, data, and notifications',
         caption: {
           tag: 'FIG. C',
-          desc: 'Timeline wireframes annotated with which result each row draws from, and how it normalizes over time.',
+          desc: 'Research as the foundation — confusing results, scattered data, and how people wanted to be guided.',
         },
       },
     ],
@@ -160,61 +138,70 @@ export const sage: CaseStudy = {
 
   solution: {
     chapter: {
-      numeral: '04',
+      numeral: '03',
       label: 'Solution',
       subtitle: 'the part with the pictures',
     },
     principles: [
       {
         numeral: 'i.',
-        text: 'One flow, start to finish — order, pay, and onboard without ever leaving the app.',
+        title: 'Scan, and understand.',
+        text: 'Point your phone at an old lab result and Sage reads it, cleans it up, and pulls the numbers into your record. The messy PDF becomes usable data with no manual typing.',
       },
       {
         numeral: 'ii.',
-        text: 'Time is the axis — every value plotted against your own history, not just a reference range.',
+        title: 'A timeline you can actually read.',
+        text: "Your results laid out over time, each value in plain language and in context, so you see the trend, not just today's number.",
       },
       {
         numeral: 'iii.',
-        text: 'AI as a guide, not an oracle — a plain-language next step, never a diagnosis.',
+        title: 'Gap analysis that points you somewhere.',
+        text: 'Sage flags the gaps in your results worth a closer look and turns each into a next step: a question for your doctor, a test you can order through Sage, or a supplement to consider. A page of numbers becomes a short list of things to actually do.',
       },
     ],
     figures: [
       {
         placeholder: 'Screen 01',
-        dims: '2880 × 1800',
-        aspect: '8/5',
-        innerLabel: 'Health timeline — full view',
+        dims: '1400 × 900',
+        aspect: '1400/900',
+        innerLabel: 'AI insights + sageMD+',
         hoverLift: true,
+        src: '/case-studies/sage/Sage-05.jpg',
+        alt: 'Sage Analyze results AI screen and sageMD+ proactive health marketing site',
         caption: {
           tag: '01',
-          lead: 'The health timeline — progress you can see.',
-          desc: 'Every panel, biomarker, and habit on one scrollable timeline, so a member can tell at a glance whether the last three months moved the needle.',
+          lead: 'Scan, timeline, and insight.',
+          desc: 'Personalized analysis in the app — and a public face that sells the same promise: proactive health, made practical.',
         },
       },
       {
         placeholder: 'Screen 02',
-        dims: '1400 × 1050',
-        aspect: '4/3',
-        innerLabel: 'Unified checkout',
+        dims: '800 × 600',
+        aspect: '800/600',
+        innerLabel: 'Integration ecosystem',
         hoverLift: true,
+        src: '/case-studies/sage/Sage-07.jpg',
+        alt: 'Sage Healthspan final integration ecosystem — Quest, AI, Shopify, and more',
         caption: {
           tag: '02',
-          lead: 'One checkout.',
+          lead: 'One platform, many vendors.',
           leadInline: true,
-          desc: ' Lab order, eligibility, and payment in a single flow — the three-portal handoff, gone.',
+          desc: ' Quest, AI, commerce, and support wired into one hub — the plumbing behind scan, timeline, and next step.',
         },
       },
       {
         placeholder: 'Screen 03',
-        dims: '1400 × 1050',
-        aspect: '4/3',
-        innerLabel: 'AI next step',
+        dims: '1600 × 1200',
+        aspect: '1600/1200',
+        innerLabel: 'At-home tests and kits',
         hoverLift: true,
+        src: '/case-studies/sage/Sage-08.jpg',
+        alt: 'Sage at-home test and hormone optimization kit product cards',
         caption: {
           tag: '03',
-          lead: 'The next step.',
+          lead: 'When free love meets paid.',
           leadInline: true,
-          desc: ' AI reads the trend and suggests one concrete action in plain language — with a clear line it never crosses into diagnosis.',
+          desc: ' At-home tests and kits — the bet on what people might pay for after scanning won the engagement fight.',
         },
       },
     ],
@@ -222,20 +209,82 @@ export const sage: CaseStudy = {
 
   outcome: {
     chapter: {
-      numeral: '05',
+      numeral: '04',
       label: 'Outcome',
-      subtitle: 'receipts, where available',
+      subtitle: 'what got built, and what I learned',
     },
-    stats: [
-      { kind: 'count', to: 6, suffix: 'k+', label: 'Members, from a standing start' },
-      { kind: 'static', display: '3 → 1', label: 'Vendor handoffs, one checkout' },
-      { kind: 'static', display: '0 → 1', label: 'Built and shipped from scratch' },
+    lead: 'Zero to 6,000+ users, and a signal we almost bet against.',
+    paragraphs: [
+      'Sage went from a blank page to a working product with more than 6,000 users. Scanning became the runaway feature, hundreds a day at peak, and the Document For Review flow kept those scans trustworthy. But the order people used things told the real story. They scanned, they reviewed, they read their insights, and then far fewer of them bought. They loved the free product and stopped at the paid one. That gap is what pushed us toward at-home tests and supplements, hunting for the thing people would actually pay for.',
     ],
-    closingParagraph:
-      'More members finished signup once it was one flow, and more came back for a second panel once progress was finally visible. The AI timeline turned one-time testers into members with a reason to return — the whole point of a longevity product.',
-    ifIDidItAgain:
-      'Instrument the retest loop from day one. We learned too late which nudge actually brought members back for their second panel — the single metric the business runs on.',
+    asideLabel: 'What I learned',
+    lessons: [
+      {
+        title: "The feature people love isn't always the one they'll pay for.",
+        text: 'We won the engagement fight and still had a conversion problem, and no amount of scanning volume papers over that. Watching where people drop between using and paying is worth more than any single usage number.',
+      },
+      {
+        title: 'Follow the data over your own bet.',
+        text: 'We were sure the trends would be the draw. Users told us it was scanning. The fastest thing I did right was believe them and move the product toward what they were already doing.',
+      },
+    ],
   },
+
+  // Collage-only images (not placed in the page body).
+  gallery: [
+    {
+      placeholder: 'Gallery',
+      dims: '1200 × 1200',
+      aspect: '1/1',
+      innerLabel: 'App screens collage',
+      src: '/case-studies/sage/Animation-square02.png',
+      alt: 'Sage app screens — dashboard, biological age, biomarker detail, and purchase flow',
+      caption: {
+        tag: 'APP',
+        lead: 'The product surfaces.',
+        desc: 'Dashboard, biological age, biomarker detail, and the purchase path — the app as members actually used it.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '1200 × 1200',
+      aspect: '1/1',
+      innerLabel: 'Lifestyle photography',
+      src: '/case-studies/sage/Animation-square03.png',
+      alt: 'Sage lifestyle photography — wellness, lab work, and aging well',
+      caption: {
+        tag: 'PHOTO',
+        lead: 'The world around the data.',
+        desc: 'Lifestyle and clinical photography that framed Sage as everyday health, not another medical portal.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '1200 × 1200',
+      aspect: '1/1',
+      innerLabel: 'Brand and UI exploration',
+      src: '/case-studies/sage/Animation-square04.png',
+      alt: 'Sage brand mood board with mushroom-inspired palette and light/dark home screens',
+      caption: {
+        tag: 'BRAND',
+        lead: 'Look and feel.',
+        desc: 'Early brand and UI exploration — earthy palette into light and dark home screens.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '1200 × 1200',
+      aspect: '1/1',
+      innerLabel: 'Health category icons',
+      src: '/case-studies/sage/Animation-square05.png',
+      alt: 'Sage health category icons — blood, cardiometabolic, thyroid, and more',
+      caption: {
+        tag: 'SYSTEM',
+        lead: 'Categories you can scan into.',
+        desc: 'Icon system for the health areas Sage could read from a pile of old results.',
+      },
+    },
+  ],
 
   nextCase: {
     label: 'Bexa Suite',

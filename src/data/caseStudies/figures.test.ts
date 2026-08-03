@@ -19,8 +19,8 @@ describe('collectCaseStudyFigures', () => {
     const images = collectCaseStudyImages(plmc);
     expect(images.length).toBeGreaterThan(0);
     expect(images.every((f) => Boolean(f.src))).toBe(true);
-    // Sage still uses placeholders — no collage assets yet.
-    expect(collectCaseStudyImages(sage)).toEqual([]);
+    // Sage has hero + process + solution wired.
+    expect(collectCaseStudyImages(sage).length).toBe(11);
   });
 
   it('includes collage-only gallery figures when present', () => {

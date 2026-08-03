@@ -84,7 +84,7 @@ export const roles: Role[] = [
     disc: 'Product Leadership',
     dates: '2023 — Present',
     loc: 'Remote',
-    desc: 'Founding product hire. Grew the app 0 → 6,000+ users, led a small design and engineering team, and owned the full product lifecycle.',
+    desc: 'Founding product hire. Built scan → timeline → gap analysis, grew 0 → 6,000+ users, and owned the product through what people actually used versus what they paid for.',
     tags: ['0 → 1', 'Systems Integration', 'AI Insights'],
     designW: 0.75,
     devW: 0.85,

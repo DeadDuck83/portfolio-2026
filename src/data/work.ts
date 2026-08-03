@@ -27,8 +27,8 @@ export const work: WorkItem[] = [
     title: 'Sage Healthspan',
     roleTag: 'Product Owner · Consumer Health',
     description:
-      'Grew a longevity platform from zero to 6,000+ users, unifying Quest lab-ordering, payments, and an AI health timeline into one app.',
-    tags: ['0 → 1', 'Systems Integration', 'AI Insights', 'HIPAA'],
+      'Founding product hire on a consumer health app: scan old lab results, build a personal timeline, and surface AI gap analysis people can act on — zero to 6,000+ users.',
+    tags: ['0 → 1', 'AI Insights', 'Consumer Health', 'OCR / Data'],
     to: '/work/sage',
     endLabel: 'Case study',
     endGlyph: '→',
