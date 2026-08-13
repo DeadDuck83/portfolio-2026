@@ -151,9 +151,6 @@ function WorkBand({ item }: { item: WorkItem }) {
           maxWidth: layout.maxWidth,
           margin: '0 auto',
           width: '100%',
-          maxWidth: layout.maxWidth,
-          margin: '0 auto',
-          width: '100%',
           padding: `clamp(1.8rem, 4vh, 2.6rem) ${layout.sidePad}`,
           boxSizing: 'border-box',
         }}
