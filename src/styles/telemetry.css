@@ -1,0 +1,90 @@
+/* Secret telemetry chassis — PCB / instrument world (overlay only). */
+
+/* Cover slam-shut: whip closed, then a 1–2px impact shudder. */
+@keyframes chassis-slam-shut {
+  0% {
+    transform: translate3d(0, calc(-1 * var(--chassis-lift, 0px)), 0);
+  }
+  48% {
+    transform: translate3d(0, 0, 0);
+  }
+  60% {
+    transform: translate3d(2px, 0, 0);
+  }
+  72% {
+    transform: translate3d(-2px, 1px, 0);
+  }
+  84% {
+    transform: translate3d(1px, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.chassis-cover--slam {
+  animation: chassis-slam-shut 280ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chassis-cover--slam {
+    animation: none;
+  }
+}
+
+@keyframes telemetry-power-on {
+  0% {
+    opacity: 0.35;
+    filter: brightness(0.7) saturate(0.8);
+  }
+  40% {
+    opacity: 1;
+    filter: brightness(1.15) saturate(1.1);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes telemetry-scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.telemetry-chassis {
+  --tele-board: #070b09;
+  --tele-board-mid: #0d1411;
+  --tele-copper: #c4844a;
+  --tele-copper-dim: rgba(196, 132, 74, 0.35);
+  --tele-phosphor: #8dffb8;
+  --tele-phosphor-dim: rgba(141, 255, 184, 0.55);
+  --tele-amber: #ffc857;
+  --tele-ink: #d8e6dc;
+  --tele-muted: #7a8f82;
+  --tele-bezel: #1a221e;
+}
+
+.telemetry-chassis[data-power='on']:not([data-reduced='true']) {
+  animation: telemetry-power-on 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.telemetry-chassis[data-power='on']:not([data-reduced='true']) .telemetry-scanline {
+  animation: telemetry-scan 4.5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .telemetry-chassis[data-power='on'] {
+    animation: none;
+  }
+
+  .telemetry-chassis .telemetry-scanline {
+    animation: none !important;
+    opacity: 0.08;
+  }
+}

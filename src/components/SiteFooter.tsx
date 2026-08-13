@@ -18,9 +18,14 @@ const linkStyle = {
 export default function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'case' }) {
   return (
     <footer
+      data-chassis-handle
+      title="Drag up"
       style={{
         borderTop: `1px solid ${border.hairline}`,
         background: variant === 'case' ? colors.bgAlt : undefined,
+        cursor: 'grab',
+        touchAction: 'pan-x',
+        userSelect: 'none',
       }}
     >
       <div
