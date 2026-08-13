@@ -375,7 +375,13 @@ export default function ChassisReveal({ children }: { children: ReactNode }) {
             zIndex: 1,
             minHeight: '100%',
             background: colors.bg,
-            transform: slamming ? undefined : `translate3d(0, ${-lift}px, 0)`,
+            // Avoid translate3d(0,0,0) when closed — it makes position:fixed
+            // descendants (PixelCameo) bind to this tall cover instead of the viewport.
+            transform: slamming
+              ? undefined
+              : lift > 0
+                ? `translate3d(0, ${-lift}px, 0)`
+                : 'none',
             transition:
               dragging || slamming || reduced
                 ? 'none'

@@ -1,23 +1,52 @@
-import { type MouseEvent, type ReactNode } from 'react';
+import { type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
 import { track } from '../../lib/analytics';
-import { border, colors, fonts } from '../../theme/tokens';
+import { colors, fonts, layout } from '../../theme/tokens';
 
 /**
- * "Selected work" — four full-width rows (numeral · title/desc/tags · date).
- * Rows link externally, to an internal case study, or nowhere yet. Hovering a
- * row tints its background and shifts the numeral to the accent color.
- * On mobile, numeral + end label stack above the body so copy can use full width.
+ * Spatial thesis (work section):
+ * - Lead: case-study hero as a full-bleed visual plane per project.
+ * - Support: title + role in the scrim; tags + CTA clustered under it.
+ * - Frame: dark section field; stacked full-width bands with hairline gaps.
+ * - Rhythm: tall image bands, generous header above.
+ * - Adapt: same overlay stack on narrow; image stays cover.
+ */
+
+const frame = {
+  bg: colors.bg,
+  ink: colors.text,
+  inkMuted: colors.textMuted,
+  border: 'rgba(236, 230, 218, 0.1)',
+} as const;
+
+const onImage = {
+  text: colors.text,
+  muted: 'rgba(236, 230, 218, 0.62)',
+  chipBorder: 'rgba(236, 230, 218, 0.28)',
+  scrim:
+    'linear-gradient(180deg, rgba(26,23,18,0.15) 0%, rgba(26,23,18,0.45) 42%, rgba(26,23,18,0.92) 100%)',
+} as const;
+
+/**
+ * "Selected work" — stacked full-width hero bands. Image leads; copy rides a dark scrim.
+ * Each band links to its case study. Hover lifts the photo slightly.
  */
 export default function WorkList() {
   return (
-    <section id="work" style={{ borderTop: `1px solid ${border.hairline}` }}>
+    <section
+      id="work"
+      style={{
+        background: frame.bg,
+        color: frame.ink,
+        borderTop: `1px solid ${frame.border}`,
+      }}
+    >
       <div
         style={{
-          maxWidth: 1240,
+          maxWidth: layout.maxWidth,
           margin: '0 auto',
-          padding: 'clamp(4rem, 11vh, 8rem) clamp(1.5rem, 6vw, 6rem) clamp(2rem, 6vh, 4rem)',
+          padding: `clamp(3.5rem, 9vh, 6.5rem) ${layout.sidePad} clamp(1.6rem, 4vh, 2.4rem)`,
           display: 'flex',
           alignItems: 'baseline',
           justifyContent: 'space-between',
@@ -32,6 +61,7 @@ export default function WorkList() {
             fontSize: 'clamp(2.2rem, 5vw, 3.6rem)',
             margin: 0,
             lineHeight: 1,
+            color: frame.ink,
           }}
         >
           The work
@@ -41,147 +71,23 @@ export default function WorkList() {
             fontSize: '0.68rem',
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
-            color: colors.textMuted,
+            color: frame.inkMuted,
           }}
         >
           04 projects · 2019 — 2026
         </span>
       </div>
 
-      <div
-        style={{
-          maxWidth: 1240,
-          margin: '0 auto',
-          padding: '0 clamp(1.5rem, 6vw, 6rem) clamp(4rem, 10vh, 7rem)',
-        }}
-      >
-        {work.map((item, i) => (
-          <WorkRow key={item.n} item={item} last={i === work.length - 1} />
+      <div className="work-grid" style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {work.map((item) => (
+          <WorkBand key={item.n} item={item} />
         ))}
       </div>
     </section>
   );
 }
 
-function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
-  const rowStyle = {
-    display: 'grid',
-    gridTemplateColumns: '3.5rem 1fr auto',
-    gridTemplateAreas: '"numeral body end"',
-    gap: 'clamp(1rem, 4vw, 3rem)',
-    alignItems: 'start' as const,
-    padding: 'clamp(2rem, 5vh, 3rem) 0',
-    borderTop: `1px solid ${border.hairlineStronger}`,
-    ...(last ? { borderBottom: `1px solid ${border.hairlineStronger}` } : {}),
-  };
-
-  const onEnter = (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = 'rgba(132,137,69,0.05)';
-    const numeral = e.currentTarget.querySelector('.work-row__numeral');
-    if (numeral) (numeral as HTMLElement).style.color = colors.accentBright;
-  };
-  const onLeave = (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = 'transparent';
-    const numeral = e.currentTarget.querySelector('.work-row__numeral');
-    if (numeral) (numeral as HTMLElement).style.color = colors.textMuted;
-  };
-
-  const inner: ReactNode = (
-    <>
-      <span
-        className="work-row__numeral"
-        style={{
-          gridArea: 'numeral',
-          fontFamily: fonts.display,
-          fontSize: '1.5rem',
-          color: colors.textMuted,
-        }}
-      >
-        {item.n}
-      </span>
-      <div className="work-row__body" style={{ gridArea: 'body', minWidth: 0 }}>
-        <div
-          className="work-row__title-row"
-          style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}
-        >
-          <span
-            style={{
-              fontFamily: fonts.display,
-              fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-              lineHeight: 1.05,
-            }}
-          >
-            {item.title}
-          </span>
-          <span
-            className="work-row__role"
-            style={{
-              fontSize: '0.66rem',
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: colors.textMuted,
-            }}
-          >
-            {item.roleTag}
-          </span>
-        </div>
-        <p
-          className="work-row__desc"
-          style={{
-            maxWidth: '60ch',
-            margin: '0.9rem 0 0',
-            fontSize: '0.86rem',
-            lineHeight: 1.7,
-            color: colors.textBody,
-          }}
-        >
-          {item.description}
-        </p>
-        <div
-          className="work-row__tags"
-          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}
-        >
-          {item.tags.map((t) => (
-            <span
-              key={t}
-              style={{
-                fontSize: '0.62rem',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: colors.textMuted,
-                padding: '0.3rem 0.6rem',
-                border: `1px solid ${border.hairlineStrong}`,
-              }}
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-      <span
-        className="work-row__end"
-        style={{
-          gridArea: 'end',
-          fontSize: '0.68rem',
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: colors.textMuted,
-          whiteSpace: 'nowrap',
-          ...(item.endGlyph
-            ? { display: 'flex', alignItems: 'center', gap: '0.5rem' }
-            : {}),
-        }}
-      >
-        {item.endLabel}
-        {item.endGlyph && (
-          <span style={{ fontFamily: fonts.display, fontSize: '1.2rem', color: colors.accent }}>
-            {item.endGlyph}
-          </span>
-        )}
-      </span>
-    </>
-  );
-
+function WorkBand({ item }: { item: WorkItem }) {
   const onWorkClick = () => {
     track('WorkItemClick', {
       title: item.title,
@@ -191,46 +97,209 @@ function WorkRow({ item, last }: { item: WorkItem; last: boolean }) {
     });
   };
 
-  // Internal case-study route.
+  const bandStyle: CSSProperties = {
+    position: 'relative',
+    display: 'block',
+    minHeight: 'clamp(20rem, 48vh, 30rem)',
+    overflow: 'hidden',
+    color: onImage.text,
+    textDecoration: 'none',
+    isolation: 'isolate',
+  };
+
+  const inner: ReactNode = (
+    <>
+      <img
+        className="work-band__image"
+        src={item.imageSrc}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: item.imagePosition ?? 'center center',
+          transform: 'scale(1.001)',
+          transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+          zIndex: 0,
+        }}
+      />
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: onImage.scrim,
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div
+        className="work-band__content"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          minHeight: 'inherit',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+          maxWidth: layout.maxWidth,
+          margin: '0 auto',
+          width: '100%',
+          maxWidth: layout.maxWidth,
+          margin: '0 auto',
+          width: '100%',
+          padding: `clamp(1.8rem, 4vh, 2.6rem) ${layout.sidePad}`,
+          boxSizing: 'border-box',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            marginBottom: '0.85rem',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: fonts.display,
+              fontSize: '1.15rem',
+              color: colors.accentTint,
+              letterSpacing: '0.02em',
+            }}
+          >
+            {item.n}
+          </span>
+          <span
+            style={{
+              fontSize: '0.66rem',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: onImage.muted,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+            }}
+          >
+            {item.endLabel}
+            {item.endGlyph && (
+              <span
+                style={{
+                  fontFamily: fonts.display,
+                  fontSize: '1.15rem',
+                  color: colors.accentBright,
+                  lineHeight: 1,
+                }}
+              >
+                {item.endGlyph}
+              </span>
+            )}
+          </span>
+        </div>
+
+        <h3
+          style={{
+            margin: 0,
+            fontFamily: fonts.display,
+            fontWeight: 400,
+            fontSize: 'clamp(2rem, 4.8vw, 3.2rem)',
+            lineHeight: 1.05,
+            letterSpacing: '-0.02em',
+            color: onImage.text,
+            maxWidth: '22ch',
+          }}
+        >
+          {item.title}
+        </h3>
+        <p
+          style={{
+            margin: '0.55rem 0 0',
+            fontSize: '0.66rem',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: onImage.muted,
+          }}
+        >
+          {item.brand}
+        </p>
+        <div
+          className="work-band__tags"
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '1.1rem' }}
+        >
+          {item.tags.map((t) => (
+            <span
+              key={t}
+              style={{
+                fontSize: '0.6rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: onImage.muted,
+                padding: '0.28rem 0.55rem',
+                border: `1px solid ${onImage.chipBorder}`,
+              }}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+
+  const hoverHandlers = {
+    onMouseEnter: (e: MouseEvent<HTMLElement>) => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const img = e.currentTarget.querySelector('.work-band__image') as HTMLElement | null;
+      if (img) img.style.transform = 'scale(1.04)';
+    },
+    onMouseLeave: (e: MouseEvent<HTMLElement>) => {
+      const img = e.currentTarget.querySelector('.work-band__image') as HTMLElement | null;
+      if (img) img.style.transform = 'scale(1.001)';
+    },
+  };
+
   if (item.to) {
     return (
       <Link
         to={item.to}
-        className="work-row"
-        style={rowStyle}
+        className="work-band"
+        aria-label={`${item.brand}: ${item.title} — ${item.endLabel}`}
+        style={bandStyle}
         onClick={onWorkClick}
-        onMouseEnter={onEnter}
-        onMouseLeave={onLeave}
+        {...hoverHandlers}
       >
         {inner}
       </Link>
     );
   }
-  // External link.
+
   if (item.href) {
     return (
       <a
         href={item.href}
         target="_blank"
         rel="noopener"
-        className="work-row"
-        style={rowStyle}
+        className="work-band"
+        aria-label={`${item.brand}: ${item.title} — ${item.endLabel}`}
+        style={bandStyle}
         onClick={onWorkClick}
-        onMouseEnter={onEnter}
-        onMouseLeave={onLeave}
+        {...hoverHandlers}
       >
         {inner}
       </a>
     );
   }
-  // Not yet linked.
+
   return (
-    <div
-      className="work-row"
-      style={rowStyle}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-    >
+    <div className="work-band" style={bandStyle} {...hoverHandlers}>
       {inner}
     </div>
   );
