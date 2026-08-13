@@ -230,6 +230,25 @@ export const bexa: CaseStudy = {
       label: 'Outcome',
       subtitle: 'shipped, and still shipping',
     },
+    stats: [
+      {
+        kind: 'count',
+        to: 9,
+        suffix: 'k+',
+        label: 'Exams run on the platform',
+      },
+      {
+        kind: 'count',
+        to: 4,
+        label: 'Unique applications designed and deployed',
+      },
+      {
+        kind: 'count',
+        to: 1600,
+        suffix: '+',
+        label: 'Mass locations identified',
+      },
+    ],
     lead: "All four are live. I'm still building them.",
     paragraphs: [
       "The four systems are deployed and in active use. This isn't a write-up I finished and moved on from — I'm still shipping updates on agile cycles as real usage comes in. With 0-1 creations there are always new things that need to be built as soon as it gets in the hands of users.",
