@@ -1,4 +1,4 @@
-import { type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { type CSSProperties, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
 import { track } from '../../lib/analytics';
@@ -6,31 +6,30 @@ import { colors, fonts, layout } from '../../theme/tokens';
 
 /**
  * Spatial thesis (work section):
- * - Lead: case-study hero as a full-bleed visual plane per project.
- * - Support: title + role in the scrim; tags + CTA clustered under it.
- * - Frame: dark section field; stacked full-width bands with hairline gaps.
- * - Rhythm: tall image bands, generous header above.
- * - Adapt: same overlay stack on narrow; image stays cover.
+ * - Type aligns to layout.maxWidth (1240) with the rest of the page.
+ * - Text share ≈ 27.5% of that measure (¼ + 10%); image takes the rest and bleeds out.
+ * - Image container caps at 2500px; outer edge fades 1500 → 2500 into the section bg.
+ * - Stagger: even text→image, odd image→text. Hover: 1px lift.
  */
 
 const frame = {
   bg: colors.bg,
   ink: colors.text,
   inkMuted: colors.textMuted,
+  body: colors.textBody,
   border: 'rgba(236, 230, 218, 0.1)',
+  chipBorder: 'rgba(236, 230, 218, 0.22)',
+  cta: colors.accentBright,
 } as const;
 
-const onImage = {
-  text: colors.text,
-  muted: 'rgba(236, 230, 218, 0.62)',
-  chipBorder: 'rgba(236, 230, 218, 0.28)',
-  scrim:
-    'linear-gradient(180deg, rgba(26,23,18,0.15) 0%, rgba(26,23,18,0.45) 42%, rgba(26,23,18,0.92) 100%)',
-} as const;
+/** Text share of the content measure (¼ + 10%). */
+const TEXT_RATIO = 1.1 / 4;
+
+const IMAGE_MAX = 2500;
+const IMAGE_FADE_START = 1500;
 
 /**
- * "Selected work" — stacked full-width hero bands. Image leads; copy rides a dark scrim.
- * Each band links to its case study. Hover lifts the photo slightly.
+ * "Selected work" — staggered copy · image rows with outer fade.
  */
 export default function WorkList() {
   return (
@@ -40,6 +39,11 @@ export default function WorkList() {
         background: frame.bg,
         color: frame.ink,
         borderTop: `1px solid ${frame.border}`,
+        // Shared by .work-band grid / mask in global.css
+        ['--work-measure' as string]: `${layout.maxWidth}px`,
+        ['--work-text-ratio' as string]: String(TEXT_RATIO),
+        ['--work-image-max' as string]: `${IMAGE_MAX}px`,
+        ['--work-image-fade-start' as string]: `${IMAGE_FADE_START}px`,
       }}
     >
       <div
@@ -79,15 +83,15 @@ export default function WorkList() {
       </div>
 
       <div className="work-grid" style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {work.map((item) => (
-          <WorkBand key={item.n} item={item} />
+        {work.map((item, index) => (
+          <WorkBand key={item.n} item={item} flip={index % 2 === 1} />
         ))}
       </div>
     </section>
   );
 }
 
-function WorkBand({ item }: { item: WorkItem }) {
+function WorkBand({ item, flip }: { item: WorkItem; flip: boolean }) {
   const onWorkClick = () => {
     track('WorkItemClick', {
       title: item.title,
@@ -98,22 +102,110 @@ function WorkBand({ item }: { item: WorkItem }) {
   };
 
   const bandStyle: CSSProperties = {
-    position: 'relative',
-    display: 'block',
-    minHeight: 'clamp(20rem, 48vh, 30rem)',
+    display: 'grid',
+    minHeight: 'clamp(18rem, 42vh, 26rem)',
     overflow: 'hidden',
-    color: onImage.text,
+    color: frame.ink,
     textDecoration: 'none',
+    background: frame.bg,
     isolation: 'isolate',
   };
 
-  const inner: ReactNode = (
-    <>
+  const content: ReactNode = (
+    <div
+      className="work-band__content"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        gap: '0.85rem',
+        paddingTop: 'clamp(1.5rem, 3.5vh, 2.4rem)',
+        paddingBottom: 'clamp(1.5rem, 3.5vh, 2.4rem)',
+        paddingLeft: flip ? 'clamp(1.1rem, 2vw, 1.6rem)' : layout.sidePad,
+        paddingRight: flip ? layout.sidePad : 'clamp(1.1rem, 2vw, 1.6rem)',
+        boxSizing: 'border-box',
+        minWidth: 0,
+      }}
+    >
+      <span
+        style={{
+          fontSize: '0.66rem',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: frame.inkMuted,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.45rem',
+        }}
+      >
+        {item.endLabel}
+        {item.endGlyph && (
+          <span
+            style={{
+              fontFamily: fonts.display,
+              fontSize: '1.05rem',
+              color: frame.cta,
+              lineHeight: 1,
+            }}
+          >
+            {item.endGlyph}
+          </span>
+        )}
+      </span>
+
+      <h3
+        style={{
+          margin: 0,
+          fontFamily: fonts.display,
+          fontWeight: 400,
+          fontSize: 'clamp(1.45rem, 2.4vw, 2.15rem)',
+          lineHeight: 1.12,
+          letterSpacing: '-0.02em',
+          color: frame.ink,
+        }}
+      >
+        {item.title}
+      </h3>
+      <p
+        style={{
+          margin: 0,
+          fontSize: '0.66rem',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: frame.inkMuted,
+        }}
+      >
+        {item.brand}
+      </p>
+      <div
+        className="work-band__tags"
+        style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}
+      >
+        {item.tags.map((t) => (
+          <span
+            key={t}
+            style={{
+              fontSize: '0.58rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: frame.body,
+              padding: '0.26rem 0.5rem',
+              border: `1px solid ${frame.chipBorder}`,
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+
+  const media: ReactNode = (
+    <div className="work-band__media" aria-hidden>
       <img
         className="work-band__image"
         src={item.imageSrc}
         alt=""
-        aria-hidden="true"
         loading="lazy"
         decoding="async"
         style={{
@@ -123,155 +215,32 @@ function WorkBand({ item }: { item: WorkItem }) {
           height: '100%',
           objectFit: 'cover',
           objectPosition: item.imagePosition ?? 'center center',
-          transform: 'scale(1.001)',
-          transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
-          zIndex: 0,
         }}
       />
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: onImage.scrim,
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div
-        className="work-band__content"
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          minHeight: 'inherit',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          maxWidth: layout.maxWidth,
-          margin: '0 auto',
-          width: '100%',
-          padding: `clamp(1.8rem, 4vh, 2.6rem) ${layout.sidePad}`,
-          boxSizing: 'border-box',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'space-between',
-            gap: '1rem',
-            flexWrap: 'wrap',
-            marginBottom: '0.85rem',
-          }}
-        >
-          <span
-            style={{
-              fontFamily: fonts.display,
-              fontSize: '1.15rem',
-              color: colors.accentTint,
-              letterSpacing: '0.02em',
-            }}
-          >
-            {item.n}
-          </span>
-          <span
-            style={{
-              fontSize: '0.66rem',
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: onImage.muted,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-            }}
-          >
-            {item.endLabel}
-            {item.endGlyph && (
-              <span
-                style={{
-                  fontFamily: fonts.display,
-                  fontSize: '1.15rem',
-                  color: colors.accentBright,
-                  lineHeight: 1,
-                }}
-              >
-                {item.endGlyph}
-              </span>
-            )}
-          </span>
-        </div>
-
-        <h3
-          style={{
-            margin: 0,
-            fontFamily: fonts.display,
-            fontWeight: 400,
-            fontSize: 'clamp(2rem, 4.8vw, 3.2rem)',
-            lineHeight: 1.05,
-            letterSpacing: '-0.02em',
-            color: onImage.text,
-            maxWidth: '22ch',
-          }}
-        >
-          {item.title}
-        </h3>
-        <p
-          style={{
-            margin: '0.55rem 0 0',
-            fontSize: '0.66rem',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: onImage.muted,
-          }}
-        >
-          {item.brand}
-        </p>
-        <div
-          className="work-band__tags"
-          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '1.1rem' }}
-        >
-          {item.tags.map((t) => (
-            <span
-              key={t}
-              style={{
-                fontSize: '0.6rem',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: onImage.muted,
-                padding: '0.28rem 0.55rem',
-                border: `1px solid ${onImage.chipBorder}`,
-              }}
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    </>
+    </div>
   );
 
-  const hoverHandlers = {
-    onMouseEnter: (e: MouseEvent<HTMLElement>) => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const img = e.currentTarget.querySelector('.work-band__image') as HTMLElement | null;
-      if (img) img.style.transform = 'scale(1.04)';
-    },
-    onMouseLeave: (e: MouseEvent<HTMLElement>) => {
-      const img = e.currentTarget.querySelector('.work-band__image') as HTMLElement | null;
-      if (img) img.style.transform = 'scale(1.001)';
-    },
-  };
+  const inner: ReactNode = flip ? (
+    <>
+      {media}
+      {content}
+    </>
+  ) : (
+    <>
+      {content}
+      {media}
+    </>
+  );
 
   if (item.to) {
     return (
       <Link
         to={item.to}
         className="work-band"
+        data-stagger={flip ? 'flip' : 'base'}
         aria-label={`${item.brand}: ${item.title} — ${item.endLabel}`}
         style={bandStyle}
         onClick={onWorkClick}
-        {...hoverHandlers}
       >
         {inner}
       </Link>
@@ -285,10 +254,10 @@ function WorkBand({ item }: { item: WorkItem }) {
         target="_blank"
         rel="noopener"
         className="work-band"
+        data-stagger={flip ? 'flip' : 'base'}
         aria-label={`${item.brand}: ${item.title} — ${item.endLabel}`}
         style={bandStyle}
         onClick={onWorkClick}
-        {...hoverHandlers}
       >
         {inner}
       </a>
@@ -296,7 +265,7 @@ function WorkBand({ item }: { item: WorkItem }) {
   }
 
   return (
-    <div className="work-band" style={bandStyle} {...hoverHandlers}>
+    <div className="work-band" data-stagger={flip ? 'flip' : 'base'} style={bandStyle}>
       {inner}
     </div>
   );

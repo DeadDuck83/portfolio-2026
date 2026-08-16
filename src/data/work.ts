@@ -12,7 +12,7 @@ export interface WorkItem {
   roleTag: string;
   description: string;
   tags: string[];
-  /** Case-study hero — full-bleed lead behind the row copy. */
+  /** Case-study hero — 3/4 column visual in the staggered work row. */
   imageSrc: string;
   imageAlt: string;
   /** Optional crop anchor for the hero (CSS object-position). */
