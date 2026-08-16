@@ -93,15 +93,119 @@ a {
     right: calc(clamp(-438px, -59vw, -101px) - 800px);
   }
 
-  /* Selected work — full-width bands stay stacked; open padding on narrow. */
+  /* Selected work — stack; image leads for punch on narrow screens. */
   .work-band {
-    min-height: clamp(18rem, 58vh, 28rem) !important;
+    grid-template-columns: 1fr !important;
+    min-height: 0 !important;
+  }
+  .work-band__content,
+  .work-band__media {
+    grid-column: auto !important;
+  }
+  .work-band__media {
+    order: -1;
+    min-height: clamp(14rem, 48vw, 20rem) !important;
+    max-width: none !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
   }
   .work-band__content {
-    padding-top: 3.5rem !important;
+    padding-top: 1.4rem !important;
+    padding-bottom: 1.8rem !important;
   }
   .work-band__tags {
     gap: 0.35rem !important;
+  }
+}
+
+/*
+ * Selected work — desktop split.
+ * Text track locks to layout.maxWidth × text-ratio (aligned with page measure).
+ * Image bleeds to the outer edge, caps at --work-image-max, fades 1500 → 2500.
+ */
+.work-band[data-stagger='base'] {
+  grid-template-columns:
+    minmax(0, calc((100% - var(--work-measure, 1240px)) / 2))
+    minmax(0, calc(var(--work-measure, 1240px) * var(--work-text-ratio, 0.275)))
+    minmax(0, 1fr);
+}
+.work-band[data-stagger='base'] .work-band__content {
+  grid-column: 2;
+}
+.work-band[data-stagger='base'] .work-band__media {
+  grid-column: 3;
+}
+
+.work-band[data-stagger='flip'] {
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, calc(var(--work-measure, 1240px) * var(--work-text-ratio, 0.275)))
+    minmax(0, calc((100% - var(--work-measure, 1240px)) / 2));
+}
+.work-band[data-stagger='flip'] .work-band__media {
+  grid-column: 1;
+}
+.work-band[data-stagger='flip'] .work-band__content {
+  grid-column: 2;
+}
+
+.work-band__media {
+  position: relative;
+  min-height: inherit;
+  overflow: hidden;
+  width: 100%;
+  max-width: var(--work-image-max, 2500px);
+  background: transparent;
+}
+
+.work-band[data-stagger='base'] .work-band__media {
+  justify-self: start;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 min(100%, var(--work-image-fade-start, 1500px)),
+    transparent var(--work-image-max, 2500px)
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 min(100%, var(--work-image-fade-start, 1500px)),
+    transparent var(--work-image-max, 2500px)
+  );
+}
+
+.work-band[data-stagger='flip'] .work-band__media {
+  justify-self: end;
+  -webkit-mask-image: linear-gradient(
+    to left,
+    #000 0,
+    #000 min(100%, var(--work-image-fade-start, 1500px)),
+    transparent var(--work-image-max, 2500px)
+  );
+  mask-image: linear-gradient(
+    to left,
+    #000 0,
+    #000 min(100%, var(--work-image-fade-start, 1500px)),
+    transparent var(--work-image-max, 2500px)
+  );
+}
+
+/* Selected work — subtle row shift on hover (no image zoom). */
+.work-band {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.work-band:hover,
+.work-band:focus-visible {
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-band {
+    transition: none;
+  }
+  .work-band:hover,
+  .work-band:focus-visible {
+    transform: none;
   }
 }
 
