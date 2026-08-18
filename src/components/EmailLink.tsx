@@ -67,7 +67,18 @@ export default function EmailLink({
         });
       }}
     >
-      {copied ? 'Copied!' : children}
+      {/* Stack both labels in one grid cell so the button never resizes on copy. */}
+      <span style={{ display: 'inline-grid' }}>
+        <span style={{ gridArea: '1 / 1', visibility: copied ? 'hidden' : 'visible' }}>
+          {children}
+        </span>
+        <span
+          aria-hidden
+          style={{ gridArea: '1 / 1', textAlign: 'center', visibility: copied ? 'visible' : 'hidden' }}
+        >
+          Copied!
+        </span>
+      </span>
     </button>
   );
 }
