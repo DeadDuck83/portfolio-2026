@@ -16,7 +16,7 @@ import { colors, fonts } from '../theme/tokens';
  */
 export default function Home() {
   useEffect(() => {
-    document.title = 'Derek Moore — Product Designer/Manager';
+    document.title = 'Derek Moore — Product Design Portfolio';
   }, []);
 
   return (

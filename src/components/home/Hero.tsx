@@ -7,7 +7,9 @@ import PixelCameo from './PixelCameo';
 /** Magnetic reach: start attracting within this distance of the CTA center. */
 const MAGNET_RADIUS = 500;
 /** Furthest the button will lean toward the cursor. */
-const MAGNET_MAX_PULL = 10;
+const MAGNET_MAX_PULL = 16;
+/** Fraction of the cursor's offset-from-center applied as lean (0 at center → grows outward). */
+const MAGNET_STRENGTH = 0.2;
 /** Within this distance of the rest center, add a tiny reaching shake. */
 const SHAKE_RADIUS = 90;
 /** Peak amplitude of the reach-shake (px). */
@@ -356,7 +358,6 @@ function MagneticCta({
     const velocity = { x: 0, y: 0 };
     const reachDir = { x: 1, y: 0 };
     let shakeAmount = 0;
-    let pointerInside = false;
     let raf = 0;
     let last = performance.now();
     let running = false;
@@ -377,35 +378,28 @@ function MagneticCta({
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
-      const inside =
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
-
-      pointerInside = inside;
-
-      if (inside) {
-        target.x = offset.x;
-        target.y = offset.y;
-        shakeAmount = 0;
-        velocity.x = 0;
-        velocity.y = 0;
-        start();
-        return;
-      }
 
       if (dist >= MAGNET_RADIUS || dist === 0) {
         target.x = 0;
         target.y = 0;
         shakeAmount = 0;
       } else {
-        const t = 1 - dist / MAGNET_RADIUS;
-        const pull = MAGNET_MAX_PULL * t * t;
         reachDir.x = dx / dist;
         reachDir.y = dy / dist;
-        target.x = reachDir.x * pull;
-        target.y = reachDir.y * pull;
+        // Center-based radial pull: zero at the center, growing with distance,
+        // then clamped to MAGNET_MAX_PULL. Magnitude depends only on the offset
+        // vector, so the lean traces a circle instead of a boxy path — and it
+        // eases up smoothly through the center rather than snapping at the edges.
+        let px = dx * MAGNET_STRENGTH;
+        let py = dy * MAGNET_STRENGTH;
+        const mag = Math.hypot(px, py);
+        if (mag > MAGNET_MAX_PULL) {
+          const k = MAGNET_MAX_PULL / mag;
+          px *= k;
+          py *= k;
+        }
+        target.x = px;
+        target.y = py;
         shakeAmount = dist < SHAKE_RADIUS ? (1 - dist / SHAKE_RADIUS) * SHAKE_AMP : 0;
       }
       start();
@@ -415,12 +409,10 @@ function MagneticCta({
       const dt = Math.min(0.032, (now - last) / 1000);
       last = now;
 
-      if (!pointerInside) {
-        velocity.x += ((target.x - offset.x) * MAGNET_STIFFNESS - velocity.x * MAGNET_DAMPING) * dt;
-        velocity.y += ((target.y - offset.y) * MAGNET_STIFFNESS - velocity.y * MAGNET_DAMPING) * dt;
-        offset.x += velocity.x * dt;
-        offset.y += velocity.y * dt;
-      }
+      velocity.x += ((target.x - offset.x) * MAGNET_STIFFNESS - velocity.x * MAGNET_DAMPING) * dt;
+      velocity.y += ((target.y - offset.y) * MAGNET_STIFFNESS - velocity.y * MAGNET_DAMPING) * dt;
+      offset.x += velocity.x * dt;
+      offset.y += velocity.y * dt;
 
       const quiver = shakeAmount > 0 ? Math.sin(now * 0.056) * shakeAmount : 0;
       const x = offset.x + reachDir.x * quiver;
