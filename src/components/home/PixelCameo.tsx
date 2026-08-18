@@ -79,7 +79,9 @@ export default function PixelCameo() {
   };
 
   useEffect(() => {
-    void loadDerekSvg();
+    void loadDerekSvg().catch(() => {
+      // Preload is best-effort; play() retries when the camera is clicked.
+    });
     return () => window.clearTimeout(eyeTimerRef.current);
   }, []);
 

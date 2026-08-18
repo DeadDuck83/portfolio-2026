@@ -12,5 +12,11 @@ export default defineConfig({
     // Registers @testing-library/jest-dom matchers + auto-cleanup.
     setupFiles: './src/test/setup.ts',
     css: false,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text'],
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: ['src/**/*.test.{ts,tsx}', 'src/test/**', 'src/main.tsx'],
+    },
   },
 });

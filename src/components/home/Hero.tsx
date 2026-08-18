@@ -49,9 +49,9 @@ export default function Hero() {
         </h1>
 
         <p className="hero__body">
-          Ten years across design, engineering, and product — mapping data flows, wiring
-          integrations, and shipping the checkout, portals, and platforms that keep complex
-          ecosystems running.
+          I'm a product designer who takes complex, high-stakes systems and makes them feel
+          simple. Health platforms, clinical tools, patient portals. Anything that people
+          actually interact with.
         </p>
 
         <div className="hero__actions">

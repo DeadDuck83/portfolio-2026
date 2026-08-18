@@ -2,6 +2,34 @@ import '@testing-library/jest-dom/vitest';
 import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 
+const nativeFetch = globalThis.fetch.bind(globalThis);
+
+// Node's fetch (undici) rejects relative URLs like `/derek-pixels.svg`.
+// Browsers resolve those against the page origin; jsdom does not, and it
+// also does not serve Vite's `public/` folder. Stub the cameo asset so
+// mount-time preload does not surface as an unhandled rejection.
+vi.stubGlobal(
+  'fetch',
+  async (input: RequestInfo | URL, init?: RequestInit) => {
+    const raw =
+      typeof input === 'string'
+        ? input
+        : input instanceof URL
+          ? input.href
+          : input.url;
+
+    if (raw.includes('derek-pixels.svg')) {
+      return new Response('<svg xmlns="http://www.w3.org/2000/svg"></svg>', {
+        status: 200,
+        headers: { 'Content-Type': 'image/svg+xml' },
+      });
+    }
+
+    const url = raw.startsWith('/') ? new URL(raw, window.location.origin).href : input;
+    return nativeFetch(url, init);
+  },
+);
+
 // Unmount React trees between tests so they don't leak into one another.
 afterEach(() => {
   cleanup();
