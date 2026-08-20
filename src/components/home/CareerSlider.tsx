@@ -247,12 +247,11 @@ export default function CareerSlider() {
             <div
               style={{
                 fontSize: '0.68rem',
-                letterSpacing: '0.24em',
-                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
                 color: colors.textMuted,
               }}
             >
-              / The path here
+              / ABOUT ME
             </div>
             <p
               style={{
@@ -345,7 +344,7 @@ export default function CareerSlider() {
           {[
             { big: '10 yrs', label: 'Design · Eng · Product' },
             { big: '0 → 6k+', label: 'Users, founding hire' },
-            { big: '4', label: 'Connected products shipped' },
+            { big: '4', label: '0 → 1 products shipped' },
           ].map((s) => (
             <div key={s.label} style={{ background: colors.bgAlt, padding: '1.4rem 1.3rem' }}>
               <div style={{ fontFamily: fonts.display, fontSize: '1.9rem', color: colors.accentBright }}>
@@ -497,7 +496,6 @@ function RoleCard({
   const opacity = active ? 1 : dist === 1 ? 0.4 : 0.18;
   const scale = active ? 1 : 0.9;
   const accent = active ? colors.accentBright : colors.textFaint;
-  const meta = role.loc ? `${role.dates}   ·   ${role.loc}` : role.dates;
 
   return (
     <div
@@ -520,23 +518,16 @@ function RoleCard({
         userSelect: 'none',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-        <span style={{ fontFamily: fonts.display, fontSize: '1.5rem', color: accent, lineHeight: 1 }}>
-          {role.n}
-        </span>
-        <span
-          style={{
-            fontSize: '0.6rem',
-            letterSpacing: '0.16em',
-            textTransform: 'uppercase',
-            color: active ? colors.accentTint : colors.textFaint,
-            padding: '0.32rem 0.6rem',
-            border: `1px solid ${active ? border.accentSoft : border.hairlineStrong}`,
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {role.disc}
-        </span>
+      <div
+        style={{
+          fontFamily: fonts.display,
+          fontSize: '1.15rem',
+          lineHeight: 1,
+          letterSpacing: '-0.01em',
+          color: accent,
+        }}
+      >
+        {role.dates}
       </div>
       <div
         style={{
@@ -560,17 +551,19 @@ function RoleCard({
       >
         {role.role}
       </div>
-      <div
-        style={{
-          fontSize: '0.66rem',
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          color: colors.textFaint,
-          marginTop: '0.9rem',
-        }}
-      >
-        {meta}
-      </div>
+      {role.loc ? (
+        <div
+          style={{
+            fontSize: '0.66rem',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: colors.textFaint,
+            marginTop: '0.9rem',
+          }}
+        >
+          {role.loc}
+        </div>
+      ) : null}
       <p
         style={{
           fontSize: '0.82rem',
