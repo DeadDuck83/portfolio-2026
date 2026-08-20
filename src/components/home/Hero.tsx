@@ -19,7 +19,7 @@ const MAGNET_STIFFNESS = 220;
 const MAGNET_DAMPING = 18;
 
 /**
- * Hero — statement-led composition. Quiet role signature above the display lockup.
+ * Hero — statement-led composition. Display lockup, intro, CTAs.
  */
 export default function Hero() {
   return (
@@ -36,14 +36,6 @@ export default function Hero() {
       }}
     >
       <div className="hero__grid">
-        <p className="hero__meta">
-          Product manager
-          <span className="hero__meta-sep" aria-hidden="true">
-            ·
-          </span>
-          Systems &amp; integrations
-        </p>
-
         <h1 className="hero__title" aria-label={HERO_TITLE}>
           <DofTitleCanvas />
         </h1>

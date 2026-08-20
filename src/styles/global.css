@@ -209,28 +209,12 @@ a {
   }
 }
 
-/* Hero — statement-led. Quiet role signature + bare availability footnote. */
+/* Hero — statement-led. Display lockup + intro + CTAs. */
 .hero__grid {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   max-width: 46rem;
-}
-
-.hero__meta {
-  display: inline-flex;
-  align-items: center;
-  margin: 0 0 1.1rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: none;
-  color: #8f8674;
-  animation: floatIn 0.65s ease both;
-}
-
-.hero__meta-sep {
-  margin: 0 0.45em;
-  color: #6f6858;
 }
 
 .hero__title {
