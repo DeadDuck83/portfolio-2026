@@ -20,7 +20,7 @@ describe('collectCaseStudyFigures', () => {
     expect(images.length).toBeGreaterThan(0);
     expect(images.every((f) => Boolean(f.src))).toBe(true);
     // Sage has hero + process + solution wired.
-    expect(collectCaseStudyImages(sage).length).toBe(11);
+    expect(collectCaseStudyImages(sage).length).toBe(15);
   });
 
   it('includes collage-only gallery figures when present', () => {

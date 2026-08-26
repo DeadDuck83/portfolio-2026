@@ -286,6 +286,32 @@ export const bexa: CaseStudy = {
         desc: 'A short look at the handheld exam — density reading, no radiation, no compression.',
       },
     },
+    {
+      placeholder: 'Gallery',
+      dims: '2880 × 1260',
+      aspect: '2880/1260',
+      innerLabel: 'Device, palette, exam room',
+      src: '/case-studies/bexa/bexa-animation.jpg',
+      alt: 'Bexa SureTouch device, brand palette, and exam-room photography',
+      caption: {
+        tag: 'BRAND',
+        lead: 'Make the exam feel inviting.',
+        desc: 'Device, palette, and room — the branded look that had to replace an uncomfortable process.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '1814 × 1745',
+      aspect: '1814/1745',
+      innerLabel: 'BexaQuality components',
+      src: '/case-studies/bexa/bexaQuality.png',
+      alt: 'BexaQuality dashboard components — status ranges, gauges, filters, and alerts',
+      caption: {
+        tag: 'QUALITY',
+        lead: 'The device watchdog, in pieces.',
+        desc: 'Range states, gauges, and alerts for BexaQuality — so a drifting device gets flagged before a bad reading does.',
+      },
+    },
   ],
 
   nextCase: {

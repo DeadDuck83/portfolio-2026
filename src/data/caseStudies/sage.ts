@@ -284,6 +284,58 @@ export const sage: CaseStudy = {
         desc: 'Icon system for the health areas Sage could read from a pile of old results.',
       },
     },
+    {
+      placeholder: 'Gallery',
+      dims: '7465 × 5274',
+      aspect: '7465/5274',
+      innerLabel: 'Color system',
+      src: '/case-studies/sage/colors-sage.jpg',
+      alt: 'Sage color palette and brand swatches',
+      caption: {
+        tag: 'COLOR',
+        lead: 'The palette.',
+        desc: 'Brand color system that had to feel like everyday health, not another medical portal.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '4618 × 2992',
+      aspect: '4618/2992',
+      innerLabel: 'Light and dark modes',
+      src: '/case-studies/sage/color-modes-sage.jpg',
+      alt: 'Sage light and dark mode tokens with dashboard, insights, labs, and shop screens',
+      caption: {
+        tag: 'THEME',
+        lead: 'Light and dark, same system.',
+        desc: 'Token set mapped across dashboard, insights, labs, and shop so both themes stay one product.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '1950 × 1491',
+      aspect: '1950/1491',
+      innerLabel: 'Environmental range states',
+      src: '/case-studies/sage/weather-ranges-sage.jpg',
+      alt: 'Sage environmental health cards for air quality, UV, allergens, and humidity',
+      caption: {
+        tag: 'RANGES',
+        lead: 'Good, moderate, unhealthy.',
+        desc: 'Air, UV, allergens, and humidity as range states — the same language as a lab result, for the world around you.',
+      },
+    },
+    {
+      placeholder: 'Gallery',
+      dims: '5899 × 3342',
+      aspect: '5899/3342',
+      innerLabel: 'Graph scale logic',
+      src: '/case-studies/sage/test-graph-ui-explanation-sage.jpg',
+      alt: 'Whiteboard explaining how Sage biomarker graphs scale around result, upper, and lower bounds',
+      caption: {
+        tag: 'LOGIC',
+        lead: 'How the graph finds its top and bottom.',
+        desc: 'Scale rules for a result that sits inside, outside, or missing a bound — so a blood-test chart always has room to breathe.',
+      },
+    },
   ],
 
   nextCase: {
