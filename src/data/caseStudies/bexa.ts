@@ -270,6 +270,24 @@ export const bexa: CaseStudy = {
     ],
   },
 
+  // Collage-only media (file in public/case-studies/bexa/, not placed in-page).
+  gallery: [
+    {
+      placeholder: 'Gallery',
+      dims: '1196 × 1732',
+      aspect: '1196/1732',
+      innerLabel: 'Handheld device in use',
+      kind: 'video',
+      src: '/case-studies/bexa/bexa-device.mp4',
+      alt: 'Bexa handheld device screening tissue — no radiation, no compression',
+      caption: {
+        tag: 'MOTION',
+        lead: 'The device in the room.',
+        desc: 'A short look at the handheld exam — density reading, no radiation, no compression.',
+      },
+    },
+  ],
+
   nextCase: {
     label: 'Parker & Ace',
     note: '— the community vet.',

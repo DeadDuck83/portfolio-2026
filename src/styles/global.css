@@ -285,6 +285,21 @@ a {
   outline-offset: 3px;
 }
 
+.gallery-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.6rem, 4vw, 2.4rem) clamp(1.2rem, 3vw, 2rem);
+}
+
+@media (max-width: 720px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Path-section Creative / Analytical edge labels — desktop hover only. */
 @media (hover: none), (pointer: coarse) {
   .brain-side-label {

@@ -4,12 +4,16 @@ import PageTransition from './components/PageTransition';
 import ChassisReveal from './components/telemetry/ChassisReveal';
 import Home from './pages/Home';
 import CaseStudy from './pages/CaseStudy';
+import Gallery from './pages/Gallery';
+import GalleryExperiment from './pages/GalleryExperiment';
 
 /**
  * Top-level router.
- *  /              → Home (hero, career slider, selected work, contact)
- *  /work/:slug    → data-driven case study (plmc, parker-ace, bexa, sage)
- *  *              → back to Home
+ *  /                    → Home (hero, career slider, selected work, contact)
+ *  /work/:slug          → data-driven case study (plmc, parker-ace, bexa, sage)
+ *  /gallery             → unlisted experiments index (not linked from Home)
+ *  /gallery/:slug       → isolated experiment (React or HTML)
+ *  *                    → back to Home
  *
  * ChassisReveal wraps the site as a liftable cover over the telemetry bay.
  */
@@ -21,6 +25,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/work/:slug" element={<CaseStudy />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/gallery/:slug" element={<GalleryExperiment />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </PageTransition>
