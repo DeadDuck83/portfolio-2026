@@ -7,11 +7,11 @@ import PixelCameo from './PixelCameo';
 /** Magnetic reach: start attracting within this distance of the CTA center. */
 const MAGNET_RADIUS = 500;
 /** Furthest the button will lean toward the cursor. */
-const MAGNET_MAX_PULL = 16;
+const MAGNET_MAX_PULL = 10;
 /** Fraction of the cursor's offset-from-center applied as lean (0 at center → grows outward). */
 const MAGNET_STRENGTH = 0.2;
 /** Within this distance of the rest center, add a tiny reaching shake. */
-const SHAKE_RADIUS = 90;
+const SHAKE_RADIUS = 20;
 /** Peak amplitude of the reach-shake (px). */
 const SHAKE_AMP = 1;
 /** Spring constants — stiff + damped enough to feel elastic without wobbling forever. */
