@@ -10,6 +10,8 @@
   position: relative;
   /* Stack above the fixed pixel cameo on the hero seam. */
   z-index: 1;
+  /* Hairline at the hero → about seam to break the two sections apart. */
+  border-top: 1px solid rgba(236, 230, 218, 0.1);
   background: var(--ab-paper);
   color: var(--ab-ink);
 }

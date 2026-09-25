@@ -194,11 +194,14 @@ export default function AboutJourney({
         if (riveEl && firstHead) {
           const stageTop = stage.getBoundingClientRect().top;
           const bandTop = intro.getBoundingClientRect().bottom - stageTop;
-          const bandH = Math.max(160, firstHead.getBoundingClientRect().top - stageTop - bandTop);
+          // Fill the gap above the cards, then extend ~40% taller so the figure is
+          // larger and its base tucks behind the cards. Top stays put; the growth
+          // is all downward.
+          const gap = Math.max(160, firstHead.getBoundingClientRect().top - stageTop - bandTop);
           riveEl.style.top = `${bandTop}px`;
           riveEl.style.left = '0';
           riveEl.style.width = '100%';
-          riveEl.style.height = `${bandH}px`;
+          riveEl.style.height = `${Math.round(gap * 1.4)}px`;
           riveEl.style.transform = 'none';
         }
         frame();
