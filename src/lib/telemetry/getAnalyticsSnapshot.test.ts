@@ -14,7 +14,7 @@ describe('getAnalyticsSnapshot', () => {
     expect(snap.source).toBe('mock');
     expect(snap.sessionsThisMonth).toBeGreaterThan(0);
     expect(snap.customEvents.map((e) => e.name)).toEqual(
-      expect.arrayContaining(['GetInTouchClick', 'WorkItemClick', 'PathNavigate']),
+      expect.arrayContaining(['GetInTouchClick', 'WorkItemClick', 'AboutChapterView']),
     );
   });
 

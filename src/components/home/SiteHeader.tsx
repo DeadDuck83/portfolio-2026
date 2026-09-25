@@ -39,6 +39,7 @@ export default function SiteHeader() {
 
   return (
     <header
+      data-site-header
       style={{
         position: 'sticky',
         top: 0,

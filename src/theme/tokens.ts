@@ -25,6 +25,22 @@ export const colors = {
   buttonTextOnAccent: '#17140f', // solid CTA label
 } as const;
 
+/**
+ * Light "paper" counterpart to the dark palette — only used by the About
+ * journey's scroll theme shift, which blends between the two.
+ */
+export const paper = {
+  bg: '#ebe5d8',
+  card: '#f4efe6',
+  text: '#1a1712',
+  textBody: '#4f4a40',
+  textMuted: '#665f4f',
+  accentBright: '#5f6530',
+  rule: 'rgba(26,23,18,0.28)',
+  edge: 'rgba(26,23,18,0.14)',
+  chip: 'rgba(26,23,18,0.22)',
+} as const;
+
 export const border = {
   hairline: 'rgba(236,230,218,0.08)',
   hairlineStrong: 'rgba(236,230,218,0.1)',

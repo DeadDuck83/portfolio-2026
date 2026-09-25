@@ -28,7 +28,7 @@ Visitors arrive from recruiting channels (LinkedIn, Wellfound, Greenhouse, Indee
 - Case-study content is data-driven (`src/data/caseStudies/`).
 - Contact via email (mailto with optional first-touch attribution) and LinkedIn.
 - “Open to new product roles” is a toggleable site flag.
-- LogRocket session replay + custom events in production (Get in touch, work clicks, Path navigation).
+- LogRocket session replay + custom events in production (Get in touch, work clicks, About chapter views).
 - Résumé CTA links out to a Google Doc (URL supplied in site config).
 
 ## Brand Commitments
@@ -41,7 +41,7 @@ Visitors arrive from recruiting channels (LinkedIn, Wellfound, Greenhouse, Indee
 ## Evidence on Hand
 
 - Case studies: Sage Healthspan, Bexa Suite, Parker & Ace, PLMC (`src/data/caseStudies/`, routes under `/work/…`)
-- Career path roles slider (`src/data/roles.ts`)
+- About journey chapters (`src/data/aboutJourney.ts`)
 - Selected work list (`src/data/work.ts`)
 - Process visuals for PLMC (`public/case-studies/plmc/`)
 - Pixel cameo easter egg (`public/derek-pixels.svg`)

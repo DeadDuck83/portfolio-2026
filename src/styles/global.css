@@ -48,51 +48,7 @@ a {
   to { transform: translateX(0); }
 }
 
-/* Home career-journey background SVG animations */
-@keyframes driftL {
-  from { transform: translateY(-0.8%) rotate(-0.6deg); }
-  to { transform: translateY(0.8%) rotate(0.5deg); }
-}
-@keyframes driftR {
-  from { transform: translateY(0.8%) rotate(0.4deg); }
-  to { transform: translateY(-0.8%) rotate(-0.5deg); }
-}
-@keyframes svgflow { to { stroke-dashoffset: -1; } }
-@keyframes svgsignal { to { stroke-dashoffset: -1; } }
-@keyframes svgpulse {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 1; }
-}
-@keyframes svgsway {
-  from { transform: translateX(-4px); }
-  to { transform: translateX(5px); }
-}
-@keyframes svgsweep {
-  from { transform: rotate(-6deg); }
-  to { transform: rotate(6deg); }
-}
-@keyframes svgspin { to { transform: rotate(360deg); } }
-@keyframes svgbreathe {
-  0%, 100% { opacity: 0.16; }
-  50% { opacity: 0.28; }
-}
-
-/* Career-path brain halves — tuck further off-canvas on narrow screens so they
-   frame the cards instead of crowding them. */
-.brain-half--creative {
-  left: clamp(-90px, -5vw, -20px);
-}
-.brain-half--analytical {
-  right: clamp(-390px, -18vw, -120px);
-}
 @media (max-width: 720px) {
-  .brain-half--creative {
-    left: calc(clamp(-238px, -59vw, -101px) - 300px);
-  }
-  .brain-half--analytical {
-    right: calc(clamp(-438px, -59vw, -101px) - 800px);
-  }
-
   /* Selected work — stack; image leads for punch on narrow screens. */
   .work-band {
     grid-template-columns: 1fr !important;
@@ -297,13 +253,6 @@ a {
 @media (max-width: 720px) {
   .gallery-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-/* Path-section Creative / Analytical edge labels — desktop hover only. */
-@media (hover: none), (pointer: coarse) {
-  .brain-side-label {
-    display: none !important;
   }
 }
 

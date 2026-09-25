@@ -56,8 +56,8 @@ src/
     Wordmark.tsx           # "Derek Moore" + accent dot
     SiteFooter.tsx         # shared footer (home + case variants)
     PlaceholderFigure.tsx  # <img>-ready gray placeholder block
-    home/                  # SiteHeader, Hero, CareerSlider, BrainBackground,
-                           #   WorkList, ContactSection
+    home/                  # SiteHeader, Hero, AboutJourney (+ engine,
+                           #   Rive background), WorkList, ContactSection
     casestudy/             # CaseStudyHeader, ChapterHeading, ContextPanel,
                            #   PersonaCard, DecisionLog, StatBand,
                            #   NextCaseFooter, Reveal
@@ -65,7 +65,7 @@ src/
     useScrollProgress.ts   # progress bar + chapter scroll-spy
     useCountUp.ts          # outcome stat count-up on scroll
   data/
-    roles.ts               # career-journey slider content
+    aboutJourney.ts        # About section intro, chapters, Today stats
     work.ts                # "Selected work" rows
     caseStudies/
       types.ts             # CaseStudy content model
@@ -73,6 +73,9 @@ src/
       index.ts             # slug → CaseStudy registry
   theme/tokens.ts          # colors, borders, fonts, layout constants
   styles/global.css        # resets, fonts, keyframes
+  styles/about-journey.css # About journey layout + stack-mode overrides
+public/
+  background/about_me_v8.riv  # About journey Rive (Chapter 1–4 timelines)
 ```
 
 ## Adding a case study

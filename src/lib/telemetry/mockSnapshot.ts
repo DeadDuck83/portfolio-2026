@@ -15,7 +15,7 @@ export function getMockSnapshot(): AnalyticsSnapshot {
     avgEventsPerVisit: 2.4,
     customEvents: [
       { name: 'WorkItemClick', count: 96 },
-      { name: 'PathNavigate', count: 64 },
+      { name: 'AboutChapterView', count: 64 },
       { name: 'GetInTouchClick', count: 28 },
     ],
     source: 'mock',

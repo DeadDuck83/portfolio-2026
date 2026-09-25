@@ -1,6 +1,7 @@
-import { useEffect, useRef, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
 import { track } from '../../lib/analytics';
 import { colors, fonts } from '../../theme/tokens';
+import { solidCta } from '../../theme/patterns';
 import { accentLinkHover, solidCtaHover } from '../../lib/hover';
 import PixelCameo from './PixelCameo';
 
@@ -305,19 +306,6 @@ function layoutTitle(
   return glyphs;
 }
 
-const ctaStyle: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '0.7rem',
-  background: colors.accent,
-  color: colors.buttonTextOnAccent,
-  fontSize: '0.74rem',
-  letterSpacing: '0.16em',
-  textTransform: 'uppercase',
-  fontWeight: 700,
-  padding: '0.95rem 1.6rem',
-};
-
 /**
  * Solid hero CTA that leans toward the pointer within MAGNET_RADIUS.
  * Anchor stays fixed; the link springs (up to MAGNET_MAX_PULL) so rapid cursor
@@ -456,7 +444,7 @@ function MagneticCta({
       <a
         ref={btnRef}
         href={href}
-        style={ctaStyle}
+        style={solidCta}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

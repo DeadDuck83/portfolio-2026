@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
 import { track } from '../../lib/analytics';
 import { colors, fonts, layout } from '../../theme/tokens';
+import { chip } from '../../theme/patterns';
 
 /**
  * Spatial thesis (work section):
@@ -16,9 +17,7 @@ const frame = {
   bg: colors.bg,
   ink: colors.text,
   inkMuted: colors.textMuted,
-  body: colors.textBody,
   border: 'rgba(236, 230, 218, 0.1)',
-  chipBorder: 'rgba(236, 230, 218, 0.22)',
   cta: colors.accentBright,
 } as const;
 
@@ -182,17 +181,7 @@ function WorkBand({ item, flip }: { item: WorkItem; flip: boolean }) {
         style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}
       >
         {item.tags.map((t) => (
-          <span
-            key={t}
-            style={{
-              fontSize: '0.58rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: frame.body,
-              padding: '0.26rem 0.5rem',
-              border: `1px solid ${frame.chipBorder}`,
-            }}
-          >
+          <span key={t} style={chip}>
             {t}
           </span>
         ))}

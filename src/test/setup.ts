@@ -48,6 +48,13 @@ class IntersectionObserverStub {
 }
 vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);
 
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+vi.stubGlobal('ResizeObserver', ResizeObserverStub);
+
 // jsdom leaves these unimplemented; stub them so navigation/scroll code is quiet.
 window.scrollTo = vi.fn();
 Element.prototype.scrollIntoView = vi.fn();
