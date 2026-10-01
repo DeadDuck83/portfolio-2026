@@ -1,0 +1,421 @@
+/*
+ * About rail — a normal vertical scroller (no scroll-jacking). A sticky
+ * animation column on the left, a rail of four chapter cards on the right, and
+ * the "Today" synthesis as the payoff. Colors come from tokens.ts via the
+ * --c-* / --accent custom properties set on the section in AboutRail.tsx.
+ */
+
+.about-rail {
+  position: relative;
+  z-index: 1;
+  /* Hairline at the hero → about seam. */
+  border-top: 1px solid rgba(236, 230, 218, 0.1);
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-mono);
+  padding: clamp(4rem, 10vh, 8rem) var(--side-pad);
+}
+
+.about-rail__intro,
+.about-rail__body,
+.about-rail__today {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+.about-rail em {
+  font-style: italic;
+  color: var(--c-em);
+}
+
+.about-rail__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0;
+  color: var(--c-text);
+  text-wrap: balance;
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.012em;
+}
+
+.about-rail__lede {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--c-body);
+  text-wrap: pretty;
+  max-width: 46ch;
+}
+
+/* Intro */
+
+.about-rail__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: min(var(--measure), 44rem);
+  padding-bottom: clamp(2.5rem, 7vh, 5rem);
+}
+
+.about-rail__intro .about-rail__title {
+  max-width: 15ch;
+}
+
+/* Body — sticky media + card rail */
+
+.about-rail__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.about-rail__media {
+  position: sticky;
+  top: clamp(4.5rem, 12vh, 6.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.about-rail__stage {
+  width: 100%;
+  max-width: 34rem;
+  aspect-ratio: 670 / 663;
+}
+
+.about-rail__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Through-line — mobile only; a rail of dots under the squares. */
+
+.about-rail__line {
+  display: none;
+}
+
+/* Cards */
+
+.about-rail__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-rail__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-height: 46vh;
+  padding: clamp(1.6rem, 4vh, 2.6rem) 0;
+  justify-content: center;
+  border-top: 1px solid var(--edge);
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
+}
+
+.about-rail__card:first-child {
+  border-top: none;
+}
+
+.about-rail__card[data-active='on'] {
+  opacity: 1;
+}
+
+.about-rail__card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+.about-rail__discipline {
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.about-rail__card-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.about-rail__card-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0;
+  font-size: clamp(1.5rem, 2.7vw, 2.2rem);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  color: var(--c-text);
+}
+
+.about-rail__card-where {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--c-muted);
+}
+
+.about-rail__card-where .about-rail__company-name {
+  color: inherit;
+  border-bottom-color: var(--rule);
+}
+
+.about-rail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-rail__tags li {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-body);
+  padding: 0.26rem 0.5rem;
+  border: 1px solid var(--rule);
+}
+
+/* Company name popover */
+
+.about-rail__company {
+  position: relative;
+  display: inline-block;
+}
+
+.about-rail__company-name {
+  font: inherit;
+  color: var(--c-em);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--accent-ring);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.about-rail__company-name:hover,
+.about-rail__company-name:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.about-rail__popover {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 6;
+  width: max-content;
+  max-width: 18rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  padding: 0.85rem 0.95rem;
+  font-family: var(--font-mono);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+}
+
+.about-rail__popover-blurb {
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--c-body);
+}
+
+.about-rail__popover-scale {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.about-rail__popover-link {
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.about-rail__popover-link:hover {
+  text-decoration: underline;
+}
+
+/* Today — the payoff */
+
+.about-rail__today {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.9rem, 2vh, 1.4rem);
+  max-width: min(var(--measure), 46rem);
+  padding-top: clamp(3rem, 9vh, 7rem);
+}
+
+.about-rail__today .about-rail__title {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  max-width: 14ch;
+}
+
+.about-rail__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  width: 100%;
+  max-width: 34rem;
+  margin: 0.4rem 0 0;
+  background: var(--grid);
+  border: 1px solid var(--grid);
+}
+
+.about-rail__stat {
+  background: var(--c-bg);
+  padding: clamp(1.1rem, 2.2vh, 1.6rem) 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.about-rail__stat dt {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vh, 2.2rem);
+  line-height: 1;
+  color: var(--c-text);
+}
+
+.about-rail__stat dd {
+  margin: 0;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+/*
+ * Mobile / narrow — a self-contained swipe unit: the squares up top, a
+ * through-line of dots, then the chapter content as a horizontal scroll-snap
+ * row. Swiping between chapters is read in AboutRail.tsx and scrubs the clip.
+ */
+
+@media (max-width: 880px) {
+  .about-rail__body {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    gap: 0.75rem;
+  }
+
+  /* Top half — the squares, in flow (not sticky). */
+  .about-rail__media {
+    position: static;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+
+  .about-rail__stage {
+    width: min(82vw, 22rem);
+    max-width: none;
+  }
+
+  /* Through-line of dots between the squares and the content. */
+  .about-rail__line {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* Hairline connecting the ring centres (each ring box is 1.5rem wide). */
+  .about-rail__line::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    top: 50%;
+    height: 1px;
+    background: var(--edge);
+  }
+
+  .about-rail__dot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  /* Outline-only circle — echoes the animation's shapes; fills on arrival. */
+  .about-rail__dot::after {
+    content: '';
+    box-sizing: border-box;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--c-muted);
+    background: var(--c-bg);
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  }
+
+  .about-rail__dot[data-active='on']::after {
+    border-color: var(--accent);
+    background: var(--accent);
+    transform: scale(1.3);
+  }
+
+  /* Bottom half — chapters as a full-bleed slider, one slide per screen. */
+  .about-rail__cards {
+    flex-direction: row;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--side-pad));
+    padding-inline: 0;
+    padding-bottom: 0.4rem;
+  }
+
+  .about-rail__cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .about-rail__card {
+    flex: 0 0 100%;
+    min-height: auto;
+    justify-content: flex-start;
+    gap: 0.7rem;
+    padding: 1.4rem var(--side-pad);
+    border: none;
+    scroll-snap-align: center;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-rail__card {
+    transition: none;
+  }
+}

@@ -13,6 +13,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@rive-app/canvas-advanced-single": "^2.44.0",
     "@rive-app/react-canvas": "^4.35.0",
     "logrocket": "^12.1.1",
     "react": "^19.2.7",

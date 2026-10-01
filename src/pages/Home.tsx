@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import Grain from '../components/Grain';
 import SiteHeader from '../components/home/SiteHeader';
 import Hero from '../components/home/Hero';
-import AboutJourney from '../components/home/AboutJourney';
+// Pinned/Rive-background version preserved in ./AboutJourney for reuse; the live
+// About section is now the vertical rail with the scrubbed squares animation.
+import AboutRail from '../components/home/AboutRail';
 import WorkList from '../components/home/WorkList';
 import ContactSection from '../components/home/ContactSection';
 import SiteFooter from '../components/SiteFooter';
@@ -35,7 +37,7 @@ export default function Home() {
       <Grain enabled />
       <SiteHeader />
       <Hero />
-      <AboutJourney />
+      <AboutRail />
       <WorkList />
       <ContactSection showResume />
       <SiteFooter variant="home" />
