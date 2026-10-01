@@ -42,9 +42,10 @@ export default function Hero() {
         </h1>
 
         <p className="hero__body">
-          I'm a product designer who takes complex, high-stakes systems and makes them feel
-          simple. Health platforms, clinical tools, patient portals. Anything that people
-          actually interact with.
+          Products these days ask more of everyone. Designers are expected to center a div,
+          developers have to run the meeting with their camera on, and researchers are pushing
+          to prod. The AI landscape raised the bar for all of us. Looks like the requirements
+          caught up to my resume.
         </p>
 
         <div className="hero__actions">

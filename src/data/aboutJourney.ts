@@ -19,7 +19,6 @@ export interface AboutStat {
 }
 
 export const aboutIntro = {
-  eyebrow: '/ About me',
   titleLead: 'A nonlinear path to a more',
   titleEm: 'holistic',
   titleTail: 'perspective.',
@@ -33,7 +32,7 @@ export const aboutChapters: AboutChapter[] = [
     companies: 'Mob Media · Metagenics',
     lesson: 'clarity.',
     body: 'Design taught me to communicate complex ideas visually, turning information into something people can understand and act on.',
-    tags: ['Visual design', 'Brand', 'Communication'],
+    tags: ['Visual design', 'Brand', 'Communication', 'Ecom web design'],
   },
   {
     n: '02',
@@ -62,7 +61,6 @@ export const aboutChapters: AboutChapter[] = [
 ];
 
 export const aboutToday = {
-  eyebrow: '/ The synthesis',
   titleLead: 'Today, I bring it',
   titleEm: 'together.',
   body: 'I bring design, technical understanding, and product judgment together to make complicated products feel simple.',
@@ -70,6 +68,6 @@ export const aboutToday = {
     { big: '10+ yrs', label: 'In design + product' },
     { big: '10+', label: 'Products shipped' },
     { big: '4', label: 'Startups' },
-    { big: 'Both', label: 'Corporate + mom-and-pop' },
+    { big: 'All sizes', label: 'mom-&-pop to corporate' },
   ] satisfies AboutStat[],
 } as const;

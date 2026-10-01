@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { aboutChapters, aboutIntro, aboutToday } from '../../data/aboutJourney';
 import { track } from '../../lib/analytics';
-import { chip, eyebrow } from '../../theme/patterns';
+import { chip } from '../../theme/patterns';
 import { border, colors, fonts, layout } from '../../theme/tokens';
 import AboutJourneyBackground from './AboutJourneyBackground';
 import {
@@ -45,14 +45,11 @@ const sectionVars = {
   '--ab-rive': '0',
 } as CSSProperties;
 
-const themedEyebrow: CSSProperties = { ...eyebrow, color: 'var(--ab-ink-3)' };
 const themedChip: CSSProperties = {
   ...chip,
   color: 'var(--ab-ink-2)',
   borderColor: 'var(--ab-tag)',
 };
-
-const todayEyebrow: CSSProperties = { ...eyebrow, color: colors.textMuted };
 
 export interface AboutJourneyProps {
   /** Pin the section and carry chapters into focus (false = plain vertical flow). */
@@ -457,7 +454,6 @@ export default function AboutJourney({
         <div ref={moverRef} className="about-journey__mover">
           <div ref={introRef} className="about-journey__intro">
             <div data-reveal="intro" className="about-journey__intro-top">
-              <span style={themedEyebrow}>{aboutIntro.eyebrow}</span>
               <h2 id="about-title" className="about-journey__title">
                 {aboutIntro.titleLead} <em>{aboutIntro.titleEm}</em> {aboutIntro.titleTail}
               </h2>
@@ -510,7 +506,6 @@ export default function AboutJourney({
 
         <div ref={todayRef} className="about-journey__today">
           <canvas ref={runnerRef} className="about-journey__runner" aria-hidden="true" />
-          <span style={todayEyebrow}>{aboutToday.eyebrow}</span>
           <h3 className="about-journey__title">
             {aboutToday.titleLead} <em>{aboutToday.titleEm}</em>
           </h3>

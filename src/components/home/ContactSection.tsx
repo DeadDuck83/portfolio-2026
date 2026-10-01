@@ -16,7 +16,7 @@ const outlinedCta = {
 };
 
 /**
- * Contact section — eyebrow, serif headline with an italic accent word, short
+ * Contact section — serif headline with an italic accent word, short
  * paragraph, and CTA row (copy-email, outlined LinkedIn, optional Résumé).
  * Résumé opens the Google Doc share link from `RESUME_URL` when set.
  */
@@ -35,23 +35,13 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
           padding: 'clamp(4.5rem, 13vh, 9rem) clamp(1.5rem, 6vw, 6rem)',
         }}
       >
-        <div
-          style={{
-            fontSize: '0.68rem',
-            letterSpacing: '0.24em',
-            textTransform: 'uppercase',
-            color: colors.textMuted,
-          }}
-        >
-          / Contact
-        </div>
         <h2
           style={{
             fontFamily: fonts.display,
             fontWeight: 400,
             fontSize: 'clamp(2.6rem, 7vw, 5.6rem)',
             lineHeight: 1.02,
-            margin: '1rem 0 0',
+            margin: 0,
             maxWidth: '16ch',
           }}
         >
