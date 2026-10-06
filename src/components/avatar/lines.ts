@@ -2,6 +2,8 @@
  * Avatar guide content: pre-rendered lines (ElevenLabs audio + viseme track,
  * built in the hey-avatar repo) and the question chips.
  */
+import type { GuideFocus } from '../../lib/guide';
+
 export const AVATAR_BASE = '/avatar';
 
 export const WISDOM = ['wisdom1', 'wisdom2', 'wisdom3', 'wisdom4', 'wisdom5', 'wisdom6', 'wisdom7'] as const;
@@ -14,6 +16,11 @@ export type LineId =
   | 'skills'
   | 'realai'
   | 'wisdomintro'
+  | 'tourintro'
+  | 'tour1'
+  | 'tour2'
+  | 'tour3'
+  | 'tour4'
   | (typeof WISDOM)[number];
 
 export type Track = {
@@ -29,6 +36,9 @@ export const lineTrack = (id: LineId) => `${AVATAR_BASE}/speech/${id}.json`;
 /** Somewhere on the site the guide can take the visitor. */
 export type Destination = { label: string; to: string };
 
+/** One stop on a guided tour: optionally bring part of the page into focus, then say a line. */
+export type TourStep = { line: LineId; focus?: GuideFocus };
+
 export type Chip = {
   label: string;
   line?: LineId;
@@ -37,6 +47,7 @@ export type Chip = {
   go?: string; // navigate here as he starts answering
   offer?: Destination; // a link in his message
   choices?: Destination[]; // follow-up options in his message
+  tour?: TourStep[]; // a guided walk through part of the site, step by step
 };
 
 export const CASE_STUDIES: Destination[] = [
@@ -47,7 +58,18 @@ export const CASE_STUDIES: Destination[] = [
 ];
 
 export const CHIPS: Chip[] = [
-  { label: 'Tell me about your work journey', line: 'journey', offer: { label: 'See the journey', to: '/#about' } },
+  {
+    // walks the "nonlinear path" section, anchoring each chapter as he talks
+    label: 'Tell me about your work journey',
+    go: '/#about',
+    tour: [
+      { line: 'tourintro' },
+      { line: 'tour1', focus: { section: 'about', step: 1 } },
+      { line: 'tour2', focus: { section: 'about', step: 2 } },
+      { line: 'tour3', focus: { section: 'about', step: 3 } },
+      { line: 'tour4', focus: { section: 'about', step: 4 } },
+    ],
+  },
   { label: 'Show me your work', line: 'showwork', go: '/#work' },
   { label: 'Walk me through a case study', line: 'casestudy', choices: CASE_STUDIES },
   { label: 'What are your technical skills?', line: 'skills' },

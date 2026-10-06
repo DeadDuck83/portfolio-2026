@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
 import { track } from '../../lib/analytics';
+import { guideFocus } from '../../lib/guide';
 import { AvatarController } from './controller';
 import { AVATAR_BASE, CHIPS, makeBag, wordEnds, type Chip, type Destination, type LineId } from './lines';
 import { cornerStyle, nearestCorner, type Corner } from './corner';
@@ -198,7 +199,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   };
 
   const ask = async (chip: Chip) => {
-    if (!chip.line && !chip.pick) return;
+    if (!chip.line && !chip.pick && !chip.tour) return;
     if (busy && (!camera || typing)) return; // typed answers aren't interruptible
     const token = ++askToken.current;
     track('Avatar chip asked', { chip: chip.label, camera });
@@ -207,7 +208,20 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     setBusy(chip.label);
     if (chip.go) navigate(chip.go);
     const extra: Partial<Msg> = { offer: chip.offer, choices: chip.choices };
-    if (chip.pick) {
+    if (chip.tour) {
+      // a guided walk: anchor each stop on the page, then talk about it
+      for (const step of chip.tour) {
+        if (token !== askToken.current) break;
+        if (step.focus) {
+          guideFocus(step.focus);
+          await new Promise((r) => window.setTimeout(r, 450)); // let the scroll land first
+        }
+        if (token !== askToken.current) break;
+        await say(step.line);
+        // typed: give the visitor time to read before moving on
+        if (!camera && token === askToken.current) await new Promise((r) => window.setTimeout(r, 1800));
+      }
+    } else if (chip.pick) {
       if (chip.intro && !introDone.current.has(chip.label)) {
         introDone.current.add(chip.label);
         await say(chip.intro);

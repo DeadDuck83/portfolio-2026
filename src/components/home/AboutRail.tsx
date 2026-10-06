@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { aboutChapters, aboutCompanies, aboutIntro, aboutMarks, aboutToday } from '../../data/aboutJourney';
 import { track } from '../../lib/analytics';
+import { useGuideFocus } from '../../lib/guide';
 import { border, colors, fonts, layout } from '../../theme/tokens';
 import CompanyPopover from './CompanyPopover';
 import { createSquares, type SquaresController } from './aboutRailSquares';
@@ -84,6 +85,25 @@ export default function AboutRail() {
       ?.querySelectorAll<HTMLElement>('.about-rail__card')
       [i]?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
   };
+
+  // The avatar guide walks visitors through the chapters: bring chapter `step`
+  // (1..n) into focus — on desktop by scrolling its card past the 42% line,
+  // on mobile by scrolling the section into view and centring the slide.
+  const focusChapter = useCallback((step: number) => {
+    const section = sectionRef.current;
+    const card = section?.querySelectorAll<HTMLElement>('.about-rail__card')[step - 1];
+    if (!section || !card) return;
+    const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
+    if (window.matchMedia(SWIPE_QUERY).matches) {
+      const r = section.querySelector('.about-rail__body')?.getBoundingClientRect();
+      if (r) window.scrollTo({ top: window.scrollY + r.top - 72, behavior });
+      card.scrollIntoView({ inline: 'center', block: 'nearest', behavior });
+    } else {
+      const top = window.scrollY + card.getBoundingClientRect().top - window.innerHeight * (LINE - 0.12);
+      window.scrollTo({ top, behavior });
+    }
+  }, []);
+  useGuideFocus('about', focusChapter);
 
   useEffect(() => {
     const section = sectionRef.current;
