@@ -8,7 +8,8 @@ export interface CompanyPopoverProps {
 /**
  * A company name in the rail sentence ("…at Mob Media and Metagenics"). The name
  * is a button that opens a small popover with a one-line description, a scale
- * note, and an outbound link — so reviewers can research without leaving the page.
+ * note, and an outbound link when the company still has a site — so reviewers
+ * can research without leaving the page.
  */
 export default function CompanyPopover({ company }: CompanyPopoverProps) {
   const [open, setOpen] = useState(false);
@@ -46,14 +47,16 @@ export default function CompanyPopover({ company }: CompanyPopoverProps) {
         <span id={panelId} role="dialog" aria-label={company.name} className="about-rail__popover">
           <span className="about-rail__popover-blurb">{company.blurb}</span>
           <span className="about-rail__popover-scale">{company.scale}</span>
-          <a
-            className="about-rail__popover-link"
-            href={company.href}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            Visit <span aria-hidden="true">↗</span>
-          </a>
+          {company.href && (
+            <a
+              className="about-rail__popover-link"
+              href={company.href}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Visit <span aria-hidden="true">↗</span>
+            </a>
+          )}
         </span>
       )}
     </span>

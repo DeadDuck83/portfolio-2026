@@ -30,50 +30,48 @@ export interface AboutCompany {
   blurb: string;
   /** Scale note (team size, stage, reach). */
   scale: string;
-  /** Outbound link. */
-  href: string;
+  /** Outbound link; omitted when the company's site is gone. */
+  href?: string;
 }
 
 /**
- * Company registry for the rail's name popovers. Copy and links are
- * placeholders — swap `blurb` / `scale` / `href` with the real details.
+ * Company registry for the rail's name popovers. Blurb / scale copy is still
+ * placeholder; links are real (Mob Media and Parker & Ace no longer exist).
  */
 export const aboutCompanies: Record<string, AboutCompany> = {
   'mob-media': {
     name: 'Mob Media',
     blurb: 'Creative agency building brands and marketing sites for growing businesses.',
     scale: 'Small agency · multi-client',
-    href: '#',
   },
   metagenics: {
     name: 'Metagenics',
     blurb: 'Science-based nutritional supplement company serving practitioners and patients.',
     scale: 'Global · 1,000+ employees',
-    href: '#',
+    href: 'https://www.metagenics.com',
   },
   'five-and-done': {
     name: 'Five & Done',
     blurb: 'Brand and digital studio shipping sites and products for consumer brands.',
     scale: 'Boutique studio',
-    href: '#',
+    href: 'https://www.fiveanddone.com/',
   },
   'parker-ace': {
     name: 'Parker & Ace',
     blurb: 'Veterinary care startup rethinking the neighborhood clinic experience.',
     scale: 'Early-stage startup',
-    href: '#',
   },
   bexa: {
     name: 'Bexa',
     blurb: 'Breast-health company pairing a screening device with its software.',
     scale: 'Startup · hardware + software',
-    href: '#',
+    href: 'https://mybexa.com',
   },
   sage: {
     name: 'Sage Healthspan',
     blurb: 'Longevity platform turning lab work into a guided healthspan program.',
     scale: 'Startup · 0→1',
-    href: '#',
+    href: 'https://sagehealthspan.com',
   },
 };
 
