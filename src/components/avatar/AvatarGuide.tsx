@@ -84,7 +84,6 @@ export default function AvatarGuide() {
           aria-label="Talk to Derek's avatar"
         >
           <img src={`${AVATAR_BASE}/face.webp`} alt="" width={64} height={64} />
-          <span className={styles.fabDot} aria-hidden />
         </button>
       )}
     </>

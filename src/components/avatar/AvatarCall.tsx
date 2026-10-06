@@ -8,7 +8,7 @@ import { cornerStyle, nearestCorner, type Corner } from './corner';
 import styles from './avatarGuide.module.css';
 
 const ARTBOARD = { w: 1122, h: 1402 };
-const IDLE_MS = 8000; // untouched this long (and not talking) → compact
+const IDLE_MS = 4000; // untouched this long (and not talking) → compact
 
 type Msg = { id: number; text: string; me?: boolean; live?: boolean; offer?: Destination; choices?: Destination[] };
 
