@@ -4,14 +4,18 @@ import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
 import { track } from '../../lib/analytics';
 import { AvatarController } from './controller';
 import { AVATAR_BASE, CHIPS, makeBag, wordEnds, type Chip, type Destination, type LineId } from './lines';
+import { cornerStyle, nearestCorner, type Corner } from './corner';
 import styles from './avatarGuide.module.css';
+
+const ARTBOARD = { w: 1122, h: 1402 };
+const IDLE_MS = 8000; // untouched this long (and not talking) → compact
 
 type Msg = { id: number; text: string; me?: boolean; live?: boolean; offer?: Destination; choices?: Destination[] };
 
-type Props = { open: boolean; onReady: () => void; onClose: () => void };
+type Props = { open: boolean; corner: Corner; onCorner: (c: Corner) => void; onReady: () => void; onClose: () => void };
 
 /** The call card: avatar tile + compact chat. Stays mounted while minimized. */
-export default function AvatarCall({ open, onReady, onClose }: Props) {
+export default function AvatarCall({ open, corner, onCorner, onReady, onClose }: Props) {
   const navigate = useNavigate();
   const { rive, RiveComponent } = useRive({
     src: `${AVATAR_BASE}/avatar.riv`,
@@ -32,6 +36,11 @@ export default function AvatarCall({ open, onReady, onClose }: Props) {
   const logRef = useRef<HTMLDivElement>(null);
   const bags = useRef(new Map<string, () => LineId>());
   const introDone = useRef(new Set<string>());
+  const cardRef = useRef<HTMLElement>(null);
+  const [compact, setCompact] = useState(false);
+  const [hover, setHover] = useState(false);
+  const [poke, setPoke] = useState(0); // bumps on any interaction → restarts the idle timer
+  const dragged = useRef(false);
 
   useEffect(() => {
     if (!rive) return;
@@ -56,6 +65,79 @@ export default function AvatarCall({ open, onReady, onClose }: Props) {
       rive.pause();
     }
   }, [open, rive]);
+
+  // compact when idle: chat hides, face shrinks; hover / tap brings it back
+  const talking = busy !== null || typing;
+  useEffect(() => {
+    if (!open || hover || talking) {
+      setCompact(false);
+      return;
+    }
+    const t = window.setTimeout(() => setCompact(true), IDLE_MS);
+    return () => window.clearTimeout(t);
+  }, [open, hover, talking, poke]);
+
+  // the eyes follow the mouse anywhere on the page, not just over the tile
+  useEffect(() => {
+    if (!open || !camera) return;
+    let raf = 0;
+    let seq = 0;
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse' || raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const canvas = cardRef.current?.querySelector('canvas');
+        const c = ctl.current;
+        if (!canvas || !c) return;
+        const r = canvas.getBoundingClientRect();
+        if (r.width === 0) return;
+        // Fit.Cover + TopCenter: artboard scaled to cover, centred horizontally
+        const s = Math.max(r.width / ARTBOARD.w, r.height / ARTBOARD.h);
+        const ox = (r.width - ARTBOARD.w * s) / 2;
+        c.set('hostCursorX', (e.clientX - r.left - ox) / s);
+        c.set('hostCursorY', (e.clientY - r.top) / s);
+        c.set('hostCursorSeq', ++seq);
+      });
+    };
+    window.addEventListener('pointermove', onMove);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [open, camera]);
+
+  // drag the card anywhere; on release it snaps to the nearest corner
+  const onPointerDown = (e: React.PointerEvent<HTMLElement>) => {
+    if (e.button !== 0 || (e.target as HTMLElement).closest('button, input, a, [data-nodrag]')) return;
+    const card = cardRef.current;
+    if (!card) return;
+    const start = { x: e.clientX, y: e.clientY };
+    const rect = card.getBoundingClientRect();
+    dragged.current = false;
+    const move = (ev: PointerEvent) => {
+      const dx = ev.clientX - start.x;
+      const dy = ev.clientY - start.y;
+      if (!dragged.current && Math.hypot(dx, dy) < 6) return;
+      if (!dragged.current) {
+        dragged.current = true;
+        card.classList.add(styles.dragging);
+      }
+      card.style.transform = `translate(${dx}px, ${dy}px)`;
+    };
+    const up = (ev: PointerEvent) => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      card.classList.remove(styles.dragging);
+      if (!dragged.current) return;
+      const cx = rect.left + rect.width / 2 + (ev.clientX - start.x);
+      const cy = rect.top + rect.height / 2 + (ev.clientY - start.y);
+      card.style.transform = '';
+      onCorner(nearestCorner(cx, cy, window.innerWidth, window.innerHeight));
+      setPoke((p) => p + 1);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
 
   useEffect(() => {
     logRef.current?.scrollTo({ top: logRef.current.scrollHeight, behavior: 'smooth' });
@@ -161,7 +243,33 @@ export default function AvatarCall({ open, onReady, onClose }: Props) {
   };
 
   return (
-    <section className={styles.card} hidden={!open} aria-label="Chat with Derek's avatar">
+    <section
+      ref={cardRef}
+      className={`${styles.card} ${compact ? styles.compact : ''}`}
+      style={cornerStyle(corner)}
+      hidden={!open}
+      aria-label="Chat with Derek's avatar"
+      onPointerDown={onPointerDown}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onFocus={() => setPoke((p) => p + 1)}
+      onClickCapture={(e) => {
+        if (dragged.current) {
+          // the release of a drag is not a click
+          e.preventDefault();
+          e.stopPropagation();
+          dragged.current = false;
+          return;
+        }
+        if (compact) {
+          // a tap on the compact face (mobile) only brings the card back
+          e.preventDefault();
+          e.stopPropagation();
+          setCompact(false);
+        }
+        setPoke((p) => p + 1);
+      }}
+    >
       <div className={`${styles.tile} ${camera ? '' : styles.camOff}`}>
         <div className={`${styles.avatar} ${live ? '' : styles.waiting}`} aria-hidden={!camera}>
           <RiveComponent />
@@ -202,7 +310,7 @@ export default function AvatarCall({ open, onReady, onClose }: Props) {
           </div>
         ) : (
           <>
-            <div className={styles.log} ref={logRef} aria-live="polite">
+            <div className={styles.log} ref={logRef} aria-live="polite" data-nodrag>
               {msgs.map((m) =>
                 m.text || m.offer ? (
                   <div key={m.id} className={`${styles.msg} ${m.me ? styles.me : ''} ${m.live ? styles.liveMsg : ''}`}>
@@ -232,7 +340,15 @@ export default function AvatarCall({ open, onReady, onClose }: Props) {
                 </div>
               )}
             </div>
-            <div className={styles.chips} role="group" aria-label="Suggested questions">
+            <div
+              className={styles.chips}
+              role="group"
+              aria-label="Suggested questions"
+              data-nodrag
+              onWheel={(e) => {
+                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.currentTarget.scrollLeft += e.deltaY;
+              }}
+            >
               {CHIPS.map((chip) => (
                 <button
                   key={chip.label}

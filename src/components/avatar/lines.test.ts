@@ -21,3 +21,12 @@ describe('makeBag', () => {
     }
   });
 });
+
+import { nearestCorner } from './corner';
+
+describe('nearestCorner', () => {
+  it('snaps to the quadrant the card was dropped in', () => {
+    expect(nearestCorner(100, 700, 1200, 800)).toEqual({ h: 'left', v: 'bottom' });
+    expect(nearestCorner(1100, 50, 1200, 800)).toEqual({ h: 'right', v: 'top' });
+  });
+});

@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { track } from '../../lib/analytics';
 import { AVATAR_BASE } from './lines';
+import { cornerStyle, loadCorner, saveCorner, type Corner } from './corner';
 import styles from './avatarGuide.module.css';
 
 // The call (Rive runtime + avatar, ~2.5 MB) loads only after the page has.
@@ -28,6 +29,12 @@ export default function AvatarGuide() {
   const [minTimeUp, setMinTimeUp] = useState(false);
   const [open, setOpen] = useState(false);
   const [dismissed] = useState(wasDismissed);
+  const [corner, setCorner] = useState<Corner>(loadCorner);
+  const moveTo = (c: Corner) => {
+    setCorner(c);
+    saveCorner(c);
+    track('Avatar moved', { corner: `${c.v}-${c.h}` });
+  };
 
   useEffect(() => {
     const start = () => setLoad(true);
@@ -63,12 +70,13 @@ export default function AvatarGuide() {
     <>
       {load && (
         <Suspense fallback={null}>
-          <AvatarCall open={open} onReady={() => setReady(true)} onClose={close} />
+          <AvatarCall open={open} corner={corner} onCorner={moveTo} onReady={() => setReady(true)} onClose={close} />
         </Suspense>
       )}
       {showFab && (
         <button
           className={styles.fab}
+          style={cornerStyle(corner)}
           onClick={() => {
             setOpen(true);
             track('Avatar reopened');
