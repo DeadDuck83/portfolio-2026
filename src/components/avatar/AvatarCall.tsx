@@ -67,16 +67,26 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     }
   }, [open, rive]);
 
-  // compact when idle: chat hides, face shrinks; hover / tap brings it back
+  // Compact: chat tucks away, face shrinks; hover / tap brings it back.
+  // When he's speaking out loud the voice carries the answer, so the text
+  // goes as soon as the mouse leaves (phones: after IDLE_MS). Muted or
+  // camera-off, the text IS the answer, so it stays up until he's done.
   const talking = busy !== null || typing;
+  const voiceOn = camera && !muted;
   useEffect(() => {
-    if (!open || hover || talking) {
+    if (!open || hover) {
       setCompact(false);
       return;
     }
-    const t = window.setTimeout(() => setCompact(true), IDLE_MS);
+    if (talking && !voiceOn) {
+      setCompact(false);
+      return;
+    }
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const delay = talking && canHover ? 0 : IDLE_MS;
+    const t = window.setTimeout(() => setCompact(true), delay);
     return () => window.clearTimeout(t);
-  }, [open, hover, talking, poke]);
+  }, [open, hover, talking, voiceOn, poke]);
 
   // the eyes follow the mouse anywhere on the page, not just over the tile
   useEffect(() => {
