@@ -11,6 +11,8 @@ import styles from './avatarGuide.module.css';
 const ARTBOARD = { w: 1122, h: 1402 };
 const IDLE_MS = 4000; // untouched this long (and not talking) → compact
 
+const canHover = () => window.matchMedia('(hover: hover)').matches;
+
 type Msg = { id: number; text: string; me?: boolean; live?: boolean; offer?: Destination; choices?: Destination[] };
 
 type Props = { open: boolean; corner: Corner; onCorner: (c: Corner) => void; onReady: () => void; onClose: () => void };
@@ -42,6 +44,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   const [hover, setHover] = useState(false);
   const [poke, setPoke] = useState(0); // bumps on any interaction → restarts the idle timer
   const dragged = useRef(false);
+  const tapped = useRef(0); // a tap that just expanded the compact card; its click is swallowed
 
   useEffect(() => {
     if (!rive) return;
@@ -69,8 +72,9 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
 
   // Compact: chat tucks away, face shrinks; hover / tap brings it back.
   // When he's speaking out loud the voice carries the answer, so the text
-  // goes as soon as the mouse leaves (phones: after IDLE_MS). Muted or
-  // camera-off, the text IS the answer, so it stays up until he's done.
+  // goes as soon as the mouse leaves (phones: as soon as he starts talking;
+  // a tap brings it back until IDLE_MS of quiet). Muted or camera-off, the
+  // text IS the answer, so it stays up until he's done.
   const talking = busy !== null || typing;
   const voiceOn = camera && !muted;
   useEffect(() => {
@@ -82,11 +86,16 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
       setCompact(false);
       return;
     }
-    const canHover = window.matchMedia('(hover: hover)').matches;
-    const delay = talking && canHover ? 0 : IDLE_MS;
+    const delay = talking && canHover() ? 0 : IDLE_MS;
     const t = window.setTimeout(() => setCompact(true), delay);
     return () => window.clearTimeout(t);
   }, [open, hover, talking, voiceOn, poke]);
+
+  // phones: he starts talking out loud (or starts a new answer) → tuck the text away right away
+  const speakingAloud = talking && voiceOn;
+  useEffect(() => {
+    if (open && speakingAloud && !canHover()) setCompact(true);
+  }, [open, speakingAloud, busy]);
 
   // the eyes follow the mouse anywhere on the page, not just over the tile
   useEffect(() => {
@@ -139,7 +148,16 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', up);
       card.classList.remove(styles.dragging);
-      if (!dragged.current) return;
+      if (!dragged.current) {
+        // a tap on the compact face brings the card back. Done here, not on
+        // click: touches on the avatar canvas don't always produce a click.
+        if (compact) {
+          tapped.current = Date.now();
+          setCompact(false);
+          setPoke((p) => p + 1);
+        }
+        return;
+      }
       const cx = rect.left + rect.width / 2 + (ev.clientX - start.x);
       const cy = rect.top + rect.height / 2 + (ev.clientY - start.y);
       card.style.transform = '';
@@ -274,8 +292,9 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
       hidden={!open}
       aria-label="Chat with Derek's avatar"
       onPointerDown={onPointerDown}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      // real mice only: phones fire a fake mouseenter on tap that never leaves
+      onPointerEnter={(e) => e.pointerType === 'mouse' && setHover(true)}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && setHover(false)}
       onFocus={() => setPoke((p) => p + 1)}
       onClickCapture={(e) => {
         if (dragged.current) {
@@ -285,8 +304,9 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
           dragged.current = false;
           return;
         }
-        if (compact) {
+        if (compact || Date.now() - tapped.current < 500) {
           // a tap on the compact face (mobile) only brings the card back
+          tapped.current = 0;
           e.preventDefault();
           e.stopPropagation();
           setCompact(false);
