@@ -21,6 +21,7 @@ export type LineId =
   | 'tour2'
   | 'tour3'
   | 'tour4'
+  | 'tour5'
   | (typeof WISDOM)[number];
 
 export type Track = {
@@ -68,6 +69,7 @@ export const CHIPS: Chip[] = [
       { line: 'tour2', focus: { section: 'about', step: 2 } },
       { line: 'tour3', focus: { section: 'about', step: 3 } },
       { line: 'tour4', focus: { section: 'about', step: 4 } },
+      { line: 'tour5', focus: { section: 'about', step: 5 } }, // "Today, I bring it together"
     ],
   },
   { label: 'Show me your work', line: 'showwork', go: '/#work' },

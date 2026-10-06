@@ -89,11 +89,17 @@ export default function AboutRail() {
   // The avatar guide walks visitors through the chapters: bring chapter `step`
   // (1..n) into focus — on desktop by scrolling its card past the 42% line,
   // on mobile by scrolling the section into view and centring the slide.
+  // Step n+1 (TODAY) brings the closing "Today, I bring it together" block up.
   const focusChapter = useCallback((step: number) => {
     const section = sectionRef.current;
+    const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
+    if (step === TODAY) {
+      const today = section?.querySelector<HTMLElement>('.about-rail__today');
+      if (today) window.scrollTo({ top: window.scrollY + today.getBoundingClientRect().top - window.innerHeight * 0.25, behavior });
+      return;
+    }
     const card = section?.querySelectorAll<HTMLElement>('.about-rail__card')[step - 1];
     if (!section || !card) return;
-    const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
     if (window.matchMedia(SWIPE_QUERY).matches) {
       const r = section.querySelector('.about-rail__body')?.getBoundingClientRect();
       if (r) window.scrollTo({ top: window.scrollY + r.top - 72, behavior });
