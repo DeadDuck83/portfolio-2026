@@ -5,6 +5,7 @@ import ChassisReveal from './components/telemetry/ChassisReveal';
 import Home from './pages/Home';
 import CaseStudy from './pages/CaseStudy';
 import Gallery from './pages/Gallery';
+import AvatarGuide from './components/avatar/AvatarGuide';
 import GalleryExperiment from './pages/GalleryExperiment';
 
 /**
@@ -19,6 +20,7 @@ import GalleryExperiment from './pages/GalleryExperiment';
  */
 export default function App() {
   return (
+    <>
     <ChassisReveal>
       <ScrollManager />
       <PageTransition>
@@ -31,5 +33,8 @@ export default function App() {
         </Routes>
       </PageTransition>
     </ChassisReveal>
+    {/* outside the chassis: a transformed ancestor would break position: fixed */}
+    <AvatarGuide />
+    </>
   );
 }
