@@ -45,6 +45,15 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   const [poke, setPoke] = useState(0); // bumps on any interaction → restarts the idle timer
   const dragged = useRef(false);
   const tapped = useRef(0); // a tap that just expanded the compact card; its click is swallowed
+  const nudgedAt = useRef(0);
+  // touching or scrolling inside the card (swiping the chip row, reading the
+  // log) counts as interaction, so the idle timer doesn't shrink it mid-swipe
+  const nudge = () => {
+    const now = Date.now();
+    if (now - nudgedAt.current < 250) return;
+    nudgedAt.current = now;
+    setPoke((p) => p + 1);
+  };
 
   useEffect(() => {
     if (!rive) return;
@@ -128,6 +137,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
 
   // drag the card anywhere; on release it snaps to the nearest corner
   const onPointerDown = (e: React.PointerEvent<HTMLElement>) => {
+    nudge();
     if (e.button !== 0 || (e.target as HTMLElement).closest('button, input, a, [data-nodrag]')) return;
     const card = cardRef.current;
     if (!card) return;
@@ -296,6 +306,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
       onPointerEnter={(e) => e.pointerType === 'mouse' && setHover(true)}
       onPointerLeave={(e) => e.pointerType === 'mouse' && setHover(false)}
       onFocus={() => setPoke((p) => p + 1)}
+      onScrollCapture={nudge}
       onClickCapture={(e) => {
         if (dragged.current) {
           // the release of a drag is not a click
