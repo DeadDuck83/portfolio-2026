@@ -1,7 +1,9 @@
 /**
  * The avatar's control surface: its view model numbers. The Rive file's
  * director script owns all motion; the page sets the state, and while a line
- * plays it drives the mouth (`speechHost` = 1) from the audio clock.
+ * plays it drives the mouth (`speechHost` = 1) from the audio clock, and
+ * sends the line's speech cues (head angle per phrase, brow beats, smiles...)
+ * so the whole face punctuates the words, not just the mouth.
  */
 import type { Rive, ViewModelInstance } from '@rive-app/react-webgl2';
 import { lineAudio, lineTrack, type LineId, type Track } from './lines';
@@ -17,6 +19,7 @@ export class AvatarController {
   private startTimer = 0;
   private pending: ((done: boolean) => void) | null = null;
   private tracks = new Map<LineId, Track>();
+  private cueSeq = 0;
   muted = false;
 
   constructor(rive: Rive) {
@@ -75,11 +78,19 @@ export class AvatarController {
     return new Promise<boolean>((resolve) => {
       this.pending = resolve;
       let k = 0;
+      let c = 0;
+      const cues = track.cues ?? [];
       const tick = () => {
         if (this.audio !== audio) return;
         const t = audio.currentTime;
         while (k + 1 < track.keys.length && track.keys[k + 1][0] <= t) k++;
         if (track.keys[k][0] <= t) this.set('viseme', track.keys[k][1]);
+        // cues fire once each, in order, one per frame (the director reads one per frame)
+        if (c < cues.length && cues[c][0] <= t) {
+          this.set('hostCue', cues[c][1]);
+          this.set('hostCueSeq', ++this.cueSeq);
+          c++;
+        }
         onTime?.(t);
         this.raf = requestAnimationFrame(tick);
       };

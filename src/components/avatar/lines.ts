@@ -28,6 +28,7 @@ export type Track = {
   text: string;
   words: [string, number][]; // [word, start seconds]
   keys: [number, number][]; // [seconds, viseme]
+  cues?: [number, number][]; // [seconds, cue] - head/brow accents: 1 phrase, 2 beat, 3 question, 4 smile, 5 ponder
   duration: number;
 };
 
