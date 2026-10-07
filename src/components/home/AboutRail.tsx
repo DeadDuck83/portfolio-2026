@@ -102,7 +102,14 @@ export default function AboutRail() {
     if (window.matchMedia(SWIPE_QUERY).matches) {
       const r = section.querySelector('.about-rail__body')?.getBoundingClientRect();
       if (r) window.scrollTo({ top: window.scrollY + r.top - 72, behavior });
-      card.scrollIntoView({ inline: 'center', block: 'nearest', behavior });
+      // slide the row itself (scrollIntoView would also scroll the page and
+      // cancel the smooth scroll above)
+      const track = section.querySelector<HTMLElement>('.about-rail__cards');
+      if (track) {
+        const tr = track.getBoundingClientRect();
+        const cr = card.getBoundingClientRect();
+        track.scrollTo({ left: track.scrollLeft + cr.left - tr.left - (tr.width - cr.width) / 2, behavior });
+      }
     } else {
       // Line the card's middle up with the middle of the locked squares, but
       // always far enough that it has crossed the activation line.

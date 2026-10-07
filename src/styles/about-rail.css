@@ -392,6 +392,10 @@
 
   /* Bottom half — chapters as a full-bleed slider, one slide per screen. */
   .about-rail__cards {
+    /* the body keeps the desktop align-items: start - without this the row
+       sizes to its content and runs off the right edge of the phone */
+    align-self: stretch;
+    min-width: 0;
     flex-direction: row;
     gap: 0;
     overflow-x: auto;
