@@ -32,7 +32,10 @@ export type Track = {
 };
 
 export const lineAudio = (id: LineId) => `${AVATAR_BASE}/speech/${id}.mp3`;
-export const lineTrack = (id: LineId) => `${AVATAR_BASE}/speech/${id}.json`;
+// `?lips=v1` plays the original lip sync (every sound its own full shape),
+// for comparing against the current, calmer one
+const LIPS = typeof location !== 'undefined' && new URLSearchParams(location.search).get('lips') === 'v1' ? 'v1/' : '';
+export const lineTrack = (id: LineId) => `${AVATAR_BASE}/speech/${LIPS}${id}.json`;
 
 /** Somewhere on the site the guide can take the visitor. */
 export type Destination = { label: string; to: string };
