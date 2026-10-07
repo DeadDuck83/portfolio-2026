@@ -4,7 +4,7 @@ import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
 import { track } from '../../lib/analytics';
 import { guideFocus } from '../../lib/guide';
 import { AvatarController } from './controller';
-import { AVATAR_BASE, CHIPS, makeBag, wordEnds, type Chip, type Destination, type LineId } from './lines';
+import { AVATAR_BASE, CHIPS, SHIRTS, makeBag, wordEnds, type Chip, type Destination, type LineId, type Shirt } from './lines';
 import { cornerStyle, nearestCorner, type Corner } from './corner';
 import styles from './avatarGuide.module.css';
 
@@ -13,7 +13,15 @@ const IDLE_MS = 4000; // untouched this long (and not talking) → compact
 
 const canHover = () => window.matchMedia('(hover: hover)').matches;
 
-type Msg = { id: number; text: string; me?: boolean; live?: boolean; offer?: Destination; choices?: Destination[] };
+type Msg = {
+  id: number;
+  text: string;
+  me?: boolean;
+  live?: boolean;
+  offer?: Destination;
+  choices?: Destination[];
+  shirts?: boolean;
+};
 
 type Props = { open: boolean; corner: Corner; onCorner: (c: Corner) => void; onReady: () => void; onClose: () => void };
 
@@ -41,6 +49,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   const introDone = useRef(new Set<string>());
   const cardRef = useRef<HTMLElement>(null);
   const [compact, setCompact] = useState(false);
+  const [shirt, setShirt] = useState(0);
   const [hover, setHover] = useState(false);
   const [poke, setPoke] = useState(0); // bumps on any interaction → restarts the idle timer
   const dragged = useRef(false);
@@ -245,7 +254,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     post({ text: chip.label, me: true });
     setBusy(chip.label);
     if (chip.go) navigate(chip.go);
-    const extra: Partial<Msg> = { offer: chip.offer, choices: chip.choices };
+    const extra: Partial<Msg> = { offer: chip.offer, choices: chip.choices, shirts: chip.shirts };
     if (chip.tour) {
       // a guided walk: anchor each stop on the page, then talk about it
       for (const step of chip.tour) {
@@ -268,6 +277,22 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     } else if (chip.line) {
       await say(chip.line, extra);
     }
+    if (token === askToken.current) setBusy(null);
+  };
+
+  // a shirt pick: he changes into it, then says something about it (and
+  // offers the rest again, so visitors can keep flipping through)
+  const wear = async (s: Shirt) => {
+    if (busy && (!camera || typing)) return;
+    const token = ++askToken.current;
+    track('Avatar shirt', { shirt: s.label });
+    ctl.current?.stop();
+    post({ text: s.label, me: true });
+    setBusy('shirt');
+    setShirt(s.id);
+    ctl.current?.set('shirt', s.id);
+    await new Promise((r) => window.setTimeout(r, 350)); // let the new print fade in first
+    if (token === askToken.current) await say(s.line, { shirts: true });
     if (token === askToken.current) setBusy(null);
   };
 
@@ -367,13 +392,22 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
           <>
             <div className={styles.log} ref={logRef} aria-live="polite" data-nodrag>
               {msgs.map((m) =>
-                m.text || m.offer ? (
+                m.text || m.offer || m.shirts ? (
                   <div key={m.id} className={`${styles.msg} ${m.me ? styles.me : ''} ${m.live ? styles.liveMsg : ''}`}>
                     {m.text}
                     {m.offer && (
                       <button className={styles.inlineLink} onClick={() => goTo(m.offer!)}>
                         {m.offer.label} →
                       </button>
+                    )}
+                    {m.shirts && (
+                      <span className={styles.choices}>
+                        {SHIRTS.filter((s) => s.id !== shirt).map((s) => (
+                          <button key={s.id} onClick={() => void wear(s)}>
+                            {s.label}
+                          </button>
+                        ))}
+                      </span>
                     )}
                     {m.choices && (
                       <span className={styles.choices}>

@@ -22,6 +22,12 @@ export type LineId =
   | 'tour3'
   | 'tour4'
   | 'tour5'
+  | 'shirt'
+  | 'shirt0'
+  | 'shirt1'
+  | 'shirt2'
+  | 'shirt3'
+  | 'shirt4'
   | (typeof WISDOM)[number];
 
 export type Track = {
@@ -50,7 +56,18 @@ export type Chip = {
   offer?: Destination; // a link in his message
   choices?: Destination[]; // follow-up options in his message
   tour?: TourStep[]; // a guided walk through part of the site, step by step
+  shirts?: boolean; // offer Derek's other shirts in his message
 };
+
+/** Derek's other Hawaiian shirts (the avatar's `shirt` value), and what he says when you pick one. */
+export type Shirt = { id: number; label: string; line: LineId };
+export const SHIRTS: Shirt[] = [
+  { id: 1, label: 'Light blue', line: 'shirt1' },
+  { id: 2, label: 'Red', line: 'shirt2' },
+  { id: 3, label: 'Beige', line: 'shirt3' },
+  { id: 4, label: 'Green', line: 'shirt4' },
+  { id: 0, label: 'The original', line: 'shirt0' },
+];
 
 export const CASE_STUDIES: Destination[] = [
   { label: 'Sage', to: '/work/sage' },
@@ -78,6 +95,7 @@ export const CHIPS: Chip[] = [
   { label: 'What are your technical skills?', line: 'skills' },
   { label: 'Are you really an AI?', line: 'realai' },
   { label: 'Words of wisdom', pick: WISDOM, intro: 'wisdomintro' },
+  { label: 'I like your shirt', line: 'shirt', shirts: true },
 ];
 
 /** Character offset where each word of `track.words` ends inside `track.text`. */
