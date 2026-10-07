@@ -104,8 +104,15 @@ export default function AboutRail() {
       if (r) window.scrollTo({ top: window.scrollY + r.top - 72, behavior });
       card.scrollIntoView({ inline: 'center', block: 'nearest', behavior });
     } else {
-      const top = window.scrollY + card.getBoundingClientRect().top - window.innerHeight * (LINE - 0.12);
-      window.scrollTo({ top, behavior });
+      // Line the card's middle up with the middle of the locked squares, but
+      // always far enough that it has crossed the activation line.
+      const media = section.querySelector<HTMLElement>('.about-rail__media');
+      const stage = section.querySelector<HTMLElement>('.about-rail__stage');
+      const lockedTop = media ? parseFloat(getComputedStyle(media).top) || 0 : 0;
+      const stageMid = lockedTop + (stage?.getBoundingClientRect().height ?? 0) / 2;
+      const r = card.getBoundingClientRect();
+      const cardTop = Math.min(stageMid - r.height / 2, window.innerHeight * LINE - 12);
+      window.scrollTo({ top: window.scrollY + r.top - cardTop, behavior });
     }
   }, []);
   useGuideFocus('about', focusChapter);
