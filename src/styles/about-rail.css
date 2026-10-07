@@ -71,9 +71,13 @@
   align-items: start;
 }
 
+/* The squares lock into the vertical centre of the window (below the header)
+   while the phases scroll past. --stage-h is the stage's measured height
+   (set in AboutRail.tsx). */
 .about-rail__media {
+  --header: 4rem;
   position: sticky;
-  top: clamp(4.5rem, 12vh, 6.5rem);
+  top: max(var(--header), calc(var(--header) + (100svh - var(--header) - var(--stage-h, 34rem)) / 2));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,7 +86,8 @@
 
 .about-rail__stage {
   width: 100%;
-  max-width: 34rem;
+  /* never taller than the window has room for */
+  max-width: min(34rem, calc(100svh - var(--header) - 3rem));
   aspect-ratio: 670 / 663;
 }
 

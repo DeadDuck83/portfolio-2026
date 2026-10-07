@@ -9,7 +9,7 @@ import '../../styles/about-rail.css';
 
 const SRC = '/background/journey.riv';
 /** Desktop: the card that has crossed this fraction of viewport height is active. */
-const LINE = 0.42;
+const LINE = 0.3;
 /** Mobile: leave the "appear" pose once the chapter-1 heading reaches this fraction of the viewport (≈ as it enters from the bottom). */
 const MOBILE_ENGAGE = 0.95;
 /** Below this width the section becomes the horizontal swipe layout. */
@@ -54,7 +54,7 @@ function companyNodes(keys: string[]): ReactNode[] {
 
 /**
  * "About me" journey. On desktop it's a sticky animation column on the left with
- * a rail of four chapter cards on the right; a card crossing the 42% line picks
+ * a rail of four chapter cards on the right; a card crossing the 30% line picks
  * the chapter the squares show (journey.riv plays the transition and that
  * chapter's hold loop). On mobile it's a self-contained swipe unit — squares up
  * top, a through-line of dots, and the chapter content as a horizontal
@@ -86,7 +86,7 @@ export default function AboutRail() {
   };
 
   // The avatar guide walks visitors through the chapters: bring chapter `step`
-  // (1..n) into focus — on desktop by scrolling its card past the 42% line,
+  // (1..n) into focus — on desktop by scrolling its card past the 30% line,
   // on mobile by scrolling the section into view and centring the slide.
   // Step n+1 (TODAY) brings the closing "Today, I bring it together" block up.
   const focusChapter = useCallback((step: number) => {
@@ -126,6 +126,15 @@ export default function AboutRail() {
       setActive(n);
     };
 
+    // The sticky column centres the squares vertically; it needs their height.
+    const stage = section.querySelector<HTMLElement>('.about-rail__stage');
+    const media = section.querySelector<HTMLElement>('.about-rail__media');
+    const stageRo =
+      stage && media && typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => media.style.setProperty('--stage-h', `${stage.getBoundingClientRect().height}px`))
+        : null;
+    if (stage) stageRo?.observe(stage);
+
     // Lazy-load the heavy runtime as the section approaches, then drive it.
     let loaded = false;
     const loader = new IntersectionObserver(
@@ -146,7 +155,7 @@ export default function AboutRail() {
     );
     loader.observe(section);
 
-    // Two drivers, swapped on the breakpoint. Desktop reads the vertical 42%
+    // Two drivers, swapped on the breakpoint. Desktop reads the vertical 30%
     // line; mobile reads which card is centred in the horizontal swipe.
     let teardown = () => {};
     const setupDriver = () => {
@@ -219,6 +228,7 @@ export default function AboutRail() {
 
     return () => {
       loader.disconnect();
+      stageRo?.disconnect();
       teardown();
       swipeMq.removeEventListener('change', setupDriver);
       window.removeEventListener('resize', onResize);
