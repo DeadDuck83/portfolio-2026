@@ -26,8 +26,8 @@ export type LineId =
   | 'shirt0'
   | 'shirt1'
   | 'shirt2'
-  | 'shirt3'
   | 'shirt4'
+  | 'footer'
   | (typeof WISDOM)[number];
 
 export type Track = {
@@ -59,14 +59,17 @@ export type Chip = {
   shirts?: boolean; // offer Derek's other shirts in his message
 };
 
-/** Derek's other Hawaiian shirts (the avatar's `shirt` value), and what he says when you pick one. */
-export type Shirt = { id: number; label: string; line: LineId };
+/**
+ * Derek's other Hawaiian shirts (the avatar's `shirt` value) and his reaction
+ * when you pick one - a short line, or (no line) just a big grin.
+ */
+export type Shirt = { id: number; label: string; line?: LineId };
 export const SHIRTS: Shirt[] = [
-  { id: 1, label: 'Light blue', line: 'shirt1' },
-  { id: 2, label: 'Red', line: 'shirt2' },
-  { id: 3, label: 'Beige', line: 'shirt3' },
-  { id: 4, label: 'Green', line: 'shirt4' },
-  { id: 0, label: 'The original', line: 'shirt0' },
+  { id: 1, label: 'Light blue', line: 'shirt1' }, // "Nice!"
+  { id: 2, label: 'Red', line: 'shirt2' }, // "Bold. I like it."
+  { id: 3, label: 'Beige' }, // a delighted grin, no words
+  { id: 4, label: 'Green', line: 'shirt4' }, // "Good choice."
+  { id: 0, label: 'The original', line: 'shirt0' }, // "Good call."
 ];
 
 export const CASE_STUDIES: Destination[] = [

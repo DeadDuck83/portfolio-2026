@@ -7,10 +7,9 @@ import {
   useState,
 } from 'react';
 import { track } from '../../lib/analytics';
-import { getAnalyticsSnapshot } from '../../lib/telemetry/getAnalyticsSnapshot';
-import type { AnalyticsSnapshot } from '../../lib/telemetry/types';
+import { guideNudge } from '../../lib/guide';
 import { colors } from '../../theme/tokens';
-import TelemetryChassis from './TelemetryChassis';
+import ShirtBay from './ShirtBay';
 import '../../styles/telemetry.css';
 
 /** Intentional pull — accidental scrolls should not open the bay. */
@@ -44,12 +43,11 @@ function isHandle(target: EventTarget | null, attr: string): boolean {
 }
 
 /**
- * Lifts the site cover only as far as the telemetry bay needs —
- * bay stays content-sized at the bottom with a video bed underneath.
+ * Pull the footer up and the site cover lifts to show Derek's shirt print
+ * underneath (ShirtBay) — and the avatar asks what you're looking for.
  */
 export default function ChassisReveal({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const [snapshot, setSnapshot] = useState<AnalyticsSnapshot | null>(null);
   const [lift, setLift] = useState(0);
   const [bayHeight, setBayHeight] = useState(FALLBACK_BAY_PX);
   const [dragging, setDragging] = useState(false);
@@ -88,7 +86,7 @@ export default function ChassisReveal({ children }: { children: ReactNode }) {
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [snapshot, open]);
+  }, [open]);
 
   const settleClosed = useCallback(() => {
     setOpen(false);
@@ -113,8 +111,7 @@ export default function ChassisReveal({ children }: { children: ReactNode }) {
     setSlamming(true);
   }, [slamming, settleClosed]);
 
-  const settleOpen = useCallback((data: AnalyticsSnapshot) => {
-    setSnapshot(data);
+  const settleOpen = useCallback(() => {
     setOpen(true);
     setLift(bayHeightRef.current || FALLBACK_BAY_PX);
     setDragging(false);
@@ -141,11 +138,10 @@ export default function ChassisReveal({ children }: { children: ReactNode }) {
     openingRef.current = true;
     setBusy(true);
     try {
-      const data = await getAnalyticsSnapshot();
-      settleOpen(data);
-      track('TelemetryOpened', { source: data.source });
+      settleOpen();
+      track('Footer pulled up');
+      guideNudge('footer'); // the avatar asks what they're looking for down there
     } catch {
-      setSnapshot(null);
       settleClosed();
     } finally {
       setBusy(false);
@@ -326,13 +322,7 @@ export default function ChassisReveal({ children }: { children: ReactNode }) {
 
   return (
     <div style={{ position: 'relative', minHeight: '100%' }}>
-      <TelemetryChassis
-        ref={bayRef}
-        snapshot={snapshot}
-        active={open && !slamming}
-        chromeVisible={chromeVisible}
-        reducedMotion={reduced}
-      />
+      <ShirtBay ref={bayRef} active={open && !slamming} chromeVisible={chromeVisible} />
 
       {/* Seam between cover and bay — drag down to close */}
       {chromeVisible ? (

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
 import { track } from '../../lib/analytics';
-import { guideFocus } from '../../lib/guide';
-import { AvatarController } from './controller';
+import { guideFocus, setGuideShirt, useGuideNudge } from '../../lib/guide';
+import { AvatarController, State } from './controller';
 import { AVATAR_BASE, CHIPS, SHIRTS, makeBag, wordEnds, type Chip, type Destination, type LineId, type Shirt } from './lines';
 import { cornerStyle, nearestCorner, type Corner } from './corner';
 import styles from './avatarGuide.module.css';
@@ -290,11 +290,38 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     post({ text: s.label, me: true });
     setBusy('shirt');
     setShirt(s.id);
+    setGuideShirt(s.id);
     ctl.current?.set('shirt', s.id);
     await new Promise((r) => window.setTimeout(r, 350)); // let the new print fade in first
-    if (token === askToken.current) await say(s.line, { shirts: true });
+    if (token !== askToken.current) return;
+    if (s.line) {
+      await say(s.line, { shirts: true });
+    } else {
+      // no words: a delighted grin and a nod
+      if (camera) ctl.current?.setState(State.WarmAck);
+      post({ text: '😄', shirts: true });
+      await new Promise((r) => window.setTimeout(r, 1200));
+    }
     if (token === askToken.current) setBusy(null);
   };
+
+  // remarks on what the visitor does on the page (only once they've said hi)
+  const onNudge = useCallback(
+    (n: 'footer') => {
+      if (!live || !open || n !== 'footer') return;
+      if (busy && (!camera || typing)) return;
+      track('Avatar nudge', { nudge: n });
+      const token = ++askToken.current;
+      ctl.current?.stop();
+      setBusy('footer');
+      void say('footer').then(() => {
+        if (token === askToken.current) setBusy(null);
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [live, open, busy, camera, typing],
+  );
+  useGuideNudge(onNudge);
 
   const goTo = (d: Destination, chosen = false) => {
     track('Avatar navigated', { to: d.to });
