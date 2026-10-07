@@ -475,7 +475,13 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
                 </button>
               ))}
             </div>
-            <input className={styles.composer} disabled placeholder="Free typing is coming soon" />
+            {/* not a real input yet: tapping it gets a shrug and an honest answer */}
+            <button
+              className={styles.composer}
+              onClick={() => void ask({ label: 'Can I type my own question?', line: 'typing' })}
+            >
+              Free typing is coming soon
+            </button>
           </>
         )}
       </div>

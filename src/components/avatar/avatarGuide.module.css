@@ -106,7 +106,7 @@
 .chips .chipActive, .chips .chipActive:hover { background: var(--ink); border-color: var(--ink); color: #f1ede4; }
 .composer {
   width: 100%; padding: 6px 9px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper);
-  font: inherit; font-size: 9px; color: var(--ink-soft);
+  font: inherit; font-size: 9px; color: var(--ink-soft); text-align: left; cursor: text;
 }
 
 /* invite (before connecting) */

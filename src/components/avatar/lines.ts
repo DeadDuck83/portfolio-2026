@@ -28,6 +28,7 @@ export type LineId =
   | 'shirt2'
   | 'shirt4'
   | 'footer'
+  | 'typing'
   | (typeof WISDOM)[number];
 
 export type Track = {
