@@ -5,6 +5,8 @@ import { solidCta } from '../../theme/patterns';
 import { accentLinkHover, solidCtaHover } from '../../lib/hover';
 import PixelCameo from './PixelCameo';
 
+/** Magnetic CTA movement. Off for now: with the avatar on the page there's too much going on (Derek, 2026-10-07). */
+const MAGNETIC = false;
 /** Magnetic reach: start attracting within this distance of the CTA center. */
 const MAGNET_RADIUS = 500;
 /** Furthest the button will lean toward the cursor. */
@@ -332,7 +334,7 @@ function MagneticCta({
   useEffect(() => {
     const finePointer = window.matchMedia('(pointer: fine)').matches;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!finePointer || reduceMotion) return;
+    if (!MAGNETIC || !finePointer || reduceMotion) return;
 
     const target = { x: 0, y: 0 };
     const offset = { x: 0, y: 0 };
