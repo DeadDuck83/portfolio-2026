@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { aboutChapters, aboutCompanies, aboutIntro, aboutMarks, aboutToday } from '../../data/aboutJourney';
+import { aboutChapters, aboutCompanies, aboutIntro, aboutToday } from '../../data/aboutJourney';
 import { track } from '../../lib/analytics';
 import { useGuideFocus } from '../../lib/guide';
 import { border, colors, fonts, layout } from '../../theme/tokens';
@@ -7,9 +7,7 @@ import CompanyPopover from './CompanyPopover';
 import { createSquares, type SquaresController } from './aboutRailSquares';
 import '../../styles/about-rail.css';
 
-const SRC = '/background/squares_v2.riv';
-const ARTBOARD = 'Artboard 1';
-const ANIMATION = 'Timeline 1';
+const SRC = '/background/journey.riv';
 /** Desktop: the card that has crossed this fraction of viewport height is active. */
 const LINE = 0.42;
 /** Mobile: leave the "appear" pose once the chapter-1 heading reaches this fraction of the viewport (≈ as it enters from the bottom). */
@@ -56,10 +54,11 @@ function companyNodes(keys: string[]): ReactNode[] {
 
 /**
  * "About me" journey. On desktop it's a sticky animation column on the left with
- * a rail of four chapter cards on the right; a card crossing the 42% line sets
- * the mark on the scrubbed squares clip. On mobile it's a self-contained swipe
- * unit — squares up top, a through-line of dots, and the chapter content as a
- * horizontal scroll-snap row below; swiping scrubs the squares. "Today" is the
+ * a rail of four chapter cards on the right; a card crossing the 42% line picks
+ * the chapter the squares show (journey.riv plays the transition and that
+ * chapter's hold loop). On mobile it's a self-contained swipe unit — squares up
+ * top, a through-line of dots, and the chapter content as a horizontal
+ * scroll-snap row below; swiping picks the chapter. "Today" is the
  * payoff. (The earlier pinned / Rive-background version lives on in AboutJourney.)
  */
 export default function AboutRail() {
@@ -134,7 +133,7 @@ export default function AboutRail() {
         if (loaded || !entries.some((e) => e.isIntersecting)) return;
         loaded = true;
         loader.disconnect();
-        createSquares(canvas, { src: SRC, artboard: ARTBOARD, animation: ANIMATION, marks: aboutMarks, reducedMotion: reduceMotion })
+        createSquares(canvas, { src: SRC, reducedMotion: reduceMotion })
           .then((ctrl) => {
             controllerRef.current = ctrl;
             ctrl.setMark(desiredMark.current);

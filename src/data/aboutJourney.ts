@@ -75,13 +75,6 @@ export const aboutCompanies: Record<string, AboutCompany> = {
   },
 };
 
-/**
- * Playhead marks (seconds) in `squares_v2.riv`'s "Timeline 1" — the scrubbed
- * squares animation. Index 0 is the "appear" scatter; 1–4 are the chapters.
- * appear 0 · Design 1.03 · Develop 2 · Product design 4 · Product management 5.
- */
-export const aboutMarks = [0, 1.03, 2, 4, 5] as const;
-
 export const aboutIntro = {
   titleLead: 'A nonlinear path to a more',
   titleEm: 'holistic',
