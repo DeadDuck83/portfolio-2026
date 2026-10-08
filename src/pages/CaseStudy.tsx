@@ -4,6 +4,7 @@ import { getCaseStudy } from '../data/caseStudies';
 import { collectCaseStudyImages } from '../data/caseStudies/figures';
 import { border, colors, fonts, layout } from '../theme/tokens';
 import { useScrollProgress } from '../hooks/useScrollProgress';
+import { useGuideFocus } from '../lib/guide';
 import Grain from '../components/Grain';
 import SiteFooter from '../components/SiteFooter';
 import PlaceholderFigure from '../components/PlaceholderFigure';
@@ -51,6 +52,14 @@ export default function CaseStudy() {
   useEffect(() => {
     if (cs) document.title = `${cs.eyebrowRight} — Derek Moore`;
   }, [cs]);
+
+  // The avatar narrates a case study section by section: bring each one up as he starts it.
+  const focusSection = useCallback((id: string) => {
+    const behavior: ScrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    if (id === 'c0') window.scrollTo({ top: 0, behavior });
+    else document.getElementById(id)?.scrollIntoView({ behavior, block: 'start' });
+  }, []);
+  useGuideFocus('case', focusSection);
 
   if (!cs) return <Navigate to="/" replace />;
 

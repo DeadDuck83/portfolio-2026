@@ -5,7 +5,9 @@ import { useEffect, useState } from 'react';
  * ("anchor on chapter 2 of the journey"). Sections opt in by listening; the
  * guide never reaches into their DOM, so either side can change freely.
  */
-export type GuideFocus = { section: 'about'; step: number };
+/** What each section can be asked to focus: journey chapter 1..n (n+1 = Today), or a case study section id ('c0' = the top). */
+type FocusSteps = { about: number; case: string };
+export type GuideFocus = { [S in keyof FocusSteps]: { section: S; step: FocusSteps[S] } }[keyof FocusSteps];
 
 const EVENT = 'guide:focus';
 
@@ -13,11 +15,11 @@ export function guideFocus(focus: GuideFocus) {
   window.dispatchEvent(new CustomEvent<GuideFocus>(EVENT, { detail: focus }));
 }
 
-export function useGuideFocus(section: GuideFocus['section'], onFocus: (step: number) => void) {
+export function useGuideFocus<S extends keyof FocusSteps>(section: S, onFocus: (step: FocusSteps[S]) => void) {
   useEffect(() => {
     const handler = (e: Event) => {
       const d = (e as CustomEvent<GuideFocus>).detail;
-      if (d?.section === section) onFocus(d.step);
+      if (d?.section === section) onFocus(d.step as FocusSteps[S]);
     };
     window.addEventListener(EVENT, handler);
     return () => window.removeEventListener(EVENT, handler);

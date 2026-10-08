@@ -29,6 +29,7 @@ export type LineId =
   | 'shirt4'
   | 'footer'
   | 'typing'
+  | `cs-${CaseId}-${'short' | 1 | 2 | 3 | 4}`
   | (typeof WISDOM)[number];
 
 export type Track = {
@@ -42,8 +43,30 @@ export type Track = {
 export const lineAudio = (id: LineId) => `${AVATAR_BASE}/speech/${id}.mp3`;
 export const lineTrack = (id: LineId) => `${AVATAR_BASE}/speech/${id}.json`;
 
-/** Somewhere on the site the guide can take the visitor. */
-export type Destination = { label: string; to: string };
+/** Somewhere on the site the guide can take the visitor (`walk`: he narrates it there). */
+export type Destination = { label: string; to: string; walk?: CaseId };
+
+export type CaseId = 'sage' | 'bexa' | 'parker-ace' | 'plmc';
+
+/**
+ * Narrated case studies (Derek's scripts, hey-avatar scripts/case-walks.json).
+ * Landing from the avatar plays the short version at the top of the page;
+ * "Keep going" plays the full story from beat 2 - the short already covers the
+ * context - anchoring each beat on its section as he starts it.
+ */
+export type CaseWalk = { short: LineId; beats: { line: LineId; anchor: string }[] };
+const beats = (id: CaseId, anchors: string[]) => anchors.map((anchor, i) => ({ line: `cs-${id}-${i + 1}` as LineId, anchor }));
+export const CASE_WALKS: Record<CaseId, CaseWalk> = {
+  sage: { short: 'cs-sage-short', beats: beats('sage', ['c1', 'c-process', 'c-solution', 'c-outcome']) },
+  bexa: { short: 'cs-bexa-short', beats: beats('bexa', ['c1', 'c-process', 'c-solution', 'c-outcome']) },
+  'parker-ace': {
+    short: 'cs-parker-ace-short',
+    beats: beats('parker-ace', ['c1', 'c-process', 'c-solution', 'c-outcome']),
+  },
+  plmc: { short: 'cs-plmc-short', beats: beats('plmc', ['c1', 'c-users', 'c-process', 'c-solution']) },
+};
+/** "Keep going" starts here (0-based): the short version stands in for the context beat. */
+export const KEEP_GOING_FROM = 1;
 
 /** One stop on a guided tour: optionally bring part of the page into focus, then say a line. */
 export type TourStep = { line: LineId; focus?: GuideFocus };
@@ -74,10 +97,10 @@ export const SHIRTS: Shirt[] = [
 ];
 
 export const CASE_STUDIES: Destination[] = [
-  { label: 'Sage', to: '/work/sage' },
-  { label: 'Bexa', to: '/work/bexa' },
-  { label: 'Parker & Ace', to: '/work/parker-ace' },
-  { label: 'PLMC', to: '/work/plmc' },
+  { label: 'Sage', to: '/work/sage', walk: 'sage' },
+  { label: 'Bexa', to: '/work/bexa', walk: 'bexa' },
+  { label: 'Parker & Ace', to: '/work/parker-ace', walk: 'parker-ace' },
+  { label: 'PLMC', to: '/work/plmc', walk: 'plmc' },
 ];
 
 export const CHIPS: Chip[] = [

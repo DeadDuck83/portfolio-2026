@@ -4,7 +4,20 @@ import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
 import { track } from '../../lib/analytics';
 import { guideFocus, setGuideShirt, useGuideNudge } from '../../lib/guide';
 import { AvatarController, State } from './controller';
-import { AVATAR_BASE, CHIPS, SHIRTS, makeBag, wordEnds, type Chip, type Destination, type LineId, type Shirt } from './lines';
+import {
+  AVATAR_BASE,
+  CASE_WALKS,
+  CHIPS,
+  KEEP_GOING_FROM,
+  SHIRTS,
+  makeBag,
+  wordEnds,
+  type CaseId,
+  type Chip,
+  type Destination,
+  type LineId,
+  type Shirt,
+} from './lines';
 import { cornerStyle, nearestCorner, type Corner } from './corner';
 import styles from './avatarGuide.module.css';
 
@@ -21,6 +34,7 @@ type Msg = {
   offer?: Destination;
   choices?: Destination[];
   shirts?: boolean;
+  more?: CaseId; // offer "Keep going" into this case study's full story
 };
 
 type Props = { open: boolean; corner: Corner; onCorner: (c: Corner) => void; onReady: () => void; onClose: () => void };
@@ -323,7 +337,47 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   );
   useGuideNudge(onNudge);
 
+  // A case study he narrates: take them there, give the short version from the
+  // top of the page, and offer the rest.
+  const walkCase = async (d: Destination & { walk: CaseId }) => {
+    if (busy && (!camera || typing)) return;
+    const token = ++askToken.current;
+    track('Avatar case study', { study: d.walk, part: 'short' });
+    ctl.current?.stop();
+    post({ text: d.label, me: true });
+    setBusy('case');
+    navigate(d.to);
+    await new Promise((r) => window.setTimeout(r, 700)); // let the page mount
+    if (token !== askToken.current) return;
+    guideFocus({ section: 'case', step: 'c0' });
+    await say(CASE_WALKS[d.walk].short, { more: d.walk });
+    if (token === askToken.current) setBusy(null);
+  };
+
+  // "Keep going": the full story, beat by beat, each anchored on its section
+  const keepGoing = async (id: CaseId) => {
+    if (busy && (!camera || typing)) return;
+    const token = ++askToken.current;
+    track('Avatar case study', { study: id, part: 'full' });
+    ctl.current?.stop();
+    post({ text: 'Keep going', me: true });
+    setBusy('case');
+    for (const beat of CASE_WALKS[id].beats.slice(KEEP_GOING_FROM)) {
+      if (token !== askToken.current) break;
+      guideFocus({ section: 'case', step: beat.anchor });
+      await new Promise((r) => window.setTimeout(r, 450)); // let the scroll land first
+      if (token !== askToken.current) break;
+      await say(beat.line);
+      if (!camera && token === askToken.current) await new Promise((r) => window.setTimeout(r, 1800));
+    }
+    if (token === askToken.current) setBusy(null);
+  };
+
   const goTo = (d: Destination, chosen = false) => {
+    if (chosen && d.walk) {
+      void walkCase(d as Destination & { walk: CaseId });
+      return;
+    }
     track('Avatar navigated', { to: d.to });
     if (chosen) {
       ctl.current?.stop();
@@ -426,6 +480,11 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
                       <button className={styles.inlineLink} onClick={() => goTo(m.offer!)}>
                         {m.offer.label} →
                       </button>
+                    )}
+                    {m.more && (
+                      <span className={styles.choices}>
+                        <button onClick={() => void keepGoing(m.more!)}>Keep going →</button>
+                      </span>
                     )}
                     {m.shirts && (
                       <span className={styles.choices}>
