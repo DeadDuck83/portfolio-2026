@@ -17,8 +17,6 @@ export interface Figure {
   aspect: string;
   /** Centered description under the dimensions. */
   innerLabel: string;
-  /** Solution screens lift -6px on hover. */
-  hoverLift?: boolean;
   /** Optional caption rendered beneath the figure. */
   caption?: FigureCaption;
   /** Final image/video path under /public when the asset is ready. */

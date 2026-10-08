@@ -164,7 +164,6 @@ export const parkerAce: CaseStudy = {
         dims: '2800 × 1800',
         aspect: '2800/1800',
         innerLabel: 'Welcome — four cards',
-        hoverLift: true,
         src: '/case-studies/parkerace/Parkerace-Outcome-01.jpg',
         alt: 'Parker & Ace welcome — four cards pitching local care, membership, availability, and video',
         caption: {
@@ -178,7 +177,6 @@ export const parkerAce: CaseStudy = {
         dims: '1600 × 1200',
         aspect: '1600/1200',
         innerLabel: 'App map',
-        hoverLift: true,
         src: '/case-studies/parkerace/Parkerace-Outcome-02.png',
         alt: 'Parker & Ace app — care, appointments, records, and pets as clear lanes',
         caption: {
@@ -193,7 +191,6 @@ export const parkerAce: CaseStudy = {
         dims: '1600 × 1200',
         aspect: '1600/1200',
         innerLabel: 'Clinic site',
-        hoverLift: true,
         src: '/case-studies/parkerace/Parkerace-Outcome-03.png',
         alt: 'Parker & Ace clinic website — membership and visit options',
         caption: {

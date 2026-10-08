@@ -165,7 +165,6 @@ export const sage: CaseStudy = {
         dims: '1400 × 900',
         aspect: '1400/900',
         innerLabel: 'AI insights + sageMD+',
-        hoverLift: true,
         src: '/case-studies/sage/Sage-05.jpg',
         alt: 'Sage Analyze results AI screen and sageMD+ proactive health marketing site',
         caption: {
@@ -179,7 +178,6 @@ export const sage: CaseStudy = {
         dims: '800 × 600',
         aspect: '800/600',
         innerLabel: 'Integration ecosystem',
-        hoverLift: true,
         src: '/case-studies/sage/Sage-07.jpg',
         alt: 'Sage Healthspan final integration ecosystem — Quest, AI, Shopify, and more',
         caption: {
@@ -194,7 +192,6 @@ export const sage: CaseStudy = {
         dims: '1600 × 1200',
         aspect: '1600/1200',
         innerLabel: 'At-home tests and kits',
-        hoverLift: true,
         src: '/case-studies/sage/Sage-08.jpg',
         alt: 'Sage at-home test and hormone optimization kit product cards',
         caption: {

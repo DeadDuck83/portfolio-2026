@@ -167,7 +167,6 @@ export const bexa: CaseStudy = {
         dims: '2800 × 1800',
         aspect: '2800/1800',
         innerLabel: 'Four systems, one exam',
-        hoverLift: true,
         src: '/case-studies/bexa/Bexa-04.jpg',
         alt: 'MyBexa, BexaSupport, BexaClinical, and BexaQuality — four systems around one exam',
         caption: {
@@ -181,7 +180,6 @@ export const bexa: CaseStudy = {
         dims: '2800 × 1800',
         aspect: '2800/1800',
         innerLabel: 'Photo shoot for new branded look',
-        hoverLift: true,
         fullWidth: true,
         src: '/case-studies/bexa/Bexa-04-b.jpg',
         alt: 'Bexa handheld device and charging base in clinical and product photography',
@@ -196,7 +194,6 @@ export const bexa: CaseStudy = {
         dims: '1600 × 1200',
         aspect: '1600/1200',
         innerLabel: 'Partner schedule page',
-        hoverLift: true,
         src: '/case-studies/bexa/Bexa-05.jpg',
         alt: 'Texas Health Resources partner page to schedule a Bexa breast exam',
         caption: {
@@ -211,7 +208,6 @@ export const bexa: CaseStudy = {
         dims: '1600 × 1200',
         aspect: '1600/1200',
         innerLabel: 'What is Bexa',
-        hoverLift: true,
         src: '/case-studies/bexa/Bexa-06.jpg',
         alt: 'What is Bexa marketing section with device, dock, and SureView tablet',
         caption: {

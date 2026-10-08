@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { Figure } from '../data/caseStudies/types';
 import { fonts, colors } from '../theme/tokens';
 
@@ -19,7 +19,6 @@ export default function PlaceholderFigure({
   src?: string;
   alt?: string;
 }) {
-  const [hover, setHover] = useState(false);
   const imageSrc = src ?? figure.src;
   const imageAlt = alt ?? figure.alt ?? figure.innerLabel;
 
@@ -29,21 +28,11 @@ export default function PlaceholderFigure({
     aspectRatio: figure.aspect,
     background: colors.placeholderBg,
     overflow: 'hidden',
-    ...(figure.hoverLift
-      ? {
-          transition: 'transform 0.5s cubic-bezier(0.22,1,0.36,1)',
-          transform: hover ? 'translateY(-6px)' : 'none',
-        }
-      : {}),
   };
-
-  const hoverProps = figure.hoverLift
-    ? { onMouseEnter: () => setHover(true), onMouseLeave: () => setHover(false) }
-    : {};
 
   return (
     <figure style={{ margin: 0 }}>
-      <div style={blockStyle} {...hoverProps}>
+      <div style={blockStyle}>
         {imageSrc ? (
           <img
             src={imageSrc}

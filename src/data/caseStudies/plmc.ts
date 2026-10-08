@@ -193,7 +193,6 @@ export const plmc: CaseStudy = {
         dims: '2752 × 1536',
         aspect: '2752/1536',
         innerLabel: 'Health Summary — full dashboard',
-        hoverLift: false,
         src: '/case-studies/plmc/PLMC-04-solution_hero.png',
         alt: 'PLMC Health Summary dashboard — full scroll of vitals, labs, and 5 Functions of Health',
         caption: {
@@ -207,7 +206,6 @@ export const plmc: CaseStudy = {
         dims: '1400 × 1050',
         aspect: '4/3',
         innerLabel: 'Biometric Screening detail',
-        hoverLift: false,
         src: '/case-studies/plmc/PLMC-04-solution_website.png',
         alt: 'PLMC marketing website homepage — Holistic Functional Medicine, Personalized',
         caption: {
@@ -222,7 +220,6 @@ export const plmc: CaseStudy = {
         dims: '3008 × 1799',
         aspect: '4/3',
         innerLabel: 'Health Summary — full dashboard',
-        hoverLift: false,
         src: '/case-studies/plmc/PLMC-04-solution-dashboard2.gif',
         alt: 'PLMC Health Summary TV dashboard with biometrics, blood panel, lifestyle, and 5 Functions of Health',
         objectFit: 'cover',
