@@ -48,120 +48,67 @@ a {
   to { transform: translateX(0); }
 }
 
-@media (max-width: 720px) {
-  /* Selected work — stack; image leads for punch on narrow screens. */
-  .work-band {
-    grid-template-columns: 1fr !important;
-    min-height: 0 !important;
+/*
+ * Selected work — rows sit inside the page measure. Copy ~5/12, card image
+ * ~7/12 at its own aspect (1199×731), alternating sides. No row hover; the
+ * image and title are the links, and the title glows on desktop hover.
+ */
+.work-band {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+.work-band[data-stagger='flip'] {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+.work-band__media {
+  display: block;
+  aspect-ratio: 1199 / 731;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(236, 230, 218, 0.1);
+  background: rgba(236, 230, 218, 0.04);
+}
+.work-band__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.work-band__title {
+  color: inherit;
+  text-decoration: none;
+  transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+.work-band__title:focus-visible {
+  outline: 2px solid var(--focus, currentColor);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+@media (hover: hover) {
+  .work-band:has(.work-band__media:hover) .work-band__title,
+  .work-band__title:hover {
+    color: #fff;
+    text-shadow:
+      0 0 14px rgba(236, 230, 218, 0.35),
+      0 0 32px rgba(236, 230, 218, 0.15);
   }
-  .work-band__content,
-  .work-band__media {
-    grid-column: auto !important;
+}
+
+@media (max-width: 720px) {
+  /* Stack; image leads on narrow screens. */
+  .work-band,
+  .work-band[data-stagger='flip'] {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
   .work-band__media {
     order: -1;
-    min-height: clamp(14rem, 48vw, 20rem) !important;
-    max-width: none !important;
-    mask-image: none !important;
-    -webkit-mask-image: none !important;
-  }
-  .work-band__content {
-    padding-top: 1.4rem !important;
-    padding-bottom: 1.8rem !important;
+    border-radius: 10px;
   }
   .work-band__tags {
     gap: 0.35rem !important;
-  }
-}
-
-/*
- * Selected work — desktop split.
- * Text track locks to layout.maxWidth × text-ratio (aligned with page measure).
- * Image bleeds to the outer edge, caps at --work-image-max, fades 1500 → 2500.
- */
-.work-band[data-stagger='base'] {
-  grid-template-columns:
-    minmax(0, calc((100% - var(--work-measure, 1240px)) / 2))
-    minmax(0, calc(var(--work-measure, 1240px) * var(--work-text-ratio, 0.275)))
-    minmax(0, 1fr);
-}
-.work-band[data-stagger='base'] .work-band__content {
-  grid-column: 2;
-}
-.work-band[data-stagger='base'] .work-band__media {
-  grid-column: 3;
-}
-
-.work-band[data-stagger='flip'] {
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(0, calc(var(--work-measure, 1240px) * var(--work-text-ratio, 0.275)))
-    minmax(0, calc((100% - var(--work-measure, 1240px)) / 2));
-}
-.work-band[data-stagger='flip'] .work-band__media {
-  grid-column: 1;
-}
-.work-band[data-stagger='flip'] .work-band__content {
-  grid-column: 2;
-}
-
-.work-band__media {
-  position: relative;
-  min-height: inherit;
-  overflow: hidden;
-  width: 100%;
-  max-width: var(--work-image-max, 2500px);
-  background: transparent;
-}
-
-.work-band[data-stagger='base'] .work-band__media {
-  justify-self: start;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    #000 0,
-    #000 min(100%, var(--work-image-fade-start, 1500px)),
-    transparent var(--work-image-max, 2500px)
-  );
-  mask-image: linear-gradient(
-    to right,
-    #000 0,
-    #000 min(100%, var(--work-image-fade-start, 1500px)),
-    transparent var(--work-image-max, 2500px)
-  );
-}
-
-.work-band[data-stagger='flip'] .work-band__media {
-  justify-self: end;
-  -webkit-mask-image: linear-gradient(
-    to left,
-    #000 0,
-    #000 min(100%, var(--work-image-fade-start, 1500px)),
-    transparent var(--work-image-max, 2500px)
-  );
-  mask-image: linear-gradient(
-    to left,
-    #000 0,
-    #000 min(100%, var(--work-image-fade-start, 1500px)),
-    transparent var(--work-image-max, 2500px)
-  );
-}
-
-/* Selected work — subtle row shift on hover (no image zoom). */
-.work-band {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
-}
-.work-band:hover,
-.work-band:focus-visible {
-  transform: translateY(-1px);
-}
-@media (prefers-reduced-motion: reduce) {
-  .work-band {
-    transition: none;
-  }
-  .work-band:hover,
-  .work-band:focus-visible {
-    transform: none;
   }
 }
 
