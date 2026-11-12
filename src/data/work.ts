@@ -15,6 +15,17 @@ export interface WorkItem {
   /** Card image (1199×731) — shown whole beside the copy in the work row. */
   imageSrc: string;
   imageAlt: string;
+  /**
+   * object-position for the hero tile, which crops the image to fill its
+   * slot. Defaults to centre; set x toward what must stay in frame.
+   */
+  imageFocus?: string;
+  /**
+   * Hero tile cover video: a muted loop, with its first frame as the poster
+   * (also what reduced-motion visitors see). Narrow layouts show it at its
+   * own shape. Sources live outside the repo in ../cover-videos.
+   */
+  video?: { src: string; poster: string; width: number; height: number };
   /** External URL (new tab). */
   href?: string;
   /** Internal case-study route, e.g. "/work/plmc". */
@@ -36,6 +47,7 @@ export const work: WorkItem[] = [
     tags: ['0 → 1', 'AI Insights', 'Consumer Health', 'OCR / Data'],
     imageSrc: '/work/sage.jpg',
     imageAlt: 'Sage app home screen surrounded by biological age, insights and lab result cards',
+    video: { src: '/work/sage-hero-v2.mp4', poster: '/work/sage-hero-v2.jpg', width: 2000, height: 1500 },
     to: '/work/sage',
     endLabel: 'Case study',
     endGlyph: '→',
@@ -63,6 +75,7 @@ export const work: WorkItem[] = [
       'Founding designer at a veterinary startup, shaping the core booking and clinic flows for a two-sided marketplace around real vendor constraints.',
     tags: ['Two-sided Marketplace', '0 → 1', 'Strategy'],
     imageSrc: '/work/parkerandace.jpg',
+    imageFocus: '57% 50%',
     imageAlt: 'Parker & Ace website on a laptop beside the appointment app',
     to: '/work/parker-ace',
     endLabel: 'Case study',
@@ -77,6 +90,7 @@ export const work: WorkItem[] = [
       "Original designer on a zero-to-one clinic experience. Built the five functions of health behind its scoring system and the summary that shows a patient's whole picture at once.",
     tags: ['0 → 1', 'Health Scoring System', 'Service Design', 'User Research'],
     imageSrc: '/work/plmc.jpg',
+    imageFocus: '58% 50%',
     imageAlt: 'Clinician reviewing the PLMC health summary on a wall screen with a patient',
     to: '/work/plmc',
     endLabel: 'Case study',

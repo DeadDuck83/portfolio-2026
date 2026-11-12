@@ -1,6 +1,7 @@
 /* Global resets, fonts, and keyframes — ported from the design reference <style> blocks. */
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap');
+/* Big Shoulders (display, opsz axis) + Host Grotesk (text, with italics). See theme/tokens.ts. */
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,600..900&family=Host+Grotesk:ital,wght@0,400..700;1,400..700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -14,7 +15,7 @@ body {
   margin: 0;
   background: #1a1712;
   color: #ece6da;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Host Grotesk', system-ui, sans-serif;
 }
 
 a {
@@ -110,82 +111,6 @@ a {
   .work-band__tags {
     gap: 0.35rem !important;
   }
-}
-
-/* Hero — statement-led. Display lockup + intro + CTAs. */
-.hero__grid {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 46rem;
-}
-
-.hero__title {
-  font-family: 'Instrument Serif', serif;
-  font-weight: 400;
-  font-size: clamp(2.6rem, 7.5vw, 6.4rem);
-  line-height: 1.02;
-  letter-spacing: -0.012em;
-  margin: 0;
-  max-width: 14ch;
-  color: #ece6da;
-  overflow: visible;
-  animation: floatIn 0.85s 0.06s ease both;
-}
-
-@media (max-width: 720px) {
-  /* Must follow the base .hero__title rule or the desktop clamp wins */
-  .hero__title {
-    font-size: clamp(3.35rem, 11.5vw, 4.4rem);
-    max-width: 12ch;
-  }
-}
-
-.hero__title-canvas-host {
-  display: block;
-  width: 100%;
-  min-height: 1.1em;
-  overflow: visible;
-}
-
-.hero__title-canvas {
-  display: block;
-  max-width: none;
-}
-
-.hero__body {
-  max-width: 42ch;
-  margin: 1.05rem 0 0;
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: #b3a996;
-  animation: floatIn 0.8s 0.14s ease both;
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem 1.6rem;
-  margin-top: clamp(2.4rem, 7vh, 3.8rem);
-  animation: floatIn 0.8s 0.22s ease both;
-}
-
-.hero__secondary {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: 0.74rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #b3a996;
-  border-bottom: 1px solid rgba(179, 169, 150, 0.35);
-  padding: 0.55rem 0 0.2rem;
-}
-
-.hero a:focus-visible {
-  outline: 2px solid #9da767;
-  outline-offset: 3px;
 }
 
 .gallery-grid {

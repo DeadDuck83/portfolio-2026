@@ -1,5 +1,5 @@
 import type { ChapterMeta } from '../../data/caseStudies/types';
-import { colors, fonts } from '../../theme/tokens';
+import { colors, fonts, weights } from '../../theme/tokens';
 
 /**
  * Chapter-heading trio: big accent serif numeral, uppercase label, and an
@@ -11,6 +11,7 @@ export default function ChapterHeading({ meta }: { meta: ChapterMeta }) {
       <span
         style={{
           fontFamily: fonts.display,
+          fontWeight: weights.display,
           fontSize: 'clamp(2.4rem, 5vw, 3.6rem)',
           lineHeight: 1,
           color: colors.accentBright,
@@ -30,7 +31,7 @@ export default function ChapterHeading({ meta }: { meta: ChapterMeta }) {
       </span>
       <span
         style={{
-          fontFamily: fonts.display,
+          fontFamily: fonts.text,
           fontStyle: 'italic',
           fontSize: '1.05rem',
           color: colors.textFaint,

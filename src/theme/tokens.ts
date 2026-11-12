@@ -55,9 +55,18 @@ export const border = {
   gridBgFaint: 'rgba(236,230,218,0.08)',
 } as const;
 
+/**
+ * Type (Nov 2026, Derek's pick): Big Shoulders for display (names, headings,
+ * numerals; has an optical-size axis), Host Grotesk for everything else.
+ * Display text runs heavy; small titles and subtitles use the text face.
+ */
 export const fonts = {
-  display: "'Instrument Serif', serif",
-  mono: "'JetBrains Mono', monospace",
+  display: "'Big Shoulders', 'Arial Narrow', sans-serif",
+  text: "'Host Grotesk', system-ui, sans-serif",
+} as const;
+
+export const weights = {
+  display: 800,
 } as const;
 
 /** Shared layout constants used across sections. */

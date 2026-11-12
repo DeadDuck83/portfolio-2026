@@ -1,5 +1,5 @@
 import type { OutcomeStat } from '../../data/caseStudies/types';
-import { border, colors, fonts } from '../../theme/tokens';
+import { border, colors, fonts, weights } from '../../theme/tokens';
 import { useCountUp } from '../../hooks/useCountUp';
 
 /**
@@ -28,7 +28,7 @@ export default function StatBand({ stats }: { stats: OutcomeStat[] }) {
     >
       {stats.map((s) => (
         <div key={s.label} style={{ background: colors.bgAlt, padding: '1.6rem 1.4rem' }}>
-          <div style={{ fontFamily: fonts.display, fontSize: '2.4rem', color: colors.accentBright }}>
+          <div style={{ fontFamily: fonts.display, fontWeight: weights.display, fontSize: '2.4rem', color: colors.accentBright }}>
             {render(s)}
           </div>
           <div

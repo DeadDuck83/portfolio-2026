@@ -53,13 +53,13 @@
 }
 
 .about-journey em {
-  font-style: italic;
+  font-style: normal;
   color: var(--ab-em);
 }
 
 .about-journey__title {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 800;
   margin: 0;
   color: var(--ab-ink);
   text-wrap: balance;

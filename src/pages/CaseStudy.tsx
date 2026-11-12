@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import { getCaseStudy } from '../data/caseStudies';
 import { collectCaseStudyImages } from '../data/caseStudies/figures';
-import { border, colors, fonts, layout } from '../theme/tokens';
+import { border, colors, fonts, layout, weights } from '../theme/tokens';
 import { useScrollProgress } from '../hooks/useScrollProgress';
 import { useGuideFocus } from '../lib/guide';
 import Grain from '../components/Grain';
@@ -27,7 +27,7 @@ const sectionInner = {
 const scrollMargin = { scrollMarginTop: 130 };
 const h2Style = {
   fontFamily: fonts.display,
-  fontWeight: 400,
+  fontWeight: weights.display,
   fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)',
   lineHeight: 1.15,
   margin: 0,
@@ -88,7 +88,7 @@ export default function CaseStudy() {
         minHeight: '100vh',
         background: colors.bg,
         color: colors.text,
-        fontFamily: fonts.mono,
+        fontFamily: fonts.text,
         // `clip` (not `hidden`) so this div doesn't become a scroll container
         // and steal the sticky header's viewport anchoring.
         overflowX: 'clip',
@@ -122,6 +122,7 @@ export default function CaseStudy() {
             top: '-2rem',
             right: '-1rem',
             fontFamily: fonts.display,
+            fontWeight: weights.display,
             fontSize: 'clamp(14rem, 28vw, 26rem)',
             lineHeight: 1,
             color: 'rgba(236,230,218,0.045)',
@@ -164,7 +165,7 @@ export default function CaseStudy() {
           <h1
             style={{
               fontFamily: fonts.display,
-              fontWeight: 400,
+              fontWeight: weights.display,
               fontSize: 'clamp(3rem, 8.5vw, 7.2rem)',
               lineHeight: 0.98,
               letterSpacing: '-0.01em',
@@ -174,7 +175,7 @@ export default function CaseStudy() {
             }}
           >
             {cs.headlineLead}
-            <span style={{ fontStyle: 'italic', color: colors.accentBright }}>{cs.headlineAccent}</span>
+            <span style={{ color: colors.accentBright }}>{cs.headlineAccent}</span>
           </h1>
 
           <div
@@ -224,7 +225,7 @@ export default function CaseStudy() {
                       padding: 0,
                       border: 'none',
                       background: 'none',
-                      fontFamily: fonts.display,
+                      fontFamily: fonts.text,
                       fontStyle: 'italic',
                       fontSize: '0.95rem',
                       lineHeight: 1.4,
@@ -339,6 +340,7 @@ export default function CaseStudy() {
               <p
                 style={{
                   fontFamily: fonts.display,
+                  fontWeight: weights.display,
                   fontSize: 'clamp(1.2rem, 2.4vw, 1.6rem)',
                   lineHeight: 1.4,
                   color: colors.textMuted,
@@ -347,7 +349,7 @@ export default function CaseStudy() {
                 }}
               >
                 {cs.users.pullLead}
-                <span style={{ fontStyle: 'italic', color: colors.accentBright }}>{cs.users.pullAccent}</span>
+                <span style={{ color: colors.accentBright }}>{cs.users.pullAccent}</span>
               </p>
             </Reveal>
           </div>
@@ -423,13 +425,14 @@ export default function CaseStudy() {
           >
             {cs.solution.principles.map((pr) => (
               <div key={pr.numeral} style={{ background: colors.bg, padding: '1.4rem' }}>
-                <div style={{ fontFamily: fonts.display, fontSize: '1.2rem', color: colors.accentBright }}>
+                <div style={{ fontFamily: fonts.display, fontWeight: weights.display, fontSize: '1.2rem', color: colors.accentBright }}>
                   {pr.numeral}
                 </div>
                 {pr.title && (
                   <div
                     style={{
-                      fontFamily: fonts.display,
+                      fontFamily: fonts.text,
+                      fontWeight: 600,
                       fontSize: '1.05rem',
                       lineHeight: 1.3,
                       color: colors.text,
@@ -562,7 +565,8 @@ export default function CaseStudy() {
                   >
                     <div
                       style={{
-                        fontFamily: fonts.display,
+                        fontFamily: fonts.text,
+                        fontWeight: 600,
                         fontSize: '1.05rem',
                         lineHeight: 1.35,
                         color: colors.text,

@@ -1,7 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'react';
 import { track } from '../../lib/analytics';
 import { AVATAR_BASE } from './lines';
 import { cornerStyle, loadCorner, saveCorner, type Corner } from './corner';
+import { AVATAR_OPEN_EVENT, dockMounted, dockVisible, setCallOpen, subscribeDock } from './dock';
 import styles from './avatarGuide.module.css';
 
 // The call (Rive runtime + avatar, ~2.5 MB) loads only after the page has.
@@ -19,15 +20,21 @@ function wasDismissed(): boolean {
 }
 
 /**
- * Derek's avatar guide: a FaceTime-style call card in the corner. On a first
- * visit it pops up once the avatar has loaded (never sooner than 3 s);
- * dismissing it leaves a floating button, and later visits start there.
+ * Derek's avatar guide: a FaceTime-style call card in the corner, no Connect
+ * step. On the home page the hero's live avatar tile is the way in: a click
+ * opens the call out of that tile, with sound. Pages without the tile open
+ * the call by themselves on a first visit (once loaded, never sooner than
+ * 3 s); that greeting is captioned and muted, because browsers block sound
+ * until the visitor clicks. Closing leaves the tile / floating button, and
+ * later visits start closed.
  */
 export default function AvatarGuide() {
   const [load, setLoad] = useState(false);
   const [ready, setReady] = useState(false);
   const [minTimeUp, setMinTimeUp] = useState(false);
   const [open, setOpen] = useState(false);
+  /** The card opened by itself (no click yet), so it greets silently. */
+  const [auto, setAuto] = useState(false);
   const [dismissed] = useState(wasDismissed);
   const [corner, setCorner] = useState<Corner>(loadCorner);
   const moveTo = (c: Corner) => {
@@ -47,9 +54,28 @@ export default function AvatarGuide() {
     };
   }, []);
 
-  // first visit: pop up when loaded and at least 3 s in
+  // The hero's docked invite (dock.ts) can open the card directly.
   useEffect(() => {
-    if (ready && minTimeUp && !dismissed) {
+    const onOpen = (e: Event) => {
+      setLoad(true);
+      setAuto(false);
+      setOpen(true);
+      track('Avatar opened', { from: (e as CustomEvent<{ source?: string }>).detail?.source ?? 'dock' });
+    };
+    window.addEventListener(AVATAR_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(AVATAR_OPEN_EVENT, onOpen);
+  }, []);
+
+  const docked = useSyncExternalStore(subscribeDock, dockVisible, () => false);
+
+  // layout effect: the hero tile reappears in the same frame the card hides
+  useLayoutEffect(() => setCallOpen(open), [open]);
+
+  // first visit: open on the call when loaded and at least 3 s in, unless the
+  // hero's live tile is on the page (it's the invitation there)
+  useEffect(() => {
+    if (ready && minTimeUp && !dismissed && !dockMounted()) {
+      setAuto(true);
       setOpen(true);
       track('Avatar popped up');
     }
@@ -64,13 +90,13 @@ export default function AvatarGuide() {
     }
   };
 
-  const showFab = !open && (dismissed ? load : ready && minTimeUp);
+  const showFab = !open && !docked && (dismissed ? load : ready && minTimeUp);
 
   return (
     <>
       {load && (
         <Suspense fallback={null}>
-          <AvatarCall open={open} corner={corner} onCorner={moveTo} onReady={() => setReady(true)} onClose={close} />
+          <AvatarCall open={open} auto={auto} corner={corner} onCorner={moveTo} onReady={() => setReady(true)} onClose={close} />
         </Suspense>
       )}
       {showFab && (

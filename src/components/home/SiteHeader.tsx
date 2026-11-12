@@ -13,9 +13,9 @@ const navLinkStyle = {
 };
 
 /**
- * Home page header — sticky, blurred. Above 820px shows About / Work / Contact
- * (Contact outlined); below it collapses to a Menu button toggling a stacked
- * link list.
+ * Home page header — fixed, blurred, and hidden while the hero's name column
+ * is on screen. Above 820px shows About / Work / Contact (Contact outlined);
+ * below it collapses to a Menu button toggling a stacked link list.
  */
 export default function SiteHeader() {
   const [isMobile, setIsMobile] = useState(
@@ -35,14 +35,50 @@ export default function SiteHeader() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  // The hero's name column carries name, title and links, so the bar stays
+  // tucked away until that column has scrolled out of view.
+  const [revealed, setRevealed] = useState(false);
+  // Vertical position only: an IntersectionObserver would also see the page's
+  // horizontal entrance slide (PageTransition) and reveal the bar on load.
+  useEffect(() => {
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const heroId = document.querySelector('[data-hero-id]');
+      // Show once the name column is mostly scrolled away.
+      const gone = heroId
+        ? heroId.getBoundingClientRect().bottom < window.innerHeight * 0.35
+        : true;
+      setRevealed(gone);
+      if (!gone) setMenuOpen(false);
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    schedule();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, []);
+
   const closeMenu = () => setMenuOpen(false);
 
   return (
     <header
       data-site-header
+      inert={!revealed}
+      aria-hidden={!revealed}
       style={{
-        position: 'sticky',
+        position: 'fixed',
         top: 0,
+        left: 0,
+        right: 0,
+        transform: revealed ? 'none' : 'translateY(-105%)',
+        transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
         zIndex: 50,
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
@@ -97,7 +133,7 @@ export default function SiteHeader() {
               background: 'none',
               border: `1px solid ${border.menuButton}`,
               color: colors.text,
-              fontFamily: fonts.mono,
+              fontFamily: fonts.text,
               fontSize: '0.68rem',
               letterSpacing: '0.16em',
               textTransform: 'uppercase',

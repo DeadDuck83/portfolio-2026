@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Decision } from '../../data/caseStudies/types';
-import { border, colors, fonts } from '../../theme/tokens';
+import { border, colors, fonts, weights } from '../../theme/tokens';
 
 /**
  * The 03 Process decision log: accordion rows (numeral, serif title, rotating
@@ -38,7 +38,7 @@ export default function DecisionLog({
                 padding: '1.3rem 0',
                 textAlign: 'left',
                 color: colors.text,
-                fontFamily: fonts.mono,
+                fontFamily: fonts.text,
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = colors.accentTint)}
               onMouseLeave={(e) => (e.currentTarget.style.color = colors.text)}
@@ -49,6 +49,7 @@ export default function DecisionLog({
               <span
                 style={{
                   fontFamily: fonts.display,
+                  fontWeight: weights.display,
                   fontSize: 'clamp(1.2rem, 2.4vw, 1.65rem)',
                   flex: 1,
                   lineHeight: 1.2,
@@ -58,7 +59,7 @@ export default function DecisionLog({
               </span>
               <span
                 style={{
-                  fontFamily: fonts.display,
+                  fontFamily: fonts.text,
                   fontSize: '1.1rem',
                   color: colors.accent,
                   transform: `rotate(${isOpen ? 180 : 0}deg)`,

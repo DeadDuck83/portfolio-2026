@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
 import { track } from '../../lib/analytics';
-import { colors, fonts, layout } from '../../theme/tokens';
+import { colors, fonts, layout, weights } from '../../theme/tokens';
 import { chip } from '../../theme/patterns';
 
 /**
@@ -49,7 +49,7 @@ export default function WorkList() {
         <h2
           style={{
             fontFamily: fonts.display,
-            fontWeight: 400,
+            fontWeight: weights.display,
             fontSize: 'clamp(2.2rem, 5vw, 3.6rem)',
             margin: 0,
             lineHeight: 1,
@@ -149,7 +149,7 @@ function WorkBand({ item, flip }: { item: WorkItem; flip: boolean }) {
         style={{
           margin: 0,
           fontFamily: fonts.display,
-          fontWeight: 400,
+          fontWeight: weights.display,
           fontSize: 'clamp(1.45rem, 2.4vw, 2.15rem)',
           lineHeight: 1.12,
           letterSpacing: '-0.02em',

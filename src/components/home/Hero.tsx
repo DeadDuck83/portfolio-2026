@@ -1,459 +1,283 @@
-import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
-import { track } from '../../lib/analytics';
-import { colors, fonts } from '../../theme/tokens';
-import { solidCta } from '../../theme/patterns';
-import { accentLinkHover, solidCtaHover } from '../../lib/hover';
-import PixelCameo from './PixelCameo';
-
-/** Magnetic CTA movement. Off for now: with the avatar on the page there's too much going on (Derek, 2026-10-07). */
-const MAGNETIC = false;
-/** Magnetic reach: start attracting within this distance of the CTA center. */
-const MAGNET_RADIUS = 500;
-/** Furthest the button will lean toward the cursor. */
-const MAGNET_MAX_PULL = 10;
-/** Fraction of the cursor's offset-from-center applied as lean (0 at center → grows outward). */
-const MAGNET_STRENGTH = 0.2;
-/** Within this distance of the rest center, add a tiny reaching shake. */
-const SHAKE_RADIUS = 20;
-/** Peak amplitude of the reach-shake (px). */
-const SHAKE_AMP = 1;
-/** Spring constants — stiff + damped enough to feel elastic without wobbling forever. */
-const MAGNET_STIFFNESS = 220;
-const MAGNET_DAMPING = 18;
-
-/**
- * Hero — statement-led composition. Display lockup, intro, CTAs.
+/*
+ * THESIS: The work is the hero. Name and title own a fixed column; the four
+ * case studies fill the rest of the first viewport. Refuses the statement
+ * headline + paragraph + CTA pair with the work two sections down.
+ * OWN-WORLD: Warm near-black, bone text, one olive dot. A big two-line name in
+ * Big Shoulders 800, Host Grotesk for everything else, no tracked caps, no
+ * mono costume. The four images form one block with 8px seams and 8px
+ * corners; labels sit on the images.
+ * STORY: In three seconds a recruiter knows who (Derek Moore), what (Product &
+ * Systems Designer) and sees the proof (four products). One click opens a
+ * case study.
+ * FIRST VIEWPORT: Left ~22rem column: name, title, one short line, Get in touch
+ * / About me; avatar invite and links at its foot. Right: 2×2 flush grid that
+ * fills the viewport height; the seams are offset so it still reads staggered.
+ * Phone: name block, then the tiles.
+ * FORM: Mayank Kinger's work-first split (Derek pinned it). Signature motion:
+ * a rack focus. Tiles pull into focus as they arrive, and hovering one throws
+ * the others out of focus.
  */
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { Link } from 'react-router';
+import { work, type WorkItem } from '../../data/work';
+import { RESUME_URL } from '../../data/site';
+import { track } from '../../lib/analytics';
+import EmailLink from '../EmailLink';
+import HeroAvatar from '../avatar/HeroAvatar';
+// PixelCameo (the camera that brings out pixel Derek) is off for this
+// iteration; the component and its test stay for a later one.
+import '../../styles/hero.css';
+
+const LINKEDIN_URL = 'https://linkedin.com/in/derekjmoore1';
+/** Delay between tiles that arrive in the same batch (ms). */
+const RACK_STAGGER_MS = 110;
+/** First tiles wait for the name to settle a little. */
+const RACK_START_MS = 260;
+
 export default function Hero() {
+  const workRef = useRackFocus();
+
   return (
-    <section
-      id="top"
-      className="hero"
-      aria-label="Introduction"
-      style={{
-        position: 'relative',
-        maxWidth: 1240,
-        margin: '0 auto',
-        padding: 'clamp(3.5rem, 11vh, 8.5rem) clamp(1.15rem, 5vw, 6rem) clamp(3rem, 8vh, 6.5rem)',
-        overflowX: 'clip',
-      }}
-    >
-      <div className="hero__grid">
-        <h1 className="hero__title" aria-label={HERO_TITLE}>
-          <DofTitleCanvas />
-        </h1>
-
-        <p className="hero__body">
-          Products these days ask more of everyone. Designers are expected to center a div,
-          developers have to run the meeting with their camera on, and researchers are pushing
-          to prod. The AI landscape raised the bar for all of us. Looks like the requirements
-          caught up to my resume.
-        </p>
-
-        <div className="hero__actions">
-          <MagneticCta
-            href="#contact"
-            onClick={() => track('GetInTouchClick')}
-            {...solidCtaHover}
-          >
-            Get in touch{' '}
-            <span
-              style={{
-                fontFamily: fonts.display,
-                fontSize: '1.1rem',
-                transform: 'translateY(-1px)',
-              }}
-            >
-              →
+    <section id="top" className="hx" aria-label="Introduction and selected work">
+      <div className="hx__id" data-hero-id>
+        <div className="hx__intro">
+          <h1 className="hx__name">
+            <span className="hx__name-line">Derek</span>{' '}
+            <span className="hx__name-line">
+              Moore<span className="hx__dot" aria-hidden="true" />
             </span>
-          </MagneticCta>
-          <a className="hero__secondary" href="#work" {...accentLinkHover(colors.textBody)}>
-            See selected work
-          </a>
+          </h1>
+          <p className="hx__role">Product &amp; Systems Designer</p>
+          <p className="hx__line">
+            I design the product and the systems under it. The job finally caught up to my skill
+            set.
+          </p>
+          <div className="hx__actions">
+            <a
+              className="hx__btn hx__btn--solid"
+              href="#contact"
+              onClick={() => track('GetInTouchClick')}
+            >
+              Get in touch
+            </a>
+            <a className="hx__btn" href="#about">
+              About me
+            </a>
+          </div>
+        </div>
+
+        <div className="hx__foot">
+          <HeroAvatar />
+          <ul className="hx__links">
+            <li>
+              <a className="hx__link" href={LINKEDIN_URL} target="_blank" rel="noopener">
+                LinkedIn <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li>
+              <EmailLink className="hx__link">Copy email</EmailLink>
+            </li>
+            {RESUME_URL && (
+              <li>
+                <a className="hx__link" href={RESUME_URL} target="_blank" rel="noopener">
+                  Résumé <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
 
-      <PixelCameo />
+      <div id="work" className="hx__work" ref={workRef} aria-label="Selected work">
+        <div className="hx__grid">
+          {work.map((item, i) => (
+            <Tile key={item.n} item={item} eager={i < 2} />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
 
-/**
- * Canvas depth-of-field lockup.
- * Blur radius is driven by Euclidean distance from the center of “focus”,
- * so wrap lines still soften radially (not just by character index).
- */
-const HERO_TITLE = 'Bringing focus to the product.';
-const HERO_FOCUS = 'focus';
-const FOCUS_COLOR = '#9da767';
-const SOFT_COLOR = '#ece6da';
+function Tile({ item, eager }: { item: WorkItem; eager: boolean }) {
+  const onClick = () =>
+    track('WorkItemClick', {
+      title: item.title,
+      numeral: item.n,
+      ...(item.to ? { route: item.to } : {}),
+      ...(item.href ? { href: item.href } : {}),
+    });
 
-type Glyph = {
-  ch: string;
-  x: number;
-  y: number;
-  w: number;
-  focus: boolean;
-};
-
-function DofTitleCanvas() {
-  const hostRef = useRef<HTMLSpanElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const host = hostRef.current;
-    const canvas = canvasRef.current;
-    if (!host || !canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let cancelled = false;
-    let raf = 0;
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const paint = async () => {
-      await document.fonts.ready;
-      if (cancelled || !hostRef.current || !canvasRef.current) return;
-
-      const style = getComputedStyle(host);
-      const fontSize = parseFloat(style.fontSize);
-      const lineHeight = parseFloat(style.lineHeight) || fontSize * 1.02;
-      const letterSpacing = parseFloat(style.letterSpacing) || 0;
-      const maxWidth = host.clientWidth;
-      if (!maxWidth || !fontSize) return;
-
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const font = `400 ${fontSize}px ${fonts.display}`;
-      const focusFont = `italic 400 ${fontSize}px ${fonts.display}`;
-
-      await Promise.all([
-        document.fonts.load(font),
-        document.fonts.load(focusFont),
-      ]);
-      if (cancelled) return;
-
-      const glyphs = layoutTitle(ctx, {
-        text: HERO_TITLE,
-        focus: HERO_FOCUS,
-        font,
-        focusFont,
-        fontSize,
-        lineHeight,
-        letterSpacing,
-        maxWidth,
-      });
-
-      const pad = Math.ceil(fontSize * 0.35);
-      const contentW = Math.max(...glyphs.map((g) => g.x + g.w), maxWidth);
-      const contentH = Math.max(...glyphs.map((g) => g.y + lineHeight * 0.35), lineHeight);
-      const cssW = Math.ceil(contentW + pad * 2);
-      const cssH = Math.ceil(contentH + pad * 2);
-
-      canvas.width = Math.ceil(cssW * dpr);
-      canvas.height = Math.ceil(cssH * dpr);
-      canvas.style.width = `${cssW}px`;
-      canvas.style.height = `${cssH}px`;
-      // Pull canvas back by blur pad so glyphs share the meta/body left edge
-      canvas.style.marginLeft = `${-pad}px`;
-      canvas.style.marginTop = `${-pad}px`;
-      host.style.height = `${cssH - pad}px`;
-
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, cssW, cssH);
-      ctx.textBaseline = 'alphabetic';
-
-      const focusGlyphs = glyphs.filter((g) => g.focus);
-      const fx =
-        focusGlyphs.reduce((s, g) => s + g.x + g.w / 2, 0) / Math.max(focusGlyphs.length, 1);
-      const fy =
-        focusGlyphs.reduce((s, g) => s + g.y - fontSize * 0.35, 0) /
-        Math.max(focusGlyphs.length, 1);
-
-      const falloff = fontSize * 2.4;
-      const blurMax = fontSize * 0.055;
-      const noBlur = reduceMotion.matches;
-      const ox = pad;
-      const oy = pad;
-
-      for (const g of glyphs) {
-        if (g.focus) continue;
-        const cx = g.x + g.w / 2;
-        const cy = g.y - fontSize * 0.35;
-        const dist = Math.hypot(cx - fx, cy - fy);
-        const t = Math.min(1, dist / falloff);
-        const e = t * t;
-        const blur = noBlur ? 0 : 0.1 + e * (blurMax - 0.1);
-        const alpha = noBlur ? 0.55 : 0.98 - e * 0.32;
-
-        ctx.save();
-        ctx.font = font;
-        ctx.fillStyle = SOFT_COLOR;
-        ctx.globalAlpha = alpha;
-        if (blur > 0.15) ctx.filter = `blur(${blur.toFixed(2)}px)`;
-        ctx.fillText(g.ch, ox + g.x, oy + g.y);
-        ctx.restore();
-      }
-
-      ctx.save();
-      ctx.font = focusFont;
-      ctx.fillStyle = FOCUS_COLOR;
-      ctx.globalAlpha = 1;
-      ctx.filter = 'none';
-      if (!noBlur) {
-        ctx.shadowColor = 'rgba(26, 23, 18, 0.55)';
-        ctx.shadowBlur = fontSize * 0.35;
-      }
-      for (const g of focusGlyphs) {
-        ctx.fillText(g.ch, ox + g.x, oy + g.y);
-      }
-      ctx.restore();
-    };
-
-    const schedule = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        void paint();
-      });
-    };
-
-    const ro = new ResizeObserver(schedule);
-    ro.observe(host);
-    reduceMotion.addEventListener('change', schedule);
-    const narrow = window.matchMedia('(max-width: 720px)');
-    narrow.addEventListener('change', schedule);
-    document.fonts.addEventListener('loadingdone', schedule);
-    schedule();
-
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      reduceMotion.removeEventListener('change', schedule);
-      narrow.removeEventListener('change', schedule);
-      document.fonts.removeEventListener('loadingdone', schedule);
-    };
-  }, []);
-
-  return (
-    <span ref={hostRef} className="hero__title-canvas-host" aria-hidden="true">
-      <canvas ref={canvasRef} className="hero__title-canvas" />
-    </span>
-  );
-}
-
-function layoutTitle(
-  ctx: CanvasRenderingContext2D,
-  opts: {
-    text: string;
-    focus: string;
-    font: string;
-    focusFont: string;
-    fontSize: number;
-    lineHeight: number;
-    letterSpacing: number;
-    maxWidth: number;
-  },
-): Glyph[] {
-  const { text, focus, font, focusFont, fontSize, lineHeight, letterSpacing, maxWidth } = opts;
-  const focusAt = text.indexOf(focus);
-  const focusEnd = focusAt + focus.length;
-  const words = text.split(/(\s+)/);
-  const lines: { start: number; chars: string }[] = [];
-  let line = '';
-  let lineStart = 0;
-  let cursor = 0;
-
-  const measure = (str: string, from: number) => {
-    let w = 0;
-    for (let i = 0; i < str.length; i++) {
-      const abs = from + i;
-      const isFocus = abs >= focusAt && abs < focusEnd;
-      ctx.font = isFocus ? focusFont : font;
-      w += ctx.measureText(str[i]!).width + letterSpacing;
-    }
-    return w;
-  };
-
-  for (const token of words) {
-    if (!token) continue;
-    const next = line + token;
-    const width = measure(next, lineStart);
-    if (line && width > maxWidth && token.trim()) {
-      lines.push({ start: lineStart, chars: line });
-      line = token.replace(/^\s+/, '');
-      lineStart = cursor + (token.length - line.length);
-    } else {
-      if (!line) lineStart = cursor;
-      line = next;
-    }
-    cursor += token.length;
-  }
-  if (line) lines.push({ start: lineStart, chars: line });
-
-  const glyphs: Glyph[] = [];
-  lines.forEach((ln, li) => {
-    let x = 0;
-    const y = fontSize + li * lineHeight;
-    for (let i = 0; i < ln.chars.length; i++) {
-      const abs = ln.start + i;
-      const ch = ln.chars[i]!;
-      const isFocus = abs >= focusAt && abs < focusEnd;
-      ctx.font = isFocus ? focusFont : font;
-      const w = ctx.measureText(ch).width;
-      glyphs.push({ ch, x, y, w, focus: isFocus });
-      x += w + letterSpacing;
-    }
-  });
-
-  return glyphs;
-}
-
-/**
- * Solid hero CTA that leans toward the pointer within MAGNET_RADIUS.
- * Anchor stays fixed; the link springs (up to MAGNET_MAX_PULL) so rapid cursor
- * motion feels elastic rather than locked-on. Inside the button, tracking freezes
- * so it doesn't jitter; when very close it adds a tiny reaching shake.
- */
-function MagneticCta({
-  href,
-  children,
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
-}: {
-  href: string;
-  children: ReactNode;
-  onClick?: () => void;
-  onMouseEnter?: (e: MouseEvent<HTMLElement>) => void;
-  onMouseLeave?: (e: MouseEvent<HTMLElement>) => void;
-}) {
-  const anchorRef = useRef<HTMLSpanElement | null>(null);
-  const btnRef = useRef<HTMLAnchorElement | null>(null);
-
-  useEffect(() => {
-    const finePointer = window.matchMedia('(pointer: fine)').matches;
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!MAGNETIC || !finePointer || reduceMotion) return;
-
-    const target = { x: 0, y: 0 };
-    const offset = { x: 0, y: 0 };
-    const velocity = { x: 0, y: 0 };
-    const reachDir = { x: 1, y: 0 };
-    let shakeAmount = 0;
-    let raf = 0;
-    let last = performance.now();
-    let running = false;
-
-    const start = () => {
-      if (running) return;
-      running = true;
-      last = performance.now();
-      raf = requestAnimationFrame(tick);
-    };
-
-    const onMove = (e: PointerEvent) => {
-      const rest = anchorRef.current;
-      if (!rest) return;
-      const rect = rest.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const dist = Math.hypot(dx, dy);
-
-      if (dist >= MAGNET_RADIUS || dist === 0) {
-        target.x = 0;
-        target.y = 0;
-        shakeAmount = 0;
-      } else {
-        reachDir.x = dx / dist;
-        reachDir.y = dy / dist;
-        // Center-based radial pull: zero at the center, growing with distance,
-        // then clamped to MAGNET_MAX_PULL. Magnitude depends only on the offset
-        // vector, so the lean traces a circle instead of a boxy path — and it
-        // eases up smoothly through the center rather than snapping at the edges.
-        let px = dx * MAGNET_STRENGTH;
-        let py = dy * MAGNET_STRENGTH;
-        const mag = Math.hypot(px, py);
-        if (mag > MAGNET_MAX_PULL) {
-          const k = MAGNET_MAX_PULL / mag;
-          px *= k;
-          py *= k;
-        }
-        target.x = px;
-        target.y = py;
-        shakeAmount = dist < SHAKE_RADIUS ? (1 - dist / SHAKE_RADIUS) * SHAKE_AMP : 0;
-      }
-      start();
-    };
-
-    const tick = (now: number) => {
-      const dt = Math.min(0.032, (now - last) / 1000);
-      last = now;
-
-      velocity.x += ((target.x - offset.x) * MAGNET_STIFFNESS - velocity.x * MAGNET_DAMPING) * dt;
-      velocity.y += ((target.y - offset.y) * MAGNET_STIFFNESS - velocity.y * MAGNET_DAMPING) * dt;
-      offset.x += velocity.x * dt;
-      offset.y += velocity.y * dt;
-
-      const quiver = shakeAmount > 0 ? Math.sin(now * 0.056) * shakeAmount : 0;
-      const x = offset.x + reachDir.x * quiver;
-      const y = offset.y + reachDir.y * quiver;
-
-      if (btnRef.current) {
-        btnRef.current.style.willChange = 'transform';
-        btnRef.current.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`;
-      }
-
-      const settled =
-        shakeAmount < 0.01 &&
-        Math.abs(target.x) < 0.01 &&
-        Math.abs(target.y) < 0.01 &&
-        Math.abs(offset.x) < 0.05 &&
-        Math.abs(offset.y) < 0.05 &&
-        Math.abs(velocity.x) < 0.05 &&
-        Math.abs(velocity.y) < 0.05;
-
-      if (settled) {
-        offset.x = 0;
-        offset.y = 0;
-        velocity.x = 0;
-        velocity.y = 0;
-        if (btnRef.current) {
-          btnRef.current.style.transform = '';
-          btnRef.current.style.willChange = '';
-        }
-        running = false;
-        return;
-      }
-
-      raf = requestAnimationFrame(tick);
-    };
-
-    window.addEventListener('pointermove', onMove, { passive: true });
-    return () => {
-      window.removeEventListener('pointermove', onMove);
-      cancelAnimationFrame(raf);
-      if (btnRef.current) {
-        btnRef.current.style.transform = '';
-        btnRef.current.style.willChange = '';
-      }
-    };
-  }, []);
-
-  return (
-    <span ref={anchorRef} style={{ display: 'inline-flex' }}>
-      <a
-        ref={btnRef}
-        href={href}
-        style={solidCta}
-        onClick={onClick}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
+  const body: ReactNode = (
+    <>
+      <span
+        className="tile__media"
+        style={item.video ? ({ '--tile-ar': `${item.video.width} / ${item.video.height}` } as CSSProperties) : undefined}
       >
-        {children}
-      </a>
-    </span>
+        {item.video ? (
+          <TileVideo video={item.video} eager={eager} />
+        ) : (
+          <img
+            className="tile__pic"
+            src={item.imageSrc}
+            alt=""
+            width={1199}
+            height={731}
+            loading={eager ? 'eager' : 'lazy'}
+            decoding="async"
+            style={item.imageFocus ? { objectPosition: item.imageFocus } : undefined}
+          />
+        )}
+      </span>
+      <span className="tile__cap">
+        <span className="tile__brand">{item.brand}</span>
+        <span className="tile__title">{item.title}</span>
+        <span className="tile__go" aria-hidden="true">
+          →
+        </span>
+      </span>
+    </>
   );
+
+  if (item.to) {
+    return (
+      <Link className="tile" to={item.to} onClick={onClick}>
+        {body}
+      </Link>
+    );
+  }
+  return (
+    <a className="tile" href={item.href} target="_blank" rel="noopener" onClick={onClick}>
+      {body}
+    </a>
+  );
+}
+
+/**
+ * A tile's cover video, muted and looping. With a mouse it holds its first
+ * frame (the hero frame) and plays only while its tile is hovered or focused,
+ * so the grid stays calm; leaving rewinds it. Touch screens can't hover, so
+ * there it plays whenever it's on screen. Reduced motion shows the poster.
+ */
+function TileVideo({ video, eager }: { video: NonNullable<WorkItem['video']>; eager: boolean }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const [still] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [hoverPlay] = useState(() => window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || still) return;
+    // React doesn't reflect `muted` to the attribute, and autoplay needs it
+    el.muted = true;
+    const play = () => void el.play().catch(() => {});
+
+    if (hoverPlay) {
+      const tile = el.closest<HTMLElement>('.tile');
+      if (!tile) return;
+      const rewind = () => {
+        el.pause();
+        el.currentTime = 0;
+      };
+      const onFocusOut = (e: FocusEvent) => {
+        if (!tile.contains(e.relatedTarget as Node | null)) rewind();
+      };
+      tile.addEventListener('pointerenter', play);
+      tile.addEventListener('pointerleave', rewind);
+      tile.addEventListener('focusin', play);
+      tile.addEventListener('focusout', onFocusOut);
+      return () => {
+        tile.removeEventListener('pointerenter', play);
+        tile.removeEventListener('pointerleave', rewind);
+        tile.removeEventListener('focusin', play);
+        tile.removeEventListener('focusout', onFocusOut);
+      };
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      play();
+      return;
+    }
+    const io = new IntersectionObserver(([e]) => (e?.isIntersecting ? play() : el.pause()), {
+      threshold: 0.1,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [still, hoverPlay]);
+
+  if (still) {
+    return (
+      <img
+        className="tile__pic"
+        src={video.poster}
+        alt=""
+        width={video.width}
+        height={video.height}
+        decoding="async"
+      />
+    );
+  }
+  return (
+    <video
+      ref={ref}
+      className="tile__pic"
+      src={video.src}
+      poster={video.poster}
+      width={video.width}
+      height={video.height}
+      muted
+      // touch: the browser's own muted autoplay (it resumes the video after
+      // pausing it off screen, e.g. during the page's slide-in)
+      autoPlay={!hoverPlay}
+      loop
+      playsInline
+      disablePictureInPicture
+      // with a mouse, eager tiles buffer up front so a hover starts at once
+      preload={eager ? 'auto' : 'metadata'}
+      aria-hidden="true"
+      tabIndex={-1}
+    />
+  );
+}
+
+/**
+ * Rack focus: tiles start out of focus and pull sharp as they enter the
+ * viewport, staggered within each batch. Content stays visible without JS
+ * (the grid is only "armed" once this runs) and under reduced motion.
+ */
+function useRackFocus() {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const grid = ref.current;
+    if (!grid || typeof IntersectionObserver === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    grid.classList.add('is-armed');
+    return () => grid.classList.remove('is-armed');
+  }, []);
+
+  useEffect(() => {
+    const grid = ref.current;
+    if (!grid || !grid.classList.contains('is-armed')) return;
+    let first = true;
+    const io = new IntersectionObserver(
+      (entries) => {
+        let n = 0;
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const el = e.target as HTMLElement;
+          const delay = (first ? RACK_START_MS : 0) + n * RACK_STAGGER_MS;
+          el.style.setProperty('--rack-delay', `${delay}ms`);
+          el.classList.add('is-in');
+          io.unobserve(el);
+          n++;
+        }
+        first = false;
+      },
+      { threshold: 0.18 },
+    );
+    grid.querySelectorAll('.tile').forEach((t) => io.observe(t));
+    return () => io.disconnect();
+  }, []);
+
+  return ref;
 }

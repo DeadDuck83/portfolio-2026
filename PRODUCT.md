@@ -16,7 +16,7 @@ A personal portfolio site that presents Derek’s product work through narrative
 
 ## Positioning
 
-Confirmed voice/positioning the site should preserve: **Product Manager** with a systems & integrations focus, and the headline stance **“Bringing focus to the product.”** Neighboring generic PM portfolios should not be able to claim the same design + engineering + product systems depth without inventing it.
+**Product & Systems Designer** (repositioned 2026-11-09 from “Product Manager · Systems & Integrations”: application feedback points to design roles over PM roles). The exact title wording is still being refined and may be less literal than this. The design + engineering + product systems depth stays the differentiator: neighboring generic designer portfolios should not be able to claim it without inventing it.
 
 ## Operating Context
 
@@ -34,8 +34,9 @@ Visitors arrive from recruiting channels (LinkedIn, Wellfound, Greenhouse, Indee
 ## Brand Commitments
 
 - Name: **Derek Moore**
-- Role framing: Product Manager · Systems & Integrations
-- Site title / headline stance the owner wants kept: **“Bringing focus to the product.”** (with “focus” as the optical/conceptual center)
+- Role framing: Product & Systems Designer (working title, wording TBD)
+- The hero leads with **name + title**. “Bringing focus to the product.” is no longer the headline: Derek finds it less impactful now (2026-11-09). The depth-of-field “focus” effect can survive as a mechanic, but not as the slogan.
+- Selected work should be visible in the first viewport, ahead of the About rail.
 - Do not invent new brand names, fake employers, or alternate positioning without explicit change.
 
 ## Evidence on Hand
@@ -53,7 +54,10 @@ Visitors arrive from recruiting channels (LinkedIn, Wellfound, Greenhouse, Indee
 2. **Specific beats generic** — preserve systems/integrations and design↔eng↔product overlap; don’t flatten into a template PM pitch.
 3. **Fast evaluation** — hiring managers and recruiters should find role, proof, and contact without hunting.
 4. **Truthful evidence only** — show real work and real constraints; never invent social proof.
-5. **Wit without fluff** — keep the current title’s tone: sharp, descriptive, not corporate filler.
+5. **Wit without fluff** — sharp, descriptive, not corporate filler.
+6. **Authored, not templated** — the first build came from Claude and reads that way (stock serif+mono pairing, italic accent words, tracked caps everywhere, hairline-divided sections, generic fade-ups). Derek wants the 80% kept and his own 20% added: type, entrance motion, and pattern breaks that are recognisably his.
+7. **Half the words** (Derek, 2026-11-10, applies to every page) — cut copy by at least half. Short, impactful lines; let the outcome imply the detail, and leave the rest for visitors to ask (the avatar, or Derek directly). Never pad a section to fill space.
+8. **Start with the finished dish** (Derek, 2026-11-10) — tell case studies, and stories generally, like a recipe blog: open on the end product and its result ("whoa, I'm about to make that"), then the ingredients (role, team, constraints, users), then the steps (decisions in order), then notes. Never build up to the solution; the current studies run problem → process → solution → outcome and need flipping. Pair with the Webdrift Trendwolves reference: make the complicated look easy.
 
 ## Accessibility & Inclusion
 

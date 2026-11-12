@@ -28,7 +28,7 @@ export default function GalleryExperiment() {
         height: '100vh',
         background: colors.bg,
         color: colors.text,
-        fontFamily: fonts.mono,
+        fontFamily: fonts.text,
       }}
     >
       <header
@@ -58,7 +58,8 @@ export default function GalleryExperiment() {
         </Link>
         <span
           style={{
-            fontFamily: fonts.display,
+            fontFamily: fonts.text,
+            fontWeight: 600,
             fontSize: '1.05rem',
             letterSpacing: '-0.01em',
             color: colors.text,

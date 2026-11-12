@@ -18,7 +18,7 @@ const TODAY = aboutChapters.length + 1;
 
 const sectionVars = {
   '--font-display': fonts.display,
-  '--font-mono': fonts.mono,
+  '--font-text': fonts.text,
   '--side-pad': layout.sidePad,
   '--measure': `${layout.maxWidth}px`,
   '--accent': colors.accent,

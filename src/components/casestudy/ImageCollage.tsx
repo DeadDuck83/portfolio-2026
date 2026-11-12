@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { Figure } from '../../data/caseStudies/types';
 import { isVideoFigure } from '../../data/caseStudies/figures';
-import { border, colors, fonts } from '../../theme/tokens';
+import { border, colors, fonts, weights } from '../../theme/tokens';
 
 /**
  * Full-viewport collage of case-study images with captions.
@@ -96,7 +96,7 @@ export default function ImageCollage({
               style={{
                 margin: 0,
                 fontFamily: fonts.display,
-                fontWeight: 400,
+                fontWeight: weights.display,
                 fontSize: 'clamp(1.4rem, 3vw, 2rem)',
                 lineHeight: 1.15,
                 color: colors.text,
@@ -112,7 +112,7 @@ export default function ImageCollage({
             aria-label="Close image collage"
             style={{
               flex: '0 0 auto',
-              fontFamily: fonts.mono,
+              fontFamily: fonts.text,
               fontSize: '0.7rem',
               letterSpacing: '0.16em',
               textTransform: 'uppercase',
@@ -257,7 +257,8 @@ function CollageItem({ figure, onOpen }: { figure: Figure; onOpen: () => void })
           {cap?.lead ? (
             <div
               style={{
-                fontFamily: fonts.display,
+                fontFamily: fonts.text,
+                fontWeight: 600,
                 fontSize: '1.05rem',
                 lineHeight: 1.25,
                 color: colors.text,
@@ -334,7 +335,7 @@ function Lightbox({ figure, onClose }: { figure: Figure; onClose: () => void }) 
           onClick={onClose}
           aria-label="Close full-size media"
           style={{
-            fontFamily: fonts.mono,
+            fontFamily: fonts.text,
             fontSize: '0.7rem',
             letterSpacing: '0.16em',
             textTransform: 'uppercase',

@@ -18,7 +18,7 @@
   overflow: hidden;
   background: #fff;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Host Grotesk', system-ui, sans-serif;
   color: var(--ink);
   animation: popIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2);
   cursor: grab;
@@ -91,17 +91,33 @@
 .typing span:nth-child(3) { animation-delay: 0.3s; }
 @keyframes blink { 0%, 60%, 100% { opacity: 0.25; } 30% { opacity: 1; } }
 
-/* one row that scrolls sideways (wheel or swipe), fading out at the edge */
+/* one row that scrolls sideways (wheel, swipe or the arrows); fades and an
+   arrow mark whichever end has more */
+.chipRail { position: relative; flex: none; min-width: 0; }
 .chips {
-  display: flex; flex-wrap: nowrap; gap: 4px; overflow-x: auto; scrollbar-width: none; touch-action: pan-x;
-  mask-image: linear-gradient(to right, #000 85%, transparent);
-  flex: none; min-width: 0; max-width: 100%;
+  position: relative; /* chips' offsetLeft is measured in the row's own scroll space */
+  display: flex; flex-wrap: nowrap; gap: 5px; overflow-x: auto; scrollbar-width: none; touch-action: pan-x;
+  min-width: 0; max-width: 100%;
+}
+.chipRail:not([data-end]) .chips { mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
+.chipRail:not([data-start]) .chips { mask-image: linear-gradient(to left, #000 calc(100% - 48px), transparent); }
+.chipRail:not([data-start]):not([data-end]) .chips {
+  mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
 }
 .chips::-webkit-scrollbar { display: none; }
 .chips button { flex: none; white-space: nowrap;
-  padding: 3px 7px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper);
-  font: inherit; font-size: 8.5px; color: var(--ink); transition: background 0.15s;
+  padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper);
+  font: inherit; font-size: 11px; line-height: 1.2; color: var(--ink); transition: background 0.15s;
 }
+.chipArrow {
+  position: absolute; top: 50%; translate: 0 -50%; width: 26px; height: 26px; padding: 0 0 2px;
+  display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); background: #fff;
+  color: var(--ink); font: inherit; font-size: 17px; line-height: 1; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(26, 23, 18, 0.14); transition: background 0.15s;
+}
+.chipArrow:hover { background: var(--paper); }
+.chipPrev { left: 0; }
+.chipNext { right: 0; }
 .chips button:hover { background: #fff; }
 .chips .chipActive, .chips .chipActive:hover { background: var(--ink); border-color: var(--ink); color: #f1ede4; }
 .composer {
@@ -109,16 +125,8 @@
   font: inherit; font-size: 9px; color: var(--ink-soft); text-align: left; cursor: text;
 }
 
-/* invite (before connecting) */
-.invite { margin: auto 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 0 6px; }
-.eyebrow { margin: 0; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #5f6530; }
-.inviteTitle { margin: 0; font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1.05; }
-.inviteSub { margin: 0 0 6px; font-size: 10px; line-height: 1.5; color: var(--ink-soft); }
-.connect {
-  padding: 8px 16px; border-radius: 999px; border: 0; background: var(--ink); color: #f1ede4;
-  font: inherit; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
-}
-.typeInstead { padding: 0; border: 0; background: none; font: inherit; font-size: 9.5px; color: var(--ink-soft); text-decoration: underline; cursor: pointer; }
+/* only shows if the card is opened before the avatar has loaded */
+.connecting { margin: auto 0; padding: 0 6px; font-size: 10px; color: var(--ink-soft); }
 
 /* the floating button after dismissing */
 .fab {
@@ -138,8 +146,6 @@
   .chat { padding: 8px; }
   .log { flex: none; max-height: 66px; } /* about four lines */
   .close { top: -222px; right: 8px; background: rgba(20, 18, 14, 0.45); color: #fff; }
-  .invite { padding: 2px 4px 4px; }
-  .inviteTitle { font-size: 22px; }
   .card.compact { width: 127px; height: 138px; grid-template-rows: 1fr; }
   .fab { --edge: 14px; width: 58px; height: 58px; }
 }

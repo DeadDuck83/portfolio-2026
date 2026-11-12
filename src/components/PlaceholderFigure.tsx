@@ -128,11 +128,11 @@ function FigureCaption({ caption }: { caption: NonNullable<Figure['caption']> })
         </span>
       )}
       {blockLead && (
-        <span style={{ fontFamily: fonts.display, fontSize: '1.15rem' }}>{lead}</span>
+        <span style={{ fontFamily: fonts.text, fontWeight: 600, fontSize: '1.15rem' }}>{lead}</span>
       )}
       {leadInline ? (
         <span style={{ fontSize: '0.74rem', lineHeight: 1.6, color: colors.textMuted }}>
-          <span style={{ fontFamily: fonts.display, fontSize: '1.05rem', color: colors.text }}>
+          <span style={{ fontFamily: fonts.text, fontWeight: 600, fontSize: '1.05rem', color: colors.text }}>
             {lead}
           </span>
           {desc}

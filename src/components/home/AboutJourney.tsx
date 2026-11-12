@@ -31,7 +31,7 @@ const ENGINE_PROPS = ['opacity', 'transform', 'transition', 'transition-delay', 
 const sectionVars = {
   ...themeAt(0).vars,
   '--font-display': fonts.display,
-  '--font-mono': fonts.mono,
+  '--font-text': fonts.text,
   '--side-pad': layout.sidePad,
   '--measure': `${layout.maxWidth}px`,
   '--accent': colors.accent,

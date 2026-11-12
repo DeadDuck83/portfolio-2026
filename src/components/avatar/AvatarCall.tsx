@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
 import { track } from '../../lib/analytics';
@@ -19,12 +19,19 @@ import {
   type Shirt,
 } from './lines';
 import { cornerStyle, nearestCorner, type Corner } from './corner';
+import { dockSlotRect } from './dock';
+import { useEyeFollow } from './eyeFollow';
 import styles from './avatarGuide.module.css';
 
-const ARTBOARD = { w: 1122, h: 1402 };
 const IDLE_MS = 4000; // untouched this long (and not talking) → compact
 
 const canHover = () => window.matchMedia('(hover: hover)').matches;
+const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+/** transform that lays a box of `to`'s size over `from` (origin top-left) */
+const boxOnto = (from: DOMRect, to: DOMRect) =>
+  `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`;
 
 type Msg = {
   id: number;
@@ -37,10 +44,22 @@ type Msg = {
   more?: CaseId; // offer "Keep going" into this case study's full story
 };
 
-type Props = { open: boolean; corner: Corner; onCorner: (c: Corner) => void; onReady: () => void; onClose: () => void };
+type Props = {
+  open: boolean;
+  /** Opened by itself, not by a click: greet muted, with captions. */
+  auto: boolean;
+  corner: Corner;
+  onCorner: (c: Corner) => void;
+  onReady: () => void;
+  onClose: () => void;
+};
 
-/** The call card: avatar tile + compact chat. Stays mounted while minimized. */
-export default function AvatarCall({ open, corner, onCorner, onReady, onClose }: Props) {
+/**
+ * The call card: avatar tile + compact chat. Stays mounted while minimized.
+ * There's no Connect step: the first time it opens he's already on the call
+ * and says hello.
+ */
+export default function AvatarCall({ open, auto, corner, onCorner, onReady, onClose }: Props) {
   const navigate = useNavigate();
   const { rive, RiveComponent } = useRive({
     src: `${AVATAR_BASE}/avatar.riv`,
@@ -50,7 +69,11 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     layout: new Layout({ fit: Fit.Cover, alignment: Alignment.TopCenter }),
   });
   const ctl = useRef<AvatarController | null>(null);
+  const [ctlReady, setCtlReady] = useState(false);
   const [live, setLive] = useState(false);
+  // muted only because the browser wouldn't allow sound yet (not the visitor's
+  // choice): the first thing they ask turns the sound on
+  const autoMuted = useRef(false);
   const [camera, setCamera] = useState(true);
   const [muted, setMuted] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -63,6 +86,9 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   const introDone = useRef(new Set<string>());
   const cardRef = useRef<HTMLElement>(null);
   const [compact, setCompact] = useState(false);
+  // the question chips scroll sideways; track which ends have more
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const [chipEdge, setChipEdge] = useState({ start: true, end: false });
   const [shirt, setShirt] = useState(0);
   const [hover, setHover] = useState(false);
   const [poke, setPoke] = useState(0); // bumps on any interaction → restarts the idle timer
@@ -83,6 +109,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     try {
       ctl.current = new AvatarController(rive);
       void ctl.current.track('join');
+      setCtlReady(true);
       onReady();
     } catch (err) {
       console.error(err);
@@ -129,34 +156,96 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
     if (open && speakingAloud && !canHover()) setCompact(true);
   }, [open, speakingAloud, busy]);
 
-  // the eyes follow the mouse anywhere on the page, not just over the tile
+  useEyeFollow(cardRef, ctl, open && camera);
+
+  const readChipEdge = useCallback(() => {
+    const el = chipsRef.current;
+    if (!el) return;
+    const start = el.scrollLeft <= 2;
+    const end = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+    setChipEdge((p) => (p.start === start && p.end === end ? p : { start, end }));
+  }, []);
   useEffect(() => {
-    if (!open || !camera) return;
-    let raf = 0;
-    let seq = 0;
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse' || raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        const canvas = cardRef.current?.querySelector('canvas');
-        const c = ctl.current;
-        if (!canvas || !c) return;
-        const r = canvas.getBoundingClientRect();
-        if (r.width === 0) return;
-        // Fit.Cover + TopCenter: artboard scaled to cover, centred horizontally
-        const s = Math.max(r.width / ARTBOARD.w, r.height / ARTBOARD.h);
-        const ox = (r.width - ARTBOARD.w * s) / 2;
-        c.set('hostCursorX', (e.clientX - r.left - ox) / s);
-        c.set('hostCursorY', (e.clientY - r.top) / s);
-        c.set('hostCursorSeq', ++seq);
-      });
-    };
-    window.addEventListener('pointermove', onMove);
-    return () => {
-      window.removeEventListener('pointermove', onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, [open, camera]);
+    const el = chipsRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    readChipEdge();
+    const ro = new ResizeObserver(readChipEdge);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [live, open, readChipEdge]);
+  // step a whole chip at a time: the next cut-off chip lands just clear of the arrow
+  const scrollChips = (dir: 1 | -1) => {
+    const el = chipsRef.current;
+    if (!el) return;
+    const pad = 34;
+    const chips = [...el.children] as HTMLElement[];
+    const left = el.scrollLeft;
+    const right = left + el.clientWidth;
+    let target: number;
+    if (dir > 0) {
+      // the first chip starting past the left arrow that runs under the right one
+      const next = chips.find((c) => c.offsetLeft > left + pad && c.offsetLeft + c.offsetWidth > right - pad);
+      target = next ? next.offsetLeft - pad : el.scrollWidth;
+    } else {
+      const prev = [...chips].reverse().find((c) => c.offsetLeft < left + pad - 1);
+      target = prev ? prev.offsetLeft + prev.offsetWidth - el.clientWidth + pad : 0;
+    }
+    el.scrollTo({ left: Math.max(0, target), behavior: calm() ? 'auto' : 'smooth' });
+  };
+
+  // Opening while the hero's avatar tile is on screen: the card grows out of
+  // that tile (instead of the pop-in), and the chat fades in as it lands.
+  const shownOnce = useRef(false);
+  const leaving = useRef(false);
+  useLayoutEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    if (!open) {
+      // hidden now: drop the shrink-back's held last frame and re-arm the pop-in
+      card.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+      leaving.current = false;
+      shownOnce.current = false;
+      card.style.animation = '';
+      return;
+    }
+    if (shownOnce.current) return;
+    shownOnce.current = true;
+    const from = dockSlotRect();
+    const to = card.getBoundingClientRect();
+    if (!from || !to.width || calm()) return;
+    // stays off until the card is hidden again; turning it back on here would restart the pop-in
+    card.style.animation = 'none';
+    card.animate([{ transformOrigin: 'top left', transform: boxOnto(from, to), borderRadius: '18px' }, { transformOrigin: 'top left', transform: 'none' }], {
+      duration: 620,
+      easing: EASE_OUT,
+    });
+    card.querySelector(`.${styles.chat}`)?.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: 360,
+      delay: 260,
+      easing: 'ease-out',
+      fill: 'backwards',
+    });
+  }, [open]);
+
+  // Closing while the tile is on screen: shrink back into it first.
+  const close = () => {
+    const card = cardRef.current;
+    const to = dockSlotRect();
+    if (!card || !to || calm()) {
+      onClose();
+      return;
+    }
+    if (leaving.current) return;
+    leaving.current = true;
+    ctl.current?.stop();
+    const from = card.getBoundingClientRect();
+    card.querySelector(`.${styles.chat}`)?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' });
+    const anim = card.animate(
+      [{ transformOrigin: 'top left', transform: 'none' }, { transformOrigin: 'top left', transform: boxOnto(to, from), borderRadius: '18px' }],
+      { duration: 460, easing: 'cubic-bezier(0.5, 0, 0.2, 1)', fill: 'forwards' },
+    );
+    anim.onfinish = () => onClose();
+  };
 
   // drag the card anywhere; on release it snaps to the nearest corner
   const onPointerDown = (e: React.PointerEvent<HTMLElement>) => {
@@ -212,8 +301,11 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   };
   const patch = (id: number, p: Partial<Msg>) => setMsgs((all) => all.map((m) => (m.id === id ? { ...m, ...p } : m)));
 
-  /** Derek answers: spoken with the message building in step (camera on), or typed (camera off). */
-  const say = async (line: LineId, extra: Partial<Msg> = {}, withCamera = camera) => {
+  /**
+   * Derek answers: spoken with the message building in step (camera on), or
+   * typed (camera off). `keep`: if the audio never starts, still show the line.
+   */
+  const say = async (line: LineId, extra: Partial<Msg> = {}, withCamera = camera, keep = false) => {
     const c = ctl.current;
     if (!c) return;
     const t = await c.track(line);
@@ -235,19 +327,44 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
         patch(id, { text: t.text.slice(0, ends[n - 1]) });
       }
     });
-    const said = finished ? t.text : shown > 0 ? t.text.slice(0, ends[shown - 1]).trimEnd() + '…' : '';
+    const said = finished || (keep && shown === 0) ? t.text : shown > 0 ? t.text.slice(0, ends[shown - 1]).trimEnd() + '…' : '';
     patch(id, { text: said, live: false, ...(finished ? extra : {}) });
   };
 
-  const connect = (withCamera: boolean) => {
-    track('Avatar joined', { mode: withCamera ? 'camera' : 'typing' });
-    setCamera(withCamera);
+  // He joins the first time the card opens. Opened by itself (no click yet),
+  // the browser won't play sound, so the hello runs muted with captions.
+  useEffect(() => {
+    if (!open || !ctlReady || live) return;
+    track('Avatar joined', { mode: auto ? 'auto' : 'opened' });
+    if (auto) {
+      autoMuted.current = true;
+      setMuted(true);
+      ctl.current?.setMuted(true);
+    }
     setLive(true);
     setBusy('join');
-    window.setTimeout(async () => {
-      await say('join', {}, withCamera);
-      setBusy(null);
+    let started = false;
+    const t = window.setTimeout(async () => {
+      started = true;
+      await say('join', {}, true, true);
+      setBusy((b) => (b === 'join' ? null : b));
     }, 500);
+    return () => {
+      // closed before he said hello: skip it rather than talk while hidden
+      if (started) return;
+      window.clearTimeout(t);
+      setBusy(null);
+    };
+    // say/track are stable for this purpose; `live` gates it to once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, ctlReady]);
+
+  /** The visitor asked for something: if he was only muted for autoplay, turn the sound on. */
+  const wake = () => {
+    if (!autoMuted.current) return;
+    autoMuted.current = false;
+    setMuted(false);
+    ctl.current?.setMuted(false);
   };
 
   const nextPick = (chip: Chip): LineId => {
@@ -262,6 +379,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   const ask = async (chip: Chip) => {
     if (!chip.line && !chip.pick && !chip.tour) return;
     if (busy && (!camera || typing)) return; // typed answers aren't interruptible
+    wake();
     const token = ++askToken.current;
     track('Avatar chip asked', { chip: chip.label, camera });
     ctl.current?.stop();
@@ -298,6 +416,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   // offers the rest again, so visitors can keep flipping through)
   const wear = async (s: Shirt) => {
     if (busy && (!camera || typing)) return;
+    wake();
     const token = ++askToken.current;
     track('Avatar shirt', { shirt: s.label });
     ctl.current?.stop();
@@ -341,6 +460,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   // top of the page, and offer the rest.
   const walkCase = async (d: Destination & { walk: CaseId }) => {
     if (busy && (!camera || typing)) return;
+    wake();
     const token = ++askToken.current;
     track('Avatar case study', { study: d.walk, part: 'short' });
     ctl.current?.stop();
@@ -357,6 +477,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   // "Keep going": the full story, beat by beat, each anchored on its section
   const keepGoing = async (id: CaseId) => {
     if (busy && (!camera || typing)) return;
+    wake();
     const token = ++askToken.current;
     track('Avatar case study', { study: id, part: 'full' });
     ctl.current?.stop();
@@ -395,6 +516,7 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
   };
 
   const toggleSound = () => {
+    autoMuted.current = false;
     const m = !muted;
     setMuted(m);
     ctl.current?.setMuted(m);
@@ -432,7 +554,8 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
       }}
     >
       <div className={`${styles.tile} ${camera ? '' : styles.camOff}`}>
-        <div className={`${styles.avatar} ${live ? '' : styles.waiting}`} aria-hidden={!camera}>
+        {/* blurred only while the avatar is still loading ("connecting") */}
+        <div className={`${styles.avatar} ${live || ctlReady ? '' : styles.waiting}`} aria-hidden={!camera}>
           <RiveComponent />
         </div>
         {!camera && (
@@ -454,21 +577,11 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
       </div>
 
       <div className={styles.chat}>
-        <button className={styles.close} onClick={onClose} aria-label="Minimize">
+        <button className={styles.close} onClick={close} aria-label="Minimize">
           ×
         </button>
         {!live ? (
-          <div className={styles.invite}>
-            <p className={styles.eyebrow}>Interview with an AI</p>
-            <p className={styles.inviteTitle}>Derek's here. Want a tour?</p>
-            <p className={styles.inviteSub}>Ask about his work, his story, how he builds.</p>
-            <button className={styles.connect} onClick={() => connect(true)}>
-              Connect
-            </button>
-            <button className={styles.typeInstead} onClick={() => connect(false)}>
-              I'd rather type
-            </button>
-          </div>
+          <p className={styles.connecting}>Connecting…</p>
         ) : (
           <>
             <div className={styles.log} ref={logRef} aria-live="polite" data-nodrag>
@@ -515,24 +628,49 @@ export default function AvatarCall({ open, corner, onCorner, onReady, onClose }:
                 </div>
               )}
             </div>
-            <div
-              className={styles.chips}
-              role="group"
-              aria-label="Suggested questions"
-              data-nodrag
-              onWheel={(e) => {
-                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.currentTarget.scrollLeft += e.deltaY;
-              }}
-            >
-              {CHIPS.map((chip) => (
+            <div className={styles.chipRail} data-start={chipEdge.start || undefined} data-end={chipEdge.end || undefined}>
+              <div
+                ref={chipsRef}
+                className={styles.chips}
+                role="group"
+                aria-label="Suggested questions"
+                data-nodrag
+                onScroll={readChipEdge}
+                onWheel={(e) => {
+                  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.currentTarget.scrollLeft += e.deltaY;
+                }}
+              >
+                {CHIPS.map((chip) => (
+                  <button
+                    key={chip.label}
+                    className={busy === chip.label ? styles.chipActive : undefined}
+                    onClick={() => void ask(chip)}
+                  >
+                    {chip.label}
+                  </button>
+                ))}
+              </div>
+              {/* arrows show which way there's more; swipe and wheel still work */}
+              {!chipEdge.start && (
                 <button
-                  key={chip.label}
-                  className={busy === chip.label ? styles.chipActive : undefined}
-                  onClick={() => void ask(chip)}
+                  className={`${styles.chipArrow} ${styles.chipPrev}`}
+                  onClick={() => scrollChips(-1)}
+                  aria-label="Previous questions"
+                  tabIndex={-1}
                 >
-                  {chip.label}
+                  ‹
                 </button>
-              ))}
+              )}
+              {!chipEdge.end && (
+                <button
+                  className={`${styles.chipArrow} ${styles.chipNext}`}
+                  onClick={() => scrollChips(1)}
+                  aria-label="More questions"
+                  tabIndex={-1}
+                >
+                  ›
+                </button>
+              )}
             </div>
             {/* not a real input yet: tapping it gets a shrug and an honest answer */}
             <button

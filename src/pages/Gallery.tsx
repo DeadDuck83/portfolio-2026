@@ -5,7 +5,7 @@ import Wordmark from '../components/Wordmark';
 import SiteFooter from '../components/SiteFooter';
 import { gallery, isGalleryPieceOpen, type GalleryPiece } from '../data/gallery';
 import { accentLinkHover } from '../lib/hover';
-import { border, colors, fonts, layout } from '../theme/tokens';
+import { border, colors, fonts, layout, weights } from '../theme/tokens';
 
 const coverStyle: CSSProperties = {
   display: 'block',
@@ -21,6 +21,7 @@ const titleStyle: CSSProperties = {
   display: 'block',
   marginTop: '0.85rem',
   fontFamily: fonts.display,
+  fontWeight: weights.display,
   fontSize: 'clamp(1.25rem, 2.2vw, 1.55rem)',
   lineHeight: 1.2,
   color: colors.text,
@@ -41,7 +42,7 @@ export default function Gallery() {
         minHeight: '100vh',
         background: colors.bg,
         color: colors.text,
-        fontFamily: fonts.mono,
+        fontFamily: fonts.text,
         overflowX: 'clip',
       }}
     >
@@ -103,7 +104,7 @@ function GalleryTile({ piece }: { piece: GalleryPiece }) {
           <span
             aria-hidden="true"
             style={{
-              fontFamily: fonts.display,
+              fontFamily: fonts.text,
               fontSize: '0.78em',
               marginLeft: '0.35em',
               color: colors.textMuted,

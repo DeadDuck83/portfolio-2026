@@ -95,7 +95,7 @@ export default function ContextPanel({
             background: 'none',
             border: `1px solid ${border.accentStrong}`,
             color: colors.accentTint,
-            fontFamily: fonts.mono,
+            fontFamily: fonts.text,
             fontSize: '0.66rem',
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
@@ -109,7 +109,7 @@ export default function ContextPanel({
         </button>
         <span
           style={{
-            fontFamily: fonts.display,
+            fontFamily: fonts.text,
             fontStyle: 'italic',
             fontSize: '0.95rem',
             color: colors.textFaint,

@@ -2,7 +2,8 @@
 export type Corner = { h: 'left' | 'right'; v: 'top' | 'bottom' };
 
 const KEY = 'avatar_corner';
-export const DEFAULT_CORNER: Corner = { h: 'right', v: 'bottom' };
+// bottom-left: on the home page the call opens right where the hero's avatar tile sits
+export const DEFAULT_CORNER: Corner = { h: 'left', v: 'bottom' };
 
 export function loadCorner(): Corner {
   try {

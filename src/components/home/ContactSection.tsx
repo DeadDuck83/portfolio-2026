@@ -1,4 +1,4 @@
-import { border, colors, fonts } from '../../theme/tokens';
+import { border, colors, fonts, weights } from '../../theme/tokens';
 import EmailLink from '../EmailLink';
 import { outlinedCtaHover, solidCtaHover } from '../../lib/hover';
 import { CONTACT_EMAIL, RESUME_URL } from '../../data/site';
@@ -16,7 +16,7 @@ const outlinedCta = {
 };
 
 /**
- * Contact section — serif headline with an italic accent word, short
+ * Contact section — display headline with an accent-coloured word, short
  * paragraph, and CTA row (copy-email, outlined LinkedIn, optional Résumé).
  * Résumé opens the Google Doc share link from `RESUME_URL` when set.
  */
@@ -38,7 +38,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
         <h2
           style={{
             fontFamily: fonts.display,
-            fontWeight: 400,
+            fontWeight: weights.display,
             fontSize: 'clamp(2.6rem, 7vw, 5.6rem)',
             lineHeight: 1.02,
             margin: 0,
@@ -46,7 +46,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
           }}
         >
           Got a product that needs{' '}
-          <span style={{ fontStyle: 'italic', color: colors.accentBright }}>focus?</span>
+          <span style={{ color: colors.accentBright }}>focus?</span>
         </h2>
         <p
           style={{

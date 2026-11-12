@@ -1,7 +1,7 @@
 import { type MouseEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import type { CaseStudy } from '../../data/caseStudies/types';
-import { border, colors, fonts } from '../../theme/tokens';
+import { border, colors, fonts, weights } from '../../theme/tokens';
 
 /**
  * Full-width "Next case study" link block. Links to the next case study when
@@ -33,6 +33,7 @@ export default function NextCaseFooter({ nextCase }: { nextCase: CaseStudy['next
         <div
           style={{
             fontFamily: fonts.display,
+            fontWeight: weights.display,
             fontSize: 'clamp(2rem, 5vw, 3.4rem)',
             lineHeight: 1.05,
             marginTop: '0.8rem',
@@ -40,14 +41,14 @@ export default function NextCaseFooter({ nextCase }: { nextCase: CaseStudy['next
         >
           {nextCase.label}
           {nextCase.note && (
-            <span style={{ fontStyle: 'italic', fontSize: '0.5em', color: colors.textFaint }}>
+            <span style={{ fontFamily: fonts.text, fontWeight: 400, fontStyle: 'italic', fontSize: '0.5em', color: colors.textFaint }}>
               {' '}
               {nextCase.note}
             </span>
           )}
         </div>
       </div>
-      <span style={{ fontFamily: fonts.display, fontSize: '2rem', color: colors.accent }}>→</span>
+      <span style={{ fontFamily: fonts.text, fontSize: '2rem', color: colors.accent }}>→</span>
     </div>
   );
 

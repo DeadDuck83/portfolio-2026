@@ -1,5 +1,5 @@
 import type { Persona } from '../../data/caseStudies/types';
-import { colors, fonts } from '../../theme/tokens';
+import { colors, fonts, weights } from '../../theme/tokens';
 
 /**
  * A persona cell in the 02 Users grid: label, serif name, italic subtitle, and
@@ -11,12 +11,12 @@ export default function PersonaCard({ persona }: { persona: Persona }) {
       <div style={{ fontSize: '0.62rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: colors.accentBright }}>
         {persona.label}
       </div>
-      <div style={{ fontFamily: fonts.display, fontSize: 'clamp(1.5rem, 3vw, 2rem)', marginTop: '0.9rem' }}>
+      <div style={{ fontFamily: fonts.display, fontWeight: weights.display, fontSize: 'clamp(1.5rem, 3vw, 2rem)', marginTop: '0.9rem' }}>
         {persona.name}
       </div>
       <div
         style={{
-          fontFamily: fonts.display,
+          fontFamily: fonts.text,
           fontStyle: 'italic',
           fontSize: '1rem',
           color: colors.textFaint,
