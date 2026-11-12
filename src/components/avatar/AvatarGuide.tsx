@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useState, useSyncExternalSt
 import { track } from '../../lib/analytics';
 import { AVATAR_BASE } from './lines';
 import { cornerStyle, loadCorner, saveCorner, type Corner } from './corner';
-import { AVATAR_OPEN_EVENT, dockMounted, dockVisible, setCallOpen, subscribeDock } from './dock';
+import { AVATAR_OPEN_EVENT, dockMounted, dockVisible, setCallOpen, subscribeDock, unlockAvatarAudio } from './dock';
 import styles from './avatarGuide.module.css';
 
 // The call (Rive runtime + avatar, ~2.5 MB) loads only after the page has.
@@ -104,6 +104,7 @@ export default function AvatarGuide() {
           className={styles.fab}
           style={cornerStyle(corner)}
           onClick={() => {
+            unlockAvatarAudio();
             setOpen(true);
             track('Avatar reopened');
           }}

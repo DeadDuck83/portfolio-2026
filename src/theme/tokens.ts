@@ -69,6 +69,12 @@ export const weights = {
   display: 800,
 } as const;
 
+/**
+ * One corner radius for buttons, work tiles and the avatar card, so they read
+ * as one family (hero.css uses the same 8px).
+ */
+export const radius = { control: '8px' } as const;
+
 /** Shared layout constants used across sections. */
 export const layout = {
   maxWidth: 1240,

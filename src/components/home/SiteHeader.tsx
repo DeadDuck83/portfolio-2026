@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Wordmark from '../Wordmark';
-import { border, colors, fonts, layout } from '../../theme/tokens';
+import { border, colors, fonts, layout, radius } from '../../theme/tokens';
 import { accentLinkHover, outlinedCtaHover } from '../../lib/hover';
 
 const MOBILE_BP = 820;
@@ -117,6 +117,7 @@ export default function SiteHeader() {
                 textTransform: 'uppercase',
                 padding: '0.55rem 1.1rem',
                 border: `1px solid ${border.accentMed}`,
+                borderRadius: radius.control,
                 color: colors.accentTint,
               }}
               {...outlinedCtaHover}
@@ -132,6 +133,7 @@ export default function SiteHeader() {
             style={{
               background: 'none',
               border: `1px solid ${border.menuButton}`,
+              borderRadius: radius.control,
               color: colors.text,
               fontFamily: fonts.text,
               fontSize: '0.68rem',

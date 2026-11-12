@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { border, colors, fonts } from '../../theme/tokens';
+import { border, colors, fonts, radius } from '../../theme/tokens';
 
 /** Fixed scatter transforms per chip (rotation + offset), from the reference. */
 const SCATTER = [
@@ -94,6 +94,7 @@ export default function ContextPanel({
           style={{
             background: 'none',
             border: `1px solid ${border.accentStrong}`,
+            borderRadius: radius.control,
             color: colors.accentTint,
             fontFamily: fonts.text,
             fontSize: '0.66rem',

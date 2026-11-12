@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import Wordmark from '../Wordmark';
 import EmailLink from '../EmailLink';
-import { border, colors } from '../../theme/tokens';
+import { border, colors, radius } from '../../theme/tokens';
 import { outlinedCtaHover } from '../../lib/hover';
 
 export interface Chapter {
@@ -67,6 +67,7 @@ export default function CaseStudyHeader({
               textTransform: 'uppercase',
               padding: '0.5rem clamp(0.6rem, 2vw, 1rem)',
               border: `1px solid ${border.accentMed}`,
+              borderRadius: radius.control,
               color: colors.accentTint,
               whiteSpace: 'nowrap',
             }}

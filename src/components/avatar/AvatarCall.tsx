@@ -19,7 +19,7 @@ import {
   type Shirt,
 } from './lines';
 import { cornerStyle, nearestCorner, type Corner } from './corner';
-import { dockSlotRect } from './dock';
+import { dockSlotRect, registerAudioUnlock } from './dock';
 import { useEyeFollow } from './eyeFollow';
 import styles from './avatarGuide.module.css';
 
@@ -119,14 +119,24 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rive]);
 
-  // rest the avatar while the card is minimized
+  // the tap that opens the card (hero tile, floating button) unlocks his voice
+  useEffect(() => {
+    registerAudioUnlock(() => ctl.current?.unlock());
+    return () => registerAudioUnlock(null);
+  }, []);
+
+  // rest the avatar while the card is minimized, and end any walk under way
+  // (otherwise it carries on, scrolling the page and talking behind the closed card)
+  useEffect(() => {
+    if (open) return;
+    askToken.current++;
+    ctl.current?.stop();
+    setBusy(null);
+  }, [open]);
   useEffect(() => {
     if (!rive) return;
     if (open) rive.play();
-    else {
-      ctl.current?.stop();
-      rive.pause();
-    }
+    else rive.pause();
   }, [open, rive]);
 
   // Compact: chat tucks away, face shrinks; hover / tap brings it back.
@@ -215,7 +225,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     if (!from || !to.width || calm()) return;
     // stays off until the card is hidden again; turning it back on here would restart the pop-in
     card.style.animation = 'none';
-    card.animate([{ transformOrigin: 'top left', transform: boxOnto(from, to), borderRadius: '18px' }, { transformOrigin: 'top left', transform: 'none' }], {
+    card.animate([{ transformOrigin: 'top left', transform: boxOnto(from, to), borderRadius: '8px' }, { transformOrigin: 'top left', transform: 'none' }], {
       duration: 620,
       easing: EASE_OUT,
     });
@@ -241,7 +251,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     const from = card.getBoundingClientRect();
     card.querySelector(`.${styles.chat}`)?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' });
     const anim = card.animate(
-      [{ transformOrigin: 'top left', transform: 'none' }, { transformOrigin: 'top left', transform: boxOnto(to, from), borderRadius: '18px' }],
+      [{ transformOrigin: 'top left', transform: 'none' }, { transformOrigin: 'top left', transform: boxOnto(to, from), borderRadius: '8px' }],
       { duration: 460, easing: 'cubic-bezier(0.5, 0, 0.2, 1)', fill: 'forwards' },
     );
     anim.onfinish = () => onClose();
@@ -319,14 +329,32 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     const ends = wordEnds(t);
     const id = post({ text: '', live: true });
     let shown = 0;
-    const finished = await c.speak(line, (time) => {
+    const onTime = (time: number) => {
       let n = shown;
       while (n < t.words.length && t.words[n][1] <= time) n++;
       if (n !== shown) {
         shown = n;
         patch(id, { text: t.text.slice(0, ends[n - 1]) });
       }
-    });
+    };
+    let result = await c.speak(line, onTime);
+    if (result === 'blocked' && !c.muted) {
+      // The browser wouldn't play sound without a fresh tap: carry on muted,
+      // with captions. The next tap (or the sound button) turns it back on.
+      autoMuted.current = true;
+      setMuted(true);
+      c.setMuted(true);
+      result = await c.speak(line, onTime);
+    }
+    if (result === 'blocked') {
+      // no audio at all: show the line and give it the time it would have
+      // taken to say, so a walk never races ahead in silence
+      patch(id, { text: t.text, live: false, ...extra });
+      const last = t.words[t.words.length - 1]?.[1] ?? 0;
+      await new Promise((r) => window.setTimeout(r, Math.max(2500, (last + 1) * 1000)));
+      return;
+    }
+    const finished = result === 'done';
     const said = finished || (keep && shown === 0) ? t.text : shown > 0 ? t.text.slice(0, ends[shown - 1]).trimEnd() + '…' : '';
     patch(id, { text: said, live: false, ...(finished ? extra : {}) });
   };
@@ -359,8 +387,13 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, ctlReady]);
 
-  /** The visitor asked for something: if he was only muted for autoplay, turn the sound on. */
+  /**
+   * The visitor asked for something (always from a tap or click): unlock the
+   * audio for the lines to come, and if he was only muted for autoplay, turn
+   * the sound on.
+   */
   const wake = () => {
+    ctl.current?.unlock();
     if (!autoMuted.current) return;
     autoMuted.current = false;
     setMuted(false);
@@ -516,6 +549,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
   };
 
   const toggleSound = () => {
+    ctl.current?.unlock();
     autoMuted.current = false;
     const m = !muted;
     setMuted(m);

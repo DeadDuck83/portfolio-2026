@@ -6,12 +6,14 @@
  * - `callOpen`: the call card is open, so the tile steps aside.
  * - the tile's element, so the call card can grow out of it and shrink back
  *   into it.
+ * - the card's audio unlock, so the tap that opens it can unlock his voice.
  */
 type Listener = () => void;
 
 let visible = false;
 let open = false;
 let slot: HTMLElement | null = null;
+let unlock: (() => void) | null = null;
 const listeners = new Set<Listener>();
 const emit = () => listeners.forEach((l) => l());
 
@@ -53,7 +55,17 @@ export function dockSlotRect(): DOMRect | null {
   return r;
 }
 
-/** Ask the guide to open its call card. */
+/** The call card hands over its audio unlock (see AvatarController.unlock). */
+export function registerAudioUnlock(fn: (() => void) | null) {
+  unlock = fn;
+}
+/** Call from a tap that opens the card, so his greeting can have sound. */
+export function unlockAvatarAudio() {
+  unlock?.();
+}
+
+/** Ask the guide to open its call card. Call from the tap itself. */
 export function openAvatar(source: string) {
+  unlockAvatarAudio();
   window.dispatchEvent(new CustomEvent(AVATAR_OPEN_EVENT, { detail: { source } }));
 }

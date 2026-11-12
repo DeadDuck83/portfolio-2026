@@ -1,4 +1,4 @@
-import { border, colors, fonts, weights } from '../../theme/tokens';
+import { border, colors, fonts, radius, weights } from '../../theme/tokens';
 import EmailLink from '../EmailLink';
 import { outlinedCtaHover, solidCtaHover } from '../../lib/hover';
 import { CONTACT_EMAIL, RESUME_URL } from '../../data/site';
@@ -12,6 +12,7 @@ const outlinedCta = {
   textTransform: 'uppercase' as const,
   color: colors.textBody,
   border: '1px solid rgba(236,230,218,0.15)',
+  borderRadius: radius.control,
   padding: '1rem 1.5rem',
 };
 
@@ -81,6 +82,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
               textTransform: 'uppercase',
               fontWeight: 700,
               padding: '1rem 1.7rem',
+              borderRadius: radius.control,
             }}
             {...solidCtaHover}
           >
