@@ -9,7 +9,11 @@ import AboutRail from '../components/home/AboutRail';
 // now the work section. Kept for reference until the redesign settles.
 import ContactSection from '../components/home/ContactSection';
 import SiteFooter from '../components/SiteFooter';
+import { useSectionViews } from '../hooks/useSectionViews';
+import { track, type HomeSectionId } from '../lib/analytics';
 import { colors, fonts } from '../theme/tokens';
+
+const SECTIONS: readonly HomeSectionId[] = ['work', 'about', 'contact'];
 
 /**
  * Home page: hero (name column + selected work) → about rail → contact → footer.
@@ -21,6 +25,8 @@ export default function Home() {
   useEffect(() => {
     document.title = 'Derek Moore — Product & Systems Designer';
   }, []);
+  // the hero itself is always on screen at landing, so it isn't counted
+  useSectionViews('home', SECTIONS, (sectionId) => track('PortfolioSectionViewed', { sectionId }));
 
   return (
     <div

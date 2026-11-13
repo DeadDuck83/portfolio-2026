@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from 'react';
 import { CONTACT_EMAIL } from '../data/site';
+import { track, type AnalyticsEvents } from '../lib/analytics';
 
 async function copyEmail() {
   try {
@@ -31,10 +32,15 @@ async function copyEmail() {
  */
 export default function EmailLink({
   children,
+  source,
   onClick,
   style,
   ...rest
-}: Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & { children: ReactNode }) {
+}: Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & {
+  children: ReactNode;
+  /** where this copy button sits, for the EmailCopied event */
+  source: AnalyticsEvents['EmailCopied']['source'];
+}) {
   const [copied, setCopied] = useState(false);
   const timer = useRef(0);
 
@@ -60,6 +66,7 @@ export default function EmailLink({
       onClick={(e) => {
         onClick?.(e);
         if (e.defaultPrevented) return;
+        track('EmailCopied', { source });
         void copyEmail().then(() => {
           setCopied(true);
           window.clearTimeout(timer.current);

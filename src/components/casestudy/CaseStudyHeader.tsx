@@ -61,6 +61,7 @@ export default function CaseStudyHeader({
             ← All work
           </Link>
           <EmailLink
+            source="case-header"
             style={{
               fontSize: '0.7rem',
               letterSpacing: '0.18em',

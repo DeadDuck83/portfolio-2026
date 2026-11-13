@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
-import { track } from '../../lib/analytics';
+import { noteCaseStudySource, projectIdFromPath, track } from '../../lib/analytics';
 import { colors, fonts, layout, weights } from '../../theme/tokens';
 import { chip } from '../../theme/patterns';
 
@@ -82,21 +82,19 @@ export default function WorkList() {
         }}
       >
         {work.map((item, index) => (
-          <WorkBand key={item.n} item={item} flip={index % 2 === 1} />
+          <WorkBand key={item.n} item={item} flip={index % 2 === 1} position={index + 1} />
         ))}
       </div>
     </section>
   );
 }
 
-function WorkBand({ item, flip }: { item: WorkItem; flip: boolean }) {
+function WorkBand({ item, flip, position }: { item: WorkItem; flip: boolean; position: number }) {
   const onWorkClick = () => {
-    track('WorkItemClick', {
-      title: item.title,
-      numeral: item.n,
-      ...(item.to ? { route: item.to } : {}),
-      ...(item.href ? { href: item.href } : {}),
-    });
+    const projectId = projectIdFromPath(item.to);
+    if (!projectId) return;
+    noteCaseStudySource('work-grid');
+    track('WorkItemClick', { projectId, position, source: 'work-list' });
   };
 
   // The image and the title both open the case study. The image link is

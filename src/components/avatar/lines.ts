@@ -72,6 +72,8 @@ export const KEEP_GOING_FROM = 1;
 export type TourStep = { line: LineId; focus?: GuideFocus };
 
 export type Chip = {
+  /** stable id for analytics (labels get reworded) */
+  id: string;
   label: string;
   line?: LineId;
   pick?: readonly LineId[]; // one at random, no repeats until all are heard
@@ -106,6 +108,7 @@ export const CASE_STUDIES: Destination[] = [
 export const CHIPS: Chip[] = [
   {
     // walks the "nonlinear path" section, anchoring each chapter as he talks
+    id: 'journey',
     label: 'Tell me about your work journey',
     go: '/#about',
     tour: [
@@ -117,12 +120,12 @@ export const CHIPS: Chip[] = [
       { line: 'tour5', focus: { section: 'about', step: 5 } }, // "Today, I bring it together"
     ],
   },
-  { label: 'Show me your work', line: 'showwork', go: '/#work' },
-  { label: 'Walk me through a case study', line: 'casestudy', choices: CASE_STUDIES },
-  { label: 'What are your technical skills?', line: 'skills' },
-  { label: 'Are you really an AI?', line: 'realai' },
-  { label: 'Words of wisdom', pick: WISDOM, intro: 'wisdomintro' },
-  { label: 'I like your shirt', line: 'shirt', shirts: true },
+  { id: 'work', label: 'Show me your work', line: 'showwork', go: '/#work' },
+  { id: 'case-study', label: 'Walk me through a case study', line: 'casestudy', choices: CASE_STUDIES },
+  { id: 'skills', label: 'What are your technical skills?', line: 'skills' },
+  { id: 'real-ai', label: 'Are you really an AI?', line: 'realai' },
+  { id: 'wisdom', label: 'Words of wisdom', pick: WISDOM, intro: 'wisdomintro' },
+  { id: 'shirt', label: 'I like your shirt', line: 'shirt', shirts: true },
 ];
 
 /** Character offset where each word of `track.words` ends inside `track.text`. */

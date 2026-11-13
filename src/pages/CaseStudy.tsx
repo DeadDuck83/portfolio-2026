@@ -5,6 +5,8 @@ import { collectCaseStudyImages } from '../data/caseStudies/figures';
 import { border, colors, fonts, layout, weights } from '../theme/tokens';
 import { useScrollProgress } from '../hooks/useScrollProgress';
 import { useGuideFocus } from '../lib/guide';
+import { useSectionViews } from '../hooks/useSectionViews';
+import { projectIdFromPath, takeCaseStudySource, track, type CaseSectionId } from '../lib/analytics';
 import Grain from '../components/Grain';
 import SiteFooter from '../components/SiteFooter';
 import PlaceholderFigure from '../components/PlaceholderFigure';
@@ -34,6 +36,17 @@ const h2Style = {
 };
 const bodyP = { fontSize: '0.86rem', lineHeight: 1.75, color: colors.textBody };
 
+/** Chapter element id → the section name analytics uses (the same for every case study). */
+const SECTION_OF: Record<string, CaseSectionId> = {
+  c0: 'brief',
+  c1: 'context',
+  'c-users': 'users',
+  'c-process': 'process',
+  'c-solution': 'solution',
+  'c-outcome': 'outcome',
+};
+const CHAPTER_IDS = Object.keys(SECTION_OF);
+
 /**
  * Data-driven case study page. Everything renders from the CaseStudy object
  * looked up by URL slug — new case studies are new data files, not new layouts.
@@ -52,6 +65,18 @@ export default function CaseStudy() {
   useEffect(() => {
     if (cs) document.title = `${cs.eyebrowRight} — Derek Moore`;
   }, [cs]);
+
+  // once per visit (the ref skips Strict Mode's second run; each case study is a fresh mount)
+  const projectId = projectIdFromPath(`/work/${slug}`);
+  const viewed = useRef<string | null>(null);
+  useEffect(() => {
+    if (!projectId || viewed.current === projectId) return;
+    viewed.current = projectId;
+    track('CaseStudyViewed', { projectId, source: takeCaseStudySource() });
+  }, [projectId]);
+  useSectionViews(projectId ?? 'none', projectId ? CHAPTER_IDS : [], (id) => {
+    if (projectId) track('CaseStudySectionViewed', { projectId, sectionId: SECTION_OF[id] });
+  });
 
   // The avatar narrates a case study section by section: bring each one up as he starts it.
   const focusSection = useCallback((id: string) => {

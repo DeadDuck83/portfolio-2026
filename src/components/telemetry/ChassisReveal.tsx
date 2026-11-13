@@ -139,7 +139,7 @@ export default function ChassisReveal({ children }: { children: ReactNode }) {
     setBusy(true);
     try {
       settleOpen();
-      track('Footer pulled up');
+      track('TelemetryBayOpened', {});
       guideNudge('footer'); // the avatar asks what they're looking for down there
     } catch {
       settleClosed();

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
-import { track } from '../../lib/analytics';
+import { noteCaseStudySource, track, trackOnce, type AvatarPromptKind } from '../../lib/analytics';
 import { guideFocus, setGuideShirt, useGuideNudge } from '../../lib/guide';
 import { AvatarController, State } from './controller';
 import {
@@ -113,6 +113,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       onReady();
     } catch (err) {
       console.error(err);
+      trackOnce('avatar-load', 'AvatarError', { errorCategory: 'avatar-load' });
     }
     return () => ctl.current?.dispose();
     // onReady is stable enough; re-running would rebuild the controller
@@ -124,6 +125,28 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     registerAudioUnlock(() => ctl.current?.unlock());
     return () => registerAudioUnlock(null);
   }, []);
+
+  // AvatarClosed: how long it was open and how many things they asked
+  const session = useRef<{ at: number; count: number } | null>(null);
+  useEffect(() => {
+    if (open) {
+      session.current = { at: performance.now(), count: 0 };
+      return;
+    }
+    if (!session.current) return;
+    const { at, count } = session.current;
+    session.current = null;
+    track('AvatarClosed', { durationSeconds: Math.round((performance.now() - at) / 1000), interactionCount: count });
+  }, [open]);
+
+  /** The visitor picked something: count it, and return a callback for when the answer plays out. */
+  const prompted = (promptId: string, kind: AvatarPromptKind) => {
+    if (session.current) session.current.count++;
+    track('AvatarPromptSelected', { promptId, kind });
+    const at = performance.now();
+    return () =>
+      track('AvatarInteractionCompleted', { promptId, kind, durationSeconds: Math.round((performance.now() - at) / 1000) });
+  };
 
   // rest the avatar while the card is minimized, and end any walk under way
   // (otherwise it carries on, scrolling the page and talking behind the closed card)
@@ -338,6 +361,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       }
     };
     let result = await c.speak(line, onTime);
+    if (result === 'blocked') trackOnce('audio-blocked', 'AvatarError', { errorCategory: 'audio-blocked' });
     if (result === 'blocked' && !c.muted) {
       // The browser wouldn't play sound without a fresh tap: carry on muted,
       // with captions. The next tap (or the sound button) turns it back on.
@@ -363,7 +387,6 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
   // the browser won't play sound, so the hello runs muted with captions.
   useEffect(() => {
     if (!open || !ctlReady || live) return;
-    track('Avatar joined', { mode: auto ? 'auto' : 'opened' });
     if (auto) {
       autoMuted.current = true;
       setMuted(true);
@@ -414,7 +437,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     if (busy && (!camera || typing)) return; // typed answers aren't interruptible
     wake();
     const token = ++askToken.current;
-    track('Avatar chip asked', { chip: chip.label, camera });
+    const completed = prompted(chip.id, chip.tour ? 'tour' : 'question');
     ctl.current?.stop();
     post({ text: chip.label, me: true });
     setBusy(chip.label);
@@ -442,7 +465,10 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     } else if (chip.line) {
       await say(chip.line, extra);
     }
-    if (token === askToken.current) setBusy(null);
+    if (token === askToken.current) {
+      setBusy(null);
+      completed();
+    }
   };
 
   // a shirt pick: he changes into it, then says something about it (and
@@ -451,7 +477,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     if (busy && (!camera || typing)) return;
     wake();
     const token = ++askToken.current;
-    track('Avatar shirt', { shirt: s.label });
+    const completed = prompted(`shirt-${s.label.toLowerCase().replace(/\W+/g, '-')}`, 'shirt');
     ctl.current?.stop();
     post({ text: s.label, me: true });
     setBusy('shirt');
@@ -468,7 +494,10 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       post({ text: '😄', shirts: true });
       await new Promise((r) => window.setTimeout(r, 1200));
     }
-    if (token === askToken.current) setBusy(null);
+    if (token === askToken.current) {
+      setBusy(null);
+      completed();
+    }
   };
 
   // remarks on what the visitor does on the page (only once they've said hi)
@@ -476,7 +505,6 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     (n: 'footer') => {
       if (!live || !open || n !== 'footer') return;
       if (busy && (!camera || typing)) return;
-      track('Avatar nudge', { nudge: n });
       const token = ++askToken.current;
       ctl.current?.stop();
       setBusy('footer');
@@ -495,16 +523,20 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     if (busy && (!camera || typing)) return;
     wake();
     const token = ++askToken.current;
-    track('Avatar case study', { study: d.walk, part: 'short' });
+    const completed = prompted(`walk-${d.walk}`, 'case-walk');
     ctl.current?.stop();
     post({ text: d.label, me: true });
     setBusy('case');
+    noteCaseStudySource('avatar');
     navigate(d.to);
     await new Promise((r) => window.setTimeout(r, 700)); // let the page mount
     if (token !== askToken.current) return;
     guideFocus({ section: 'case', step: 'c0' });
     await say(CASE_WALKS[d.walk].short, { more: d.walk });
-    if (token === askToken.current) setBusy(null);
+    if (token === askToken.current) {
+      setBusy(null);
+      completed();
+    }
   };
 
   // "Keep going": the full story, beat by beat, each anchored on its section
@@ -512,7 +544,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     if (busy && (!camera || typing)) return;
     wake();
     const token = ++askToken.current;
-    track('Avatar case study', { study: id, part: 'full' });
+    const completed = prompted(`keep-going-${id}`, 'keep-going');
     ctl.current?.stop();
     post({ text: 'Keep going', me: true });
     setBusy('case');
@@ -524,7 +556,10 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       await say(beat.line);
       if (!camera && token === askToken.current) await new Promise((r) => window.setTimeout(r, 1800));
     }
-    if (token === askToken.current) setBusy(null);
+    if (token === askToken.current) {
+      setBusy(null);
+      completed();
+    }
   };
 
   const goTo = (d: Destination, chosen = false) => {
@@ -532,7 +567,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       void walkCase(d as Destination & { walk: CaseId });
       return;
     }
-    track('Avatar navigated', { to: d.to });
+    noteCaseStudySource('avatar');
     if (chosen) {
       ctl.current?.stop();
       post({ text: d.label, me: true });
@@ -543,7 +578,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
 
   const toggleCamera = () => {
     const on = !camera;
-    track(on ? 'Avatar camera on' : 'Avatar camera off');
+    track('AvatarSettingChanged', { setting: 'camera', on });
     setCamera(on);
     if (!on) ctl.current?.stop();
   };
@@ -552,6 +587,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     ctl.current?.unlock();
     autoMuted.current = false;
     const m = !muted;
+    track('AvatarSettingChanged', { setting: 'sound', on: !m });
     setMuted(m);
     ctl.current?.setMuted(m);
   };
@@ -709,7 +745,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
             {/* not a real input yet: tapping it gets a shrug and an honest answer */}
             <button
               className={styles.composer}
-              onClick={() => void ask({ label: 'Can I type my own question?', line: 'typing' })}
+              onClick={() => void ask({ id: 'free-typing', label: 'Can I type my own question?', line: 'typing' })}
             >
               Free typing is coming soon
             </button>

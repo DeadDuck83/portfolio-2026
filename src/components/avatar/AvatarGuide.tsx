@@ -40,7 +40,6 @@ export default function AvatarGuide() {
   const moveTo = (c: Corner) => {
     setCorner(c);
     saveCorner(c);
-    track('Avatar moved', { corner: `${c.v}-${c.h}` });
   };
 
   useEffect(() => {
@@ -56,11 +55,11 @@ export default function AvatarGuide() {
 
   // The hero's docked invite (dock.ts) can open the card directly.
   useEffect(() => {
-    const onOpen = (e: Event) => {
+    const onOpen = () => {
       setLoad(true);
       setAuto(false);
       setOpen(true);
-      track('Avatar opened', { from: (e as CustomEvent<{ source?: string }>).detail?.source ?? 'dock' });
+      track('AvatarOpened', { source: 'hero-tile' }); // the only caller of openAvatar() today
     };
     window.addEventListener(AVATAR_OPEN_EVENT, onOpen);
     return () => window.removeEventListener(AVATAR_OPEN_EVENT, onOpen);
@@ -77,7 +76,7 @@ export default function AvatarGuide() {
     if (ready && minTimeUp && !dismissed && !dockMounted()) {
       setAuto(true);
       setOpen(true);
-      track('Avatar popped up');
+      track('AvatarOpened', { source: 'auto' });
     }
   }, [ready, minTimeUp, dismissed]);
 
@@ -106,7 +105,7 @@ export default function AvatarGuide() {
           onClick={() => {
             unlockAvatarAudio();
             setOpen(true);
-            track('Avatar reopened');
+            track('AvatarOpened', { source: 'button' });
           }}
           aria-label="Talk to Derek's avatar"
         >

@@ -21,7 +21,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
 import { RESUME_URL } from '../../data/site';
-import { track } from '../../lib/analytics';
+import { noteCaseStudySource, projectIdFromPath, track } from '../../lib/analytics';
 import EmailLink from '../EmailLink';
 import HeroAvatar from '../avatar/HeroAvatar';
 // PixelCameo (the camera that brings out pixel Derek) is off for this
@@ -56,7 +56,7 @@ export default function Hero() {
             <a
               className="hx__btn hx__btn--solid"
               href="#contact"
-              onClick={() => track('GetInTouchClick')}
+              onClick={() => track('GetInTouchClick', { source: 'hero' })}
             >
               Get in touch
             </a>
@@ -70,16 +70,30 @@ export default function Hero() {
           <HeroAvatar />
           <ul className="hx__links">
             <li>
-              <a className="hx__link" href={LINKEDIN_URL} target="_blank" rel="noopener">
+              <a
+                className="hx__link"
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener"
+                onClick={() => track('ExternalProfileClick', { profile: 'linkedin', source: 'hero' })}
+              >
                 LinkedIn <span aria-hidden="true">↗</span>
               </a>
             </li>
             <li>
-              <EmailLink className="hx__link">Copy email</EmailLink>
+              <EmailLink className="hx__link" source="hero">
+                Copy email
+              </EmailLink>
             </li>
             {RESUME_URL && (
               <li>
-                <a className="hx__link" href={RESUME_URL} target="_blank" rel="noopener">
+                <a
+                  className="hx__link"
+                  href={RESUME_URL}
+                  target="_blank"
+                  rel="noopener"
+                  onClick={() => track('ResumeClick', { source: 'hero' })}
+                >
                   Résumé <span aria-hidden="true">↗</span>
                 </a>
               </li>
@@ -91,7 +105,7 @@ export default function Hero() {
       <div id="work" className="hx__work" ref={workRef} aria-label="Selected work">
         <div className="hx__grid">
           {work.map((item, i) => (
-            <Tile key={item.n} item={item} eager={i < 2} />
+            <Tile key={item.n} item={item} position={i + 1} eager={i < 2} />
           ))}
         </div>
       </div>
@@ -99,14 +113,16 @@ export default function Hero() {
   );
 }
 
-function Tile({ item, eager }: { item: WorkItem; eager: boolean }) {
-  const onClick = () =>
-    track('WorkItemClick', {
-      title: item.title,
-      numeral: item.n,
-      ...(item.to ? { route: item.to } : {}),
-      ...(item.href ? { href: item.href } : {}),
-    });
+/** A work item was picked: which project, its place in the list, and tell the case study how they came. */
+function trackWorkItem(item: WorkItem, position: number) {
+  const projectId = projectIdFromPath(item.to);
+  if (!projectId) return;
+  noteCaseStudySource('work-grid');
+  track('WorkItemClick', { projectId, position, source: 'hero-grid' });
+}
+
+function Tile({ item, position, eager }: { item: WorkItem; position: number; eager: boolean }) {
+  const onClick = () => trackWorkItem(item, position);
 
   const body: ReactNode = (
     <>

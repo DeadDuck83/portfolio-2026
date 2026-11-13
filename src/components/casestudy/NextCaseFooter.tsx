@@ -1,6 +1,7 @@
 import { type MouseEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import type { CaseStudy } from '../../data/caseStudies/types';
+import { noteCaseStudySource } from '../../lib/analytics';
 import { border, colors, fonts, weights } from '../../theme/tokens';
 
 /**
@@ -55,7 +56,13 @@ export default function NextCaseFooter({ nextCase }: { nextCase: CaseStudy['next
   return (
     <section style={{ borderTop: `1px solid ${border.hairline}` }}>
       {nextCase.to ? (
-        <Link to={nextCase.to} style={{ display: 'block' }} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+        <Link
+          to={nextCase.to}
+          style={{ display: 'block' }}
+          onMouseEnter={onEnter}
+          onMouseLeave={onLeave}
+          onClick={() => noteCaseStudySource('next-case')}
+        >
           {inner}
         </Link>
       ) : (

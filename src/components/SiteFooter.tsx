@@ -3,6 +3,7 @@ import Wordmark from './Wordmark';
 import EmailLink from './EmailLink';
 import { border, colors, layout } from '../theme/tokens';
 import { accentLinkHover } from '../lib/hover';
+import { track } from '../lib/analytics';
 
 const linkStyle = {
   fontSize: '0.66rem',
@@ -51,7 +52,12 @@ export default function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'c
               <a href="#work" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
                 Work
               </a>
-              <a href="#contact" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
+              <a
+                href="#contact"
+                style={linkStyle}
+                {...accentLinkHover(colors.textMuted)}
+                onClick={() => track('GetInTouchClick', { source: 'footer' })}
+              >
                 Contact
               </a>
             </>
@@ -60,7 +66,7 @@ export default function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'c
               <Link to="/#work" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
                 All work
               </Link>
-              <EmailLink style={linkStyle} {...accentLinkHover(colors.textMuted)}>
+              <EmailLink style={linkStyle} {...accentLinkHover(colors.textMuted)} source="footer">
                 Contact
               </EmailLink>
             </>

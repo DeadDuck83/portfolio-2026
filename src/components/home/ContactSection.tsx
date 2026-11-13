@@ -2,6 +2,7 @@ import { border, colors, fonts, radius, weights } from '../../theme/tokens';
 import EmailLink from '../EmailLink';
 import { outlinedCtaHover, solidCtaHover } from '../../lib/hover';
 import { CONTACT_EMAIL, RESUME_URL } from '../../data/site';
+import { track } from '../../lib/analytics';
 
 const outlinedCta = {
   display: 'inline-flex',
@@ -71,6 +72,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
           }}
         >
           <EmailLink
+            source="contact"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -92,6 +94,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             href="https://linkedin.com/in/derekjmoore1"
             target="_blank"
             rel="noopener"
+            onClick={() => track('ExternalProfileClick', { profile: 'linkedin', source: 'contact' })}
             style={outlinedCta}
             {...outlinedCtaHover}
           >
@@ -102,6 +105,7 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
               href={resumeHref}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track('ResumeClick', { source: 'contact' })}
               style={outlinedCta}
               {...outlinedCtaHover}
             >

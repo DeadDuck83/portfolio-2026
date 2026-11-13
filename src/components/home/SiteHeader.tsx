@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Wordmark from '../Wordmark';
 import { border, colors, fonts, layout, radius } from '../../theme/tokens';
 import { accentLinkHover, outlinedCtaHover } from '../../lib/hover';
+import { track } from '../../lib/analytics';
 
 const MOBILE_BP = 820;
 
@@ -121,6 +122,7 @@ export default function SiteHeader() {
                 color: colors.accentTint,
               }}
               {...outlinedCtaHover}
+              onClick={() => track('GetInTouchClick', { source: 'header' })}
             >
               Contact
             </a>
@@ -187,7 +189,10 @@ export default function SiteHeader() {
           </a>
           <a
             href="#contact"
-            onClick={closeMenu}
+            onClick={() => {
+              track('GetInTouchClick', { source: 'menu' });
+              closeMenu();
+            }}
             style={{
               padding: '0.85rem 0',
               fontSize: '0.8rem',
