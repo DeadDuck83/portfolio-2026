@@ -1,10 +1,17 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+
+/** localhost only: an orange "D" in the tab, so the test tab is easy to tell from the live site. */
+const devFavicon: Plugin = {
+  name: 'dev-favicon',
+  apply: 'serve',
+  transformIndexHtml: (html) => html.replace('href="/favicon.svg"', 'href="/favicon-dev.svg"'),
+};
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), devFavicon],
   test: {
     // Component tests need a DOM; jsdom provides one in Node.
     environment: 'jsdom',

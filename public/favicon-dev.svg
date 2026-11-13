@@ -1,0 +1,6 @@
+<!-- localhost only (vite.config.ts swaps it in): orange, so the test tab stands out -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#1a1712" />
+  <path transform="translate(5.396 28.000) scale(0.015000 -0.015000)" fill="#ff7a45" d="M84 0V1600H467Q679 1600 773.5 1509.5Q868 1419 872 1212Q875 1065 876.0 932.5Q877 800 876.0 668.5Q875 537 872 390Q868 182 773.5 91.0Q679 0 467 0ZM359 242H467Q531 242 563.5 271.5Q596 301 598 358Q600 469 601.5 580.0Q603 691 603.0 801.5Q603 912 601.5 1023.0Q600 1134 597 1244Q596 1300 563.5 1329.0Q531 1358 467 1358H359Z" />
+  <circle cx="22.54" cy="25.20" r="2.8" fill="#848945" />
+</svg>
