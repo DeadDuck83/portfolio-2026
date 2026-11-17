@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router';
 import { Alignment, Fit, Layout, useRive } from '@rive-app/react-webgl2';
 import { noteCaseStudySource, track, trackOnce, type AvatarPromptKind } from '../../lib/analytics';
@@ -21,9 +22,12 @@ import {
 import { cornerStyle, nearestCorner, type Corner } from './corner';
 import { dockSlotRect, registerAudioUnlock } from './dock';
 import { useEyeFollow } from './eyeFollow';
+import SkillsShare from './SkillsShare';
+import { SKILLS_LINE, cueMoments, skillCues, type SkillCues } from './skills';
 import styles from './avatarGuide.module.css';
 
 const IDLE_MS = 4000; // untouched this long (and not talking) → compact
+const SHARE_HOLD_MS = 6000; // the finished skills "screen share" stays up this long
 
 const canHover = () => window.matchMedia('(hover: hover)').matches;
 const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -85,6 +89,10 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
   const bags = useRef(new Map<string, () => LineId>());
   const introDone = useRef(new Set<string>());
   const cardRef = useRef<HTMLElement>(null);
+  // the skills "screen share": which line owns it (a newer line takes it over) and its fade-out
+  const [share, setShare] = useState<{ cues: SkillCues; t: number; leaving?: boolean } | null>(null);
+  const shareSeq = useRef(0);
+  const shareTimer = useRef<number | undefined>(undefined);
   const [compact, setCompact] = useState(false);
   // the question chips scroll sideways; track which ends have more
   const chipsRef = useRef<HTMLDivElement>(null);
@@ -155,7 +163,11 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     askToken.current++;
     ctl.current?.stop();
     setBusy(null);
+    hideShare(0, ++shareSeq.current);
+    // hideShare only touches refs and state setters
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+  useEffect(() => () => window.clearTimeout(shareTimer.current), []);
   useEffect(() => {
     if (!rive) return;
     if (open) rive.play();
@@ -334,30 +346,65 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
   };
   const patch = (id: number, p: Partial<Msg>) => setMsgs((all) => all.map((m) => (m.id === id ? { ...m, ...p } : m)));
 
+  /** Fade the skills share out after `after` ms, unless a newer line has taken it over since. */
+  const hideShare = (after: number, seq = shareSeq.current) => {
+    if (seq !== shareSeq.current) return;
+    window.clearTimeout(shareTimer.current);
+    shareTimer.current = window.setTimeout(() => {
+      if (seq !== shareSeq.current) return;
+      setShare((s) => (s ? { ...s, leaving: true } : s));
+      shareTimer.current = window.setTimeout(() => {
+        if (seq === shareSeq.current) setShare(null);
+      }, 450);
+    }, after);
+  };
+
   /**
    * Derek answers: spoken with the message building in step (camera on), or
    * typed (camera off). `keep`: if the audio never starts, still show the line.
+   * The skills answer also "shares his screen": each section and tool appears
+   * on the page as he names it.
    */
   const say = async (line: LineId, extra: Partial<Msg> = {}, withCamera = camera, keep = false) => {
     const c = ctl.current;
     if (!c) return;
     const t = await c.track(line);
+    const seq = ++shareSeq.current;
+    const cues = line === SKILLS_LINE ? skillCues(t.words) : null;
+    const showShare = (time: number) => {
+      if (cues && seq === shareSeq.current) setShare({ cues, t: time });
+    };
+    window.clearTimeout(shareTimer.current);
+    if (cues) showShare(-1);
+    else hideShare(0, seq);
     if (!withCamera) {
       setTyping(true);
       await new Promise((r) => window.setTimeout(r, 600 + Math.min(1600, t.text.length * 10)));
       setTyping(false);
       post({ text: t.text, ...extra });
+      if (cues) {
+        showShare(Infinity);
+        hideShare(SHARE_HOLD_MS * 2, seq);
+      }
       return;
     }
     const ends = wordEnds(t);
     const id = post({ text: '', live: true });
     let shown = 0;
+    const moments = cues ? cueMoments(cues) : [];
+    let passed = 0;
     const onTime = (time: number) => {
       let n = shown;
       while (n < t.words.length && t.words[n][1] <= time) n++;
       if (n !== shown) {
         shown = n;
         patch(id, { text: t.text.slice(0, ends[n - 1]) });
+      }
+      let p = passed;
+      while (p < moments.length && moments[p] <= time) p++;
+      if (p !== passed) {
+        passed = p;
+        showShare(time);
       }
     };
     let result = await c.speak(line, onTime);
@@ -374,11 +421,17 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       // no audio at all: show the line and give it the time it would have
       // taken to say, so a walk never races ahead in silence
       patch(id, { text: t.text, live: false, ...extra });
+      showShare(Infinity);
       const last = t.words[t.words.length - 1]?.[1] ?? 0;
       await new Promise((r) => window.setTimeout(r, Math.max(2500, (last + 1) * 1000)));
+      if (cues) hideShare(SHARE_HOLD_MS, seq);
       return;
     }
     const finished = result === 'done';
+    if (cues) {
+      if (finished) showShare(Infinity);
+      hideShare(finished ? SHARE_HOLD_MS : 0, seq);
+    }
     const said = finished || (keep && shown === 0) ? t.text : shown > 0 ? t.text.slice(0, ends[shown - 1]).trimEnd() + '…' : '';
     patch(id, { text: said, live: false, ...(finished ? extra : {}) });
   };
@@ -752,6 +805,8 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
           </>
         )}
       </div>
+      {share &&
+        createPortal(<SkillsShare cues={share.cues} t={share.t} leaving={share.leaving} card={cardRef} />, document.body)}
     </section>
   );
 }
