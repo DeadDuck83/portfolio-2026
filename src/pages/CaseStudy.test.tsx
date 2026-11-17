@@ -50,7 +50,7 @@ describe('CaseStudy page', () => {
     renderAt('/work/parker-ace');
     expect(screen.getByText('02 Process')).toBeInTheDocument();
     expect(screen.queryByText(/Two sides/i)).toBeNull();
-    expect(screen.getByText(/Four calls did most of the work/i)).toBeInTheDocument();
+    expect(screen.getByText(/Three calls did most of the work/i)).toBeInTheDocument();
   });
 
   it('skips Two Members on Sage', () => {

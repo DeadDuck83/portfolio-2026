@@ -12,8 +12,8 @@ export const plmc: CaseStudy = {
   headlineLead: 'The whole patient, on ',
   headlineAccent: 'one screen.',
   intro:
-    "A functional-medicine clinic was drowning in its own thoroughness — blood panels, body scans, questionnaires, motor tests, phone data. I designed and built the clinic app that reads it all in one sitting, so clinicians and patients don't have to.",
-  tldr: 'Seven systems of patient data, one screen both clinician and patient can read in the room — shorter prep, smarter visits.',
+    'A functional-medicine clinic measured everything: blood panels, body scans, questionnaires, motor tests, phone data. I designed and built the app that reads it all in one sitting.',
+  tldr: 'Seven sources of patient data, one screen clinician and patient read together. Shorter prep, smarter visits.',
   meta: {
     role: 'Frontend Dev / Sr. UX',
     org: 'Metagenics · PLMC',
@@ -35,11 +35,8 @@ export const plmc: CaseStudy = {
       label: 'Context',
       subtitle: 'the clinic that measured everything',
     },
-    h2: "The data wasn't missing. It just wasn't in a single place that worked together.",
-    paragraphs: [
-      "A visit at PLMC starts with genuine mountains of signal: a full blood panel, an InBody composition scan, intake questionnaires, motor and balance testing, lifestyle data straight from the patient's phone. All useful. All in different systems, formats, and — occasionally — printouts.",
-      'Clinicians prepped by tab-hopping. Patients heard their results in fragments. Nobody, at any point, saw the whole person at once.',
-    ],
+    h2: "The data wasn't missing. It just wasn't in one place.",
+    paragraphs: ['Clinicians prepped by tab-hopping. Patients heard their results in fragments. Nobody saw the whole person at once.'],
     panelLabel: "One patient's paper trail",
     chips: [
       'Vitals',
@@ -60,31 +57,22 @@ export const plmc: CaseStudy = {
       label: 'Two users',
       subtitle: 'same screen, opposite fluency',
     },
-    h2: 'The hard constraint: this screen gets read aloud, in the room, by both of them.',
+    h2: 'This screen gets read aloud, in the room, by both of them.',
     personas: [
       {
         label: 'User 01',
         name: 'The clinician',
         subtitle: 'eight minutes between visits',
-        needs: [
-          'Prep the whole chart in one pass, not seven tabs',
-          'Outliers surfaced first; normal ranges can wait',
-          'Trust the source — every value traceable to its system',
-        ],
+        needs: ['One pass, not seven tabs', 'Outliers first', 'Every value traceable to its source'],
       },
       {
         label: 'User 02',
         name: 'The patient',
         subtitle: 'first time ever seeing an ALT value',
-        needs: [
-          '"Am I okay?" answered by shape and color, not jargon',
-          'What changed since last visit, at a glance',
-          'Something worth taking home and acting on',
-        ],
+        needs: ['"Am I okay?" answered by shape and color', 'What changed since last visit', 'Something to take home and act on'],
       },
     ],
-    pullLead:
-      'Every layout decision below traces back to that shared-screen moment — ',
+    pullLead: 'Every layout decision traces back to that moment: ',
     pullAccent: 'glanceable for one, legible for both.',
   },
 
@@ -94,34 +82,27 @@ export const plmc: CaseStudy = {
       label: 'Process',
       subtitle: 'the decision log',
     },
-    h2: 'Sat in on visits, mapped every data source to the moment it’s needed — then made four calls that shaped everything.',
+    h2: 'Sat in on visits, mapped every data source, then made three calls.',
     paragraph:
-      'Because I was also the one building it, every sketch was checked against the real integration payloads before it earned a second iteration. Slower ideation, zero "we can’t build that" later.',
+      'I was also building it, so every sketch was checked against real integration payloads. Slower ideation, zero "we can’t build that" later.',
     decisionCostLabel: 'The payoff',
     decisions: [
       {
         title: 'Five functions, not fifty tests.',
         choice:
-          'Turned a sprawling range of inputs (blood panels, cognitive quizzes, balance and strength tests, functional-health clinicals, behavioral habits) into five clear functions any doctor or patient could read at a glance: Physical, Cognitive, Emotional, Metabolic, Behavioral.',
-        cost: 'Every practitioner brought strong, well-earned opinions on what belonged where. My job was to hold the whole conversation, find the common ground, and hand both sides one shared language they trusted. It became the foundation the entire scoring system still runs on.',
-      },
-      {
-        title: 'Eight steps, one payoff screen.',
-        choice:
-          'Designed every step (history, biometrics, motor skills) to feed a single culminating summary, so the visit builds toward one rewarding moment instead of scattering into disconnected screens.',
-        cost: 'The real win was keeping that summary effortless to read even as eight steps of data poured into it. Smart drill-downs let the top stay clean and scannable while every detail stayed one tap away.',
+          'Blood panels, cognitive quizzes, balance and strength tests, and habits roll up into five functions anyone can read: Physical, Cognitive, Emotional, Metabolic, Behavioral.',
+        cost: 'Every practitioner had strong opinions on what belonged where. I found the common ground, and the scoring system still runs on it.',
       },
       {
         title: 'Let them watch it arrive.',
-        choice:
-          'Populated results live as the lab returned them, letting patients see their own numbers land in real time rather than waiting for a finished dashboard.',
-        cost: "Research showed patients so captivated watching their data appear that nurses noticed they'd never look away from the screen. That pull was the signal, so I leaned into the live reveal and built a richer, more engaging screen experience around it.",
+        choice: 'Results fill in live as the lab returns them.',
+        cost: "Nurses noticed patients couldn't look away. So I leaned into the live reveal.",
       },
       {
         title: 'Sequenced the visit so the data compounds.',
         choice:
-          'Ordered all eight steps to calm the patient and feed the finale at once. Vitals under a meditation video, a quick blood draw as it ends for early processing, then profile, history, biometrics, and motor skills while the panel runs in the background. By the summary screen, every data point has arrived right on time, and patients leave with their protocol supplements in hand.',
-        cost: 'This was design beyond the screen. Lab timing, room flow, and staff handoffs all choreographed so the data lands exactly when it’s needed and no one makes a second trip.',
+          'Vitals during a meditation video, blood drawn early, then history, biometrics, and motor skills while the panel runs. By the summary, everything has arrived.',
+        cost: 'Design beyond the screen: lab timing, room flow, and staff handoffs, so no one makes a second trip.',
       },
     ],
     figures: [
@@ -134,7 +115,7 @@ export const plmc: CaseStudy = {
         alt: 'PLMC patient TV and examiner iPad screens for Motor Skills and Biometric Screening, with sticky notes about cognitive load and design review',
         caption: {
           tag: 'FIG. A',
-          desc: 'Two surfaces, one visit — the 60″ patient display keeps cognitive load low while the examiner iPad captures what the scribe misses.',
+          desc: 'Two surfaces, one visit: a 60″ patient display and the examiner iPad.',
         },
       },
       {
@@ -146,7 +127,7 @@ export const plmc: CaseStudy = {
         alt: 'Whiteboard sketch of the PLMC visit flow with red annotations for errors and wait times',
         caption: {
           tag: 'FIG. B',
-          desc: 'The whiteboard phase — first layout died here, cheaply.',
+          desc: 'The whiteboard phase. The first layout died here, cheaply.',
         },
       },
       {
@@ -158,7 +139,7 @@ export const plmc: CaseStudy = {
         alt: 'Session 1 visit journey frame mapping patient display, examiner iPad, and PLMx data',
         caption: {
           tag: 'FIG. C',
-          desc: 'Patient display, examiner iPad, and PLMx — annotated with what each layer does while blood runs in the background.',
+          desc: 'Patient display, examiner iPad, and PLMx, layer by layer.',
         },
       },
     ],
@@ -174,17 +155,17 @@ export const plmc: CaseStudy = {
       {
         numeral: 'i.',
         title: 'One language everyone speaks.',
-        text: "Blood, brain, balance, strength, habits — it all rolls up into five clear scores. The doctor still has every detail underneath; you get a picture you can actually hold onto. Same five functions, whether you've read charts for years or you're seeing your health for the first time.",
+        text: 'Everything rolls up into five scores. The doctor keeps every detail; you get a picture you can hold onto.',
       },
       {
         numeral: 'ii.',
         title: 'The full picture, already put together.',
-        text: 'The whole visit was built to feed one screen, so nothing gets pieced together at the end. By the time you sit down together, every result is in place and in context. Nothing to decode, nothing to chase down — just your health, all in one view.',
+        text: 'Every step of the visit feeds one summary. By the time you sit down, every result is in place, with details one tap away.',
       },
       {
         numeral: 'iii.',
         title: "The experience does what a screen can't.",
-        text: 'Your results fill in live as the lab reads them, and it’s genuinely hard to look away — that pull is the point. People lean in when the data feels like theirs. And the visit is built around that moment: calm to start, blood drawn early, results ready by the end, protocol in hand on the way out. The design reaches past the screen and into the room itself.',
+        text: 'Calm to start, blood drawn early, results live by the end, protocol in hand on the way out.',
       },
     ],
     figures: [
@@ -197,8 +178,8 @@ export const plmc: CaseStudy = {
         alt: 'PLMC Health Summary dashboard — full scroll of vitals, labs, and 5 Functions of Health',
         caption: {
           tag: '01',
-          lead: 'Health Summary — Everything visible, nothing left unchecked.',
-          desc: 'Vitals, blood panel, questionnaires, lifestyle data, and the 5 Functions of Health score — the whole patient before the doorknob turns.',
+          lead: 'Health Summary: everything visible, nothing left unchecked.',
+          desc: 'The whole patient before the doorknob turns.',
         },
       },
       {
@@ -212,7 +193,7 @@ export const plmc: CaseStudy = {
           tag: '02',
           lead: 'The clinic website.',
           leadInline: true,
-          desc: ' I designed and developed the website as well — the public face of the same personalized-care story.',
+          desc: ' I designed and built that too.',
         },
       },
       {
@@ -228,7 +209,7 @@ export const plmc: CaseStudy = {
           tag: '03',
           lead: 'Health Summary on the room display.',
           leadInline: true,
-          desc: ' The full picture already put together — biometrics, labs, lifestyle, and the five functions in one view.',
+          desc: ' Biometrics, labs, lifestyle, and the five functions in one view.',
         },
       },
     ],
@@ -246,9 +227,8 @@ export const plmc: CaseStudy = {
       { kind: 'static', display: '0 → 1', label: 'Built from scratch, shipped to clinic' },
     ],
     closingParagraph:
-      'Clinicians opened one screen before every visit instead of many. Patients finally saw their health the way the clinic did — as one connected picture, not a stack of results. And because feasibility was checked at the sketch stage, what we designed is what actually shipped.',
-    ifIDidItAgain:
-      'Involve the front-desk staff even earlier. They knew where the paper piled up long before we did.',
+      'Clinicians opened one screen before every visit instead of many. Patients saw their health as one picture. And because feasibility was checked at the sketch stage, what we designed is what shipped.',
+    ifIDidItAgain: 'Bring in the front desk earlier. They knew where the paper piled up long before we did.',
   },
 
   // Collage-only images (file in public/case-studies/plmc/, not placed in-page).
