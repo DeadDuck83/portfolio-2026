@@ -1,0 +1,305 @@
+/* The case-study hero strip: the finished product, one card per flow.
+   Cards start on the page's content edge and run off the right of the screen,
+   so it reads as "there's more" without a word. It sits on a full-width band
+   of the brand lime: the one bright stretch on a dark site, so the work is
+   what the eye lands on. */
+
+.strip {
+  --side: clamp(1.5rem, 6vw, 6rem);
+  /* where the page's text column starts (layout.maxWidth = 1240) */
+  --inset: calc(max(0px, (100% - 1240px) / 2) + var(--side));
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --band: #9da767; /* colors.accentBright */
+  --ink: #1a1712; /* colors.bg, as text on the lime */
+  position: relative;
+  padding: clamp(2rem, 6vh, 3.5rem) 0 clamp(1rem, 3vh, 2rem);
+  background: var(--band);
+  color: var(--ink);
+  animation: floatIn 0.9s 0.36s ease both;
+}
+
+.eyebrow {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8f8674;
+}
+
+.arrow,
+.close {
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: #ece6da;
+  background: transparent;
+  border: 1px solid rgba(236, 230, 218, 0.18);
+  border-radius: 8px;
+  height: 2.4rem;
+  min-width: 2.4rem;
+  padding: 0 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+.arrow:hover:not(:disabled),
+.close:hover { border-color: #9da767; color: #b0b48a; }
+.arrow:disabled { opacity: 0.3; cursor: default; }
+.arrow:focus-visible,
+.close:focus-visible,
+.card:focus-visible,
+.phone:focus-visible { outline: 2px solid #9da767; outline-offset: 3px; }
+
+/* on the lime band: a dark focus ring */
+.strip .card:focus-visible { outline-color: var(--ink); }
+
+.track {
+  list-style: none;
+  margin: 0;
+  /* left: start on the page's text column; right: only the page gutter, so
+     the scroll ends on the last card instead of a stretch of empty band */
+  padding: 0 var(--side) 1.5rem var(--inset);
+  display: flex;
+  gap: clamp(12px, 1.4vw, 20px);
+  /* sideways only: nothing in a card may ever make the strip scroll up/down */
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--inset);
+  scrollbar-width: none;
+}
+.track::-webkit-scrollbar { display: none; }
+
+.item {
+  /* short screens (a phone on its side): the whole card, title included, fits the height */
+  flex: 0 0 min(clamp(299px, 29.9vw, 429px), calc((100svh - 8rem) * 0.8));
+  scroll-snap-align: start;
+}
+
+.card {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* the screen rises out of a line, straight off the band: no tile behind it.
+   The phone is taller than the card, so the card clips top and bottom (and
+   the cut-off part takes up no scroll room); the sides stay open so the
+   shadow is free to spread on the lime. */
+.plate {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow-x: visible;
+  overflow-y: clip;
+  container-type: inline-size;
+}
+.plate::after {
+  /* the line, drawn over the screen so the phone sinks into it */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px; /* the site's stroke weight */
+  background: var(--ink);
+  pointer-events: none;
+}
+
+.screen {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  width: 66%;
+  transform: translateX(-50%);
+  /* an iPhone screen's corner (55pt on 393pt), scaled to the plate */
+  border-radius: 9.2cqw;
+  box-shadow: 0 1.5cqw 4cqw rgba(30, 34, 8, 0.22), 0 6cqw 14cqw rgba(30, 34, 8, 0.3);
+  transition: transform 0.6s var(--ease);
+  user-select: none;
+}
+
+.caption {
+  display: grid;
+  row-gap: 0.35rem;
+  padding: 0.95rem 0.15rem 0;
+}
+.title {
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+  line-height: 1.1;
+  color: var(--ink);
+}
+.line {
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: rgba(26, 23, 18, 0.8);
+}
+.more {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: rgba(26, 23, 18, 0.62);
+  transition: color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .card:hover .screen { transform: translate(-50%, -3.5%); }
+  .card:hover .more { color: var(--ink); }
+}
+
+/* phones: as big as a card can be with the next one still peeking in */
+@media (max-width: 640px) {
+  .item { flex-basis: min(86vw, calc((100svh - 8rem) * 0.8)); }
+}
+
+/* ---- the open flow ---- */
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: rgba(18, 16, 12, 0.97);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #ece6da;
+  font-family: 'Host Grotesk', system-ui, sans-serif;
+  animation: viewerIn 0.35s ease both;
+}
+@keyframes viewerIn { from { opacity: 0; } }
+
+.bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(1rem, 3vh, 2rem) clamp(1rem, 4vw, 3rem) clamp(0.75rem, 2vh, 1.25rem);
+}
+.barText { min-width: 0; }
+.viewTitle {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.05;
+}
+.viewLine {
+  margin: 0.4rem 0 0;
+  max-width: 52ch;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #b3a996;
+}
+.barActions { display: flex; gap: 6px; flex: none; }
+
+.row {
+  --pad: clamp(1rem, 4vw, 3rem);
+  --gap: clamp(16px, 2.5vw, 40px);
+  --pad-b: clamp(1rem, 3vh, 2rem);
+  /* room under each screen for a label of up to three lines */
+  --label: 3.6rem;
+  /* the tallest a screen can be: the measured row height (JS) less its label
+     and padding; the fallback covers the first frame */
+  --tall: calc(var(--room, calc(100svh - 11rem)) - var(--pad-b) - var(--label));
+  /* the height at which every screen in the flow fits across (852/393 = 2.168) */
+  --fit: calc((100vw - 2 * var(--pad) - (var(--n, 3) - 1) * var(--gap)) / var(--n, 3) * 2.168);
+  /* wide screens: the whole flow at once, while that stays readable;
+     past that it scrolls sideways */
+  --h: min(var(--tall), 760px, max(var(--fit), 420px));
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--pad) var(--pad-b);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: safe center;
+  align-items: flex-start;
+  gap: var(--gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--pad);
+}
+
+.step {
+  flex: none;
+  width: calc(var(--h) * 393 / 852);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  scroll-snap-align: center;
+  animation: stepIn 0.5s var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+.step:nth-child(2) { animation-delay: 0.06s; }
+.step:nth-child(3) { animation-delay: 0.12s; }
+.step:nth-child(4) { animation-delay: 0.18s; }
+.step:nth-child(5) { animation-delay: 0.24s; }
+@keyframes stepIn { from { opacity: 0; transform: translateY(16px); } }
+
+/* a phone-sized window; screens taller than a phone scroll inside it */
+.phone {
+  width: 100%;
+  height: var(--h);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: calc(var(--h) * 0.065);
+  background: #f2efe9;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  scrollbar-width: none;
+}
+.phone::-webkit-scrollbar { display: none; }
+.phone img { display: block; width: 100%; height: auto; }
+
+.stepLabel {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #b3a996;
+}
+.stepNum {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: #9da767;
+  margin-right: 0.35rem;
+}
+
+/* tablets and phones: bigger screens that swipe, the next one peeking in */
+@media (max-width: 1099px) {
+  .row {
+    --h: min(var(--tall), 760px, calc(42vw * 2.168));
+    justify-content: flex-start;
+  }
+  .step { scroll-snap-align: start; }
+}
+
+@media (max-width: 640px) {
+  .bar { gap: 0.75rem; padding-top: 0.9rem; }
+  .viewTitle { font-size: 1.45rem; }
+  .viewLine { font-size: 0.76rem; line-height: 1.5; }
+  .barActions { gap: 4px; }
+  .barActions .arrow,
+  .barActions .close { height: 2.2rem; min-width: 2.2rem; padding: 0 0.6rem; font-size: 0.85rem; }
+  .row { --h: min(var(--tall), calc(80vw * 2.168)); }
+}
+
+/* short screens (small phones, any phone on its side): the title and the
+   screens; the one-line summary and long labels give way */
+@media (max-height: 640px) {
+  .viewLine { display: none; }
+  .bar { padding-block: 0.6rem 0.5rem; }
+  .viewTitle { margin-top: 0.15rem; }
+}
+@media (max-height: 500px) {
+  .bar { align-items: center; }
+  .barText .eyebrow { display: none; }
+  .viewTitle { font-size: 1.25rem; margin: 0; }
+  .row { --label: 1.6rem; }
+  .stepLabel { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip, .viewer, .step { animation: none; }
+  .screen { transition: none; }
+  .card:hover .screen { transform: translateX(-50%); }
+}

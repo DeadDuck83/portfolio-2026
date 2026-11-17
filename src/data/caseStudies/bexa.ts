@@ -33,7 +33,6 @@ export const bexa: CaseStudy = {
 
   context: {
     chapter: {
-      numeral: '01',
       label: 'Context',
       subtitle: 'a device is only half the product',
     },
@@ -55,7 +54,6 @@ export const bexa: CaseStudy = {
 
   process: {
     chapter: {
-      numeral: '02',
       label: 'Process',
       subtitle: 'the decision log',
     },
@@ -121,7 +119,6 @@ export const bexa: CaseStudy = {
 
   solution: {
     chapter: {
-      numeral: '03',
       label: 'Solution',
       subtitle: 'four systems, one exam',
     },
@@ -211,7 +208,6 @@ export const bexa: CaseStudy = {
 
   outcome: {
     chapter: {
-      numeral: '04',
       label: 'Outcome',
       subtitle: 'shipped, and still shipping',
     },

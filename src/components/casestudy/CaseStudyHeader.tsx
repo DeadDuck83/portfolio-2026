@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Link } from 'react-router';
 import Wordmark from '../Wordmark';
 import EmailLink from '../EmailLink';
@@ -11,8 +12,9 @@ export interface Chapter {
 
 /**
  * Case-study header: wordmark + "All work"/Contact, plus a second row with a
- * horizontally scrollable chapter nav. The active chapter (from scroll-spy)
- * gets accent-tint text and a 2px accent underline. Links jump to #c0…#c5.
+ * horizontally scrollable chapter nav: plain chapter names split by dots. The
+ * active chapter (from scroll-spy) gets accent-tint text and a 2px accent
+ * underline. Links jump to #c0…#c5.
  */
 export default function CaseStudyHeader({
   chapters,
@@ -86,29 +88,36 @@ export default function CaseStudyHeader({
             margin: '0 auto',
             padding: '0 clamp(1.5rem, 6vw, 6rem)',
             display: 'flex',
-            gap: '1.8rem',
+            alignItems: 'center',
+            gap: '0.9rem',
             whiteSpace: 'nowrap',
           }}
         >
           {chapters.map((c, i) => {
             const isActive = i === active;
             return (
-              <a
-                key={c.id}
-                href={`#${c.id}`}
-                style={{
-                  display: 'inline-block',
-                  padding: '0.7rem 0',
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: isActive ? colors.accentTint : colors.textFaint,
-                  borderBottom: `2px solid ${isActive ? colors.accent : 'transparent'}`,
-                  transition: 'color 0.3s ease, border-color 0.3s ease',
-                }}
-              >
-                {c.label}
-              </a>
+              <Fragment key={c.id}>
+                {i > 0 && (
+                  <span aria-hidden="true" style={{ color: colors.textFaintest, fontSize: '0.8rem', lineHeight: 1 }}>
+                    ·
+                  </span>
+                )}
+                <a
+                  href={`#${c.id}`}
+                  style={{
+                    display: 'inline-block',
+                    padding: '0.7rem 0',
+                    fontSize: '0.62rem',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: isActive ? colors.accentTint : colors.textFaint,
+                    borderBottom: `2px solid ${isActive ? colors.accent : 'transparent'}`,
+                    transition: 'color 0.3s ease, border-color 0.3s ease',
+                  }}
+                >
+                  {c.label}
+                </a>
+              </Fragment>
             );
           })}
         </div>

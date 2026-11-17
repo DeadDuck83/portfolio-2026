@@ -24,7 +24,7 @@ describe('CaseStudy page', () => {
     // Headline accent phrase renders in its own span.
     expect(screen.getByText(plmc.headlineAccent)).toBeInTheDocument();
     // Chapter nav is present.
-    expect(screen.getByText('00 Brief')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Brief' })).toBeInTheDocument();
   });
 
   it('drives content from the data object (meta + decisions)', () => {
@@ -48,21 +48,21 @@ describe('CaseStudy page', () => {
 
   it('skips the Users chapter when a case study omits it', () => {
     renderAt('/work/parker-ace');
-    expect(screen.getByText('02 Process')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Process' })).toBeInTheDocument();
     expect(screen.queryByText(/Two sides/i)).toBeNull();
     expect(screen.getByText(/Three calls did most of the work/i)).toBeInTheDocument();
   });
 
   it('skips Two Members on Sage', () => {
     renderAt('/work/sage');
-    expect(screen.getByText('02 Process')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Process' })).toBeInTheDocument();
     expect(screen.queryByText(/Two members/i)).toBeNull();
   });
 
   it('renders Bexa without a Users chapter and with the feature callout', () => {
     renderAt('/work/bexa');
     expect(screen.getByText(/Four systems turn it into a service/i)).toBeInTheDocument();
-    expect(screen.getByText('02 Process')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Process' })).toBeInTheDocument();
     expect(screen.queryByText(/Four roles/i)).toBeNull();
     expect(screen.getByText(/The numbers couldn't be trusted/i)).toBeInTheDocument();
     expect(screen.getByText(/All four are live/i)).toBeInTheDocument();

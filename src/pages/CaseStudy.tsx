@@ -19,6 +19,7 @@ import StatBand from '../components/casestudy/StatBand';
 import NextCaseFooter from '../components/casestudy/NextCaseFooter';
 import Reveal from '../components/casestudy/Reveal';
 import ImageCollage from '../components/casestudy/ImageCollage';
+import FlowStrip from '../components/casestudy/FlowStrip';
 
 // Shared section-level style fragments.
 const sectionInner = {
@@ -92,15 +93,14 @@ export default function CaseStudy() {
   const solutionFullWidth = cs.solution.figures.filter((f, i) => i === 0 || f.fullWidth);
   const solutionCards = cs.solution.figures.filter((f, i) => i !== 0 && !f.fullWidth);
 
+  // plain words in the nav; the numerals stay on the chapter headings
   const chapters: Chapter[] = [
-    { id: 'c0', label: '00 Brief' },
-    { id: 'c1', label: `${cs.context.chapter.numeral} ${cs.context.chapter.label}` },
-    ...(cs.users
-      ? [{ id: 'c-users', label: `${cs.users.chapter.numeral} ${cs.users.chapter.label}` }]
-      : []),
-    { id: 'c-process', label: `${cs.process.chapter.numeral} ${cs.process.chapter.label}` },
-    { id: 'c-solution', label: `${cs.solution.chapter.numeral} ${cs.solution.chapter.label}` },
-    { id: 'c-outcome', label: `${cs.outcome.chapter.numeral} ${cs.outcome.chapter.label}` },
+    { id: 'c0', label: 'Brief' },
+    { id: 'c1', label: cs.context.chapter.label },
+    ...(cs.users ? [{ id: 'c-users', label: cs.users.chapter.label }] : []),
+    { id: 'c-process', label: cs.process.chapter.label },
+    { id: 'c-solution', label: cs.solution.chapter.label },
+    { id: 'c-outcome', label: cs.outcome.chapter.label },
   ];
 
   const chapterIndex = (id: string) => chapters.findIndex((c) => c.id === id);
@@ -291,10 +291,14 @@ export default function CaseStudy() {
           </div>
         </div>
 
-        {/* Full-bleed hero placeholder */}
-        <Reveal style={{ padding: '0 clamp(1rem, 3vw, 2.5rem)' }}>
-          <PlaceholderFigure figure={cs.heroFigure} prominent />
-        </Reveal>
+        {/* The finished product first: a strip of flows, or the single hero figure */}
+        {cs.flows?.length ? (
+          <FlowStrip flows={cs.flows} />
+        ) : (
+          <Reveal style={{ padding: '0 clamp(1rem, 3vw, 2.5rem)' }}>
+            <PlaceholderFigure figure={cs.heroFigure} prominent />
+          </Reveal>
+        )}
       </section>
 
       {/* 01 CONTEXT */}

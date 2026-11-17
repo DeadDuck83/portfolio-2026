@@ -31,7 +31,6 @@ export const parkerAce: CaseStudy = {
 
   context: {
     chapter: {
-      numeral: '01',
       label: 'Context',
       subtitle: 'The part nobody tells you about vets',
     },
@@ -56,7 +55,6 @@ export const parkerAce: CaseStudy = {
 
   process: {
     chapter: {
-      numeral: '02',
       label: 'Process',
       subtitle: 'the decision log',
     },
@@ -124,7 +122,6 @@ export const parkerAce: CaseStudy = {
 
   solution: {
     chapter: {
-      numeral: '03',
       label: 'Solution',
       subtitle: 'the part with the pictures',
     },
@@ -192,7 +189,6 @@ export const parkerAce: CaseStudy = {
 
   outcome: {
     chapter: {
-      numeral: '04',
       label: 'Outcome',
       subtitle: 'a real 0 to 1',
     },

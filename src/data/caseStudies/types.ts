@@ -92,11 +92,31 @@ export interface Persona {
   needs: string[];
 }
 
-/** A chapter-heading trio: accent numeral, uppercase label, italic subtitle. */
+/** A chapter heading: uppercase label and italic subtitle. */
 export interface ChapterMeta {
-  numeral: string;
   label: string;
   subtitle: string;
+}
+
+/** One screen in a product flow, exported from the design file. */
+export interface FlowScreen {
+  src: string;
+  alt: string;
+  /** A few words under the screen when the flow is open. */
+  label: string;
+}
+
+/**
+ * A finished flow, shown as one card in the hero strip. Clicking the card
+ * opens every screen in the flow, in order.
+ */
+export interface ProductFlow {
+  title: string;
+  /** The problem it solved, in one line. */
+  line: string;
+  screens: FlowScreen[];
+  /** Which screen fronts the card. Defaults to the first. */
+  cover?: number;
 }
 
 export interface CaseStudy {
@@ -114,6 +134,12 @@ export interface CaseStudy {
   tldr: string;
   meta: { role: string; org: string; timeline: string; scope: string };
   heroFigure: Figure;
+  /**
+   * The finished product, one card per flow, in the hero ("the finished dish
+   * first"). When present it takes the hero figure's place; the hero figure
+   * stays in the image collage.
+   */
+  flows?: ProductFlow[];
 
   // 01 Context
   context: {

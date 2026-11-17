@@ -31,7 +31,6 @@ export const plmc: CaseStudy = {
 
   context: {
     chapter: {
-      numeral: '01',
       label: 'Context',
       subtitle: 'the clinic that measured everything',
     },
@@ -53,7 +52,6 @@ export const plmc: CaseStudy = {
 
   users: {
     chapter: {
-      numeral: '02',
       label: 'Two users',
       subtitle: 'same screen, opposite fluency',
     },
@@ -78,7 +76,6 @@ export const plmc: CaseStudy = {
 
   process: {
     chapter: {
-      numeral: '03',
       label: 'Process',
       subtitle: 'the decision log',
     },
@@ -147,7 +144,6 @@ export const plmc: CaseStudy = {
 
   solution: {
     chapter: {
-      numeral: '04',
       label: 'Solution',
       subtitle: 'the part with the pictures',
     },
@@ -217,7 +213,6 @@ export const plmc: CaseStudy = {
 
   outcome: {
     chapter: {
-      numeral: '05',
       label: 'Outcome',
       subtitle: 'receipts, where available',
     },

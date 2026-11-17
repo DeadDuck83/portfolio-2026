@@ -28,10 +28,61 @@ export const sage: CaseStudy = {
     src: '/case-studies/sage/Sage-01.jpg',
     alt: 'Sage Healthspan hero — lifespan to healthspan with app screens',
   },
+  flows: [
+    {
+      title: 'Scan your tests',
+      line: 'Any lab report becomes your record, and a person checks what the scanner misses.',
+      screens: [
+        { src: '/case-studies/sage/flows/scan-1-add.webp', alt: 'Add data: upload a PDF, scan a paper report, or scan a urine strip', label: 'Upload, scan, or strip' },
+        { src: '/case-studies/sage/flows/scan-2-camera.webp', alt: 'The camera framing a paper lab report, with Fail, shutter, and Done', label: 'Photograph the report' },
+        { src: '/case-studies/sage/flows/scan-3-loading.webp', alt: 'Loading: a page being scanned, line by line', label: 'Reading it' },
+        { src: '/case-studies/sage/flows/scan-4-request.webp', alt: 'Request review: a HIPAA-trained admin checks de-identified data', label: 'If the scan does not look right, user can submit for review' },
+        { src: '/case-studies/sage/flows/scan-5-dashboard.webp', alt: 'The dashboard, full: the new result in review, biological age, insights, out-of-range values, and categories', label: 'Your dashboard, filled in' },
+      ],
+    },
+    {
+      title: 'See the trend',
+      line: "Every biomarker against its range over time, not just today's number.",
+      cover: 2,
+      screens: [
+        { src: '/case-studies/sage/flows/trend-1-dashboard.webp', alt: 'The dashboard scrolled to Categories: Blood Sugar Balance, Cardiometabolic, and Detox', label: 'Categories on the dashboard' },
+        { src: '/case-studies/sage/flows/trend-2-category.webp', alt: 'Blood Sugar Balance: cortisol, estradiol, glucose, and insulin, each with its latest value and trend', label: 'Inside a category' },
+        { src: '/case-studies/sage/flows/trend-3-result.webp', alt: 'Cortisol over time against its range, with what it is and where each value came from', label: 'One result, over time' },
+      ],
+    },
+    {
+      title: 'Sage Insights',
+      line: 'AI reads the whole report back in plain words, with questions for your doctor.',
+      cover: 1,
+      screens: [
+        { src: '/case-studies/sage/flows/insights-1-ready.webp', alt: 'Dashboard: your insights are ready, above out-of-range results and categories', label: 'Insights are ready' },
+        { src: '/case-studies/sage/flows/insights-2-analyze.webp', alt: 'Analyze results: personalized insights, AI-powered trends, and context-driven analysis', label: 'Analyze my data' },
+        { src: '/case-studies/sage/flows/insights-3-summary.webp', alt: 'A health summary, cardiovascular health, and questions to ask your doctor', label: 'Plain words, real questions' },
+      ],
+    },
+    {
+      title: 'Gap analysis',
+      line: 'Finds the tests your results are missing and tells you which to get next.',
+      screens: [
+        { src: '/case-studies/sage/flows/gaps-1-dashboard.webp', alt: 'Dashboard: a comprehensive panel recommended, and biological age missing 3 of 9 required biomarkers', label: 'The gap, on your dashboard' },
+        { src: '/case-studies/sage/flows/gaps-2-push.webp', alt: 'Health tip notifications, one per gap: a PSA or testosterone panel, heart health, a hormone check, thyroid, vitamin D, and a full panel, each with Get Panel', label: 'A nudge for each gap, not a diagnosis' },
+        { src: '/case-studies/sage/flows/gaps-3-list.webp', alt: 'Notifications: gap analysis for a PSA panel, heart health, and thyroid health', label: 'Every gap, in one place' },
+      ],
+    },
+    {
+      title: 'Share with your practitioner',
+      line: 'Everything in one PDF, sent with your consent.',
+      cover: 1,
+      screens: [
+        { src: '/case-studies/sage/flows/share-1-settings.webp', alt: 'Settings, with Share results', label: 'From settings' },
+        { src: '/case-studies/sage/flows/share-2-report.webp', alt: 'Step 1: generate a detailed PDF report of your blood test data, with a Generate PDF button', label: 'One PDF' },
+        { src: '/case-studies/sage/flows/share-3-send.webp', alt: 'Step 2: send it to a practitioner, with consent to share medical records', label: 'Sent with consent' },
+      ],
+    },
+  ],
 
   context: {
     chapter: {
-      numeral: '01',
       label: 'Context',
       subtitle: 'the data was already there',
     },
@@ -56,7 +107,6 @@ export const sage: CaseStudy = {
 
   process: {
     chapter: {
-      numeral: '02',
       label: 'Process',
       subtitle: 'the decision log',
     },
@@ -124,7 +174,6 @@ export const sage: CaseStudy = {
 
   solution: {
     chapter: {
-      numeral: '03',
       label: 'Solution',
       subtitle: 'the part with the pictures',
     },
@@ -192,7 +241,6 @@ export const sage: CaseStudy = {
 
   outcome: {
     chapter: {
-      numeral: '04',
       label: 'Outcome',
       subtitle: 'what got built, and what I learned',
     },
