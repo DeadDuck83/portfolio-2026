@@ -433,6 +433,19 @@
     transform 1s var(--hx-ease),
     opacity 0.7s var(--hx-ease);
 }
+/*
+ * A cover video's resting image, laid over the video (mouse only). Its img is
+ * a .tile__pic too, so it racks in, scales and blurs with the video under it;
+ * the wrapper only fades, for play and for the return to rest.
+ */
+.tile__still {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.35s var(--hx-ease);
+}
+.tile__still.is-off {
+  opacity: 0;
+}
 /* Scrim so the label reads on any image. */
 .tile__media::after {
   content: '';

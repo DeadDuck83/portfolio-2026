@@ -47,7 +47,7 @@ export const work: WorkItem[] = [
     tags: ['0 → 1', 'AI Insights', 'Consumer Health', 'OCR / Data'],
     imageSrc: '/work/sage.jpg',
     imageAlt: 'Sage app home screen surrounded by biological age, insights and lab result cards',
-    video: { src: '/work/sage-hero-v3.mp4', poster: '/work/sage-hero-v3.jpg', width: 2000, height: 1500 },
+    video: { src: '/work/sage-hero-v4.mp4', poster: '/work/sage-hero-v3.jpg', width: 2000, height: 1500 },
     to: '/work/sage',
     endLabel: 'Case study',
     endGlyph: '→',

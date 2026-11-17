@@ -170,13 +170,16 @@ function Tile({ item, position, eager }: { item: WorkItem; position: number; eag
 }
 
 /**
- * A tile's cover video, muted and looping. With a mouse it holds its first
- * frame (the hero frame) and plays only while its tile is hovered or focused,
- * so the grid stays calm; leaving rewinds it. Touch screens can't hover, so
- * there it plays whenever it's on screen. Reduced motion shows the poster.
+ * A tile's cover video, muted and looping. With a mouse the tile rests on its
+ * poster (the hero image, which needn't be a frame of the video) and the video
+ * plays only while the tile is hovered or focused, so the grid stays calm;
+ * leaving fades the poster back over it and rewinds. Touch screens can't
+ * hover, so there it plays whenever it's on screen. Reduced motion shows the
+ * poster.
  */
 function TileVideo({ video, eager }: { video: NonNullable<WorkItem['video']>; eager: boolean }) {
   const ref = useRef<HTMLVideoElement | null>(null);
+  const stillRef = useRef<HTMLSpanElement | null>(null);
   const [still] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [hoverPlay] = useState(() => window.matchMedia('(hover: hover) and (pointer: fine)').matches);
 
@@ -189,22 +192,37 @@ function TileVideo({ video, eager }: { video: NonNullable<WorkItem['video']>; ea
 
     if (hoverPlay) {
       const tile = el.closest<HTMLElement>('.tile');
-      if (!tile) return;
+      const cover = stillRef.current;
+      if (!tile || !cover) return;
+      let rewindTimer = 0;
+      const start = () => {
+        window.clearTimeout(rewindTimer);
+        play();
+      };
+      // the poster lifts once frames are actually moving, so there's no blank beat
+      const onPlaying = () => cover.classList.add('is-off');
       const rewind = () => {
+        cover.classList.remove('is-off');
         el.pause();
-        el.currentTime = 0;
+        // rewind under the poster once it has faded back in
+        rewindTimer = window.setTimeout(() => {
+          el.currentTime = 0;
+        }, 400);
       };
       const onFocusOut = (e: FocusEvent) => {
         if (!tile.contains(e.relatedTarget as Node | null)) rewind();
       };
-      tile.addEventListener('pointerenter', play);
+      el.addEventListener('playing', onPlaying);
+      tile.addEventListener('pointerenter', start);
       tile.addEventListener('pointerleave', rewind);
-      tile.addEventListener('focusin', play);
+      tile.addEventListener('focusin', start);
       tile.addEventListener('focusout', onFocusOut);
       return () => {
-        tile.removeEventListener('pointerenter', play);
+        window.clearTimeout(rewindTimer);
+        el.removeEventListener('playing', onPlaying);
+        tile.removeEventListener('pointerenter', start);
         tile.removeEventListener('pointerleave', rewind);
-        tile.removeEventListener('focusin', play);
+        tile.removeEventListener('focusin', start);
         tile.removeEventListener('focusout', onFocusOut);
       };
     }
@@ -233,25 +251,39 @@ function TileVideo({ video, eager }: { video: NonNullable<WorkItem['video']>; ea
     );
   }
   return (
-    <video
-      ref={ref}
-      className="tile__pic"
-      src={video.src}
-      poster={video.poster}
-      width={video.width}
-      height={video.height}
-      muted
-      // touch: the browser's own muted autoplay (it resumes the video after
-      // pausing it off screen, e.g. during the page's slide-in)
-      autoPlay={!hoverPlay}
-      loop
-      playsInline
-      disablePictureInPicture
-      // with a mouse, eager tiles buffer up front so a hover starts at once
-      preload={eager ? 'auto' : 'metadata'}
-      aria-hidden="true"
-      tabIndex={-1}
-    />
+    <>
+      <video
+        ref={ref}
+        className="tile__pic"
+        src={video.src}
+        poster={video.poster}
+        width={video.width}
+        height={video.height}
+        muted
+        // touch: the browser's own muted autoplay (it resumes the video after
+        // pausing it off screen, e.g. during the page's slide-in)
+        autoPlay={!hoverPlay}
+        loop
+        playsInline
+        disablePictureInPicture
+        // with a mouse, eager tiles buffer up front so a hover starts at once
+        preload={eager ? 'auto' : 'metadata'}
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+      {hoverPlay && (
+        <span ref={stillRef} className="tile__still" aria-hidden="true">
+          <img
+            className="tile__pic"
+            src={video.poster}
+            alt=""
+            width={video.width}
+            height={video.height}
+            decoding="async"
+          />
+        </span>
+      )}
+    </>
   );
 }
 
