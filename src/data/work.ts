@@ -62,6 +62,7 @@ export const work: WorkItem[] = [
     tags: ['0 → 1', 'Software + Hardware', 'Multi-product', 'FDA / Quality'],
     imageSrc: '/work/bexa.jpg',
     imageAlt: 'Bexa patient app, scheduling calendar, clinical exam and quality dashboard',
+    video: { src: '/work/bexa-hero-v2.mp4', poster: '/work/bexa-hero-v2.jpg', width: 1440, height: 1440 },
     to: '/work/bexa',
     endLabel: 'Case study',
     endGlyph: '→',
