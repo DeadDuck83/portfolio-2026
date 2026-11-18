@@ -405,6 +405,8 @@
   align-items: flex-start;
   gap: var(--gap);
   overflow-x: auto;
+  /* swiping past the first or last screen doesn't go "back" a page */
+  overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--pad);
 }
@@ -432,12 +434,18 @@
 .step:nth-child(5) { animation-delay: 0.24s; }
 @keyframes stepIn { from { opacity: 0; transform: translateY(16px); } }
 
-/* a device-sized window; screens taller than the device scroll inside it */
+/* a device-sized window; screens taller than the device scroll inside it.
+   Up/down only: a sideways swipe or trackpad scroll that starts on a screen
+   passes through to the row, so you can move between screens from anywhere.
+   (Containing only the vertical keeps the end of a screen's scroll from
+   moving anything behind it.) */
 .frame {
   width: 100%;
   height: var(--h);
+  overflow-x: hidden;
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-x: auto;
+  overscroll-behavior-y: contain;
   border-radius: var(--rad);
   background: #f2efe9;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
