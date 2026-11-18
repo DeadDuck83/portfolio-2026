@@ -652,6 +652,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       style={cornerStyle(corner)}
       hidden={!open}
       aria-label="Chat with Derek's avatar"
+      data-avatar-card=""
       onPointerDown={onPointerDown}
       // real mice only: phones fire a fake mouseenter on tap that never leaves
       onPointerEnter={(e) => e.pointerType === 'mouse' && setHover(true)}

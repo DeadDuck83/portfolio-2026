@@ -49,6 +49,7 @@ export type AnalyticsEvents = {
   AvatarClosed: { durationSeconds: number; interactionCount: number };
   AvatarSettingChanged: { setting: 'camera' | 'sound'; on: boolean };
   AvatarError: { errorCategory: 'avatar-load' | 'audio-blocked' };
+  SkillsViewed: { source: 'about-today' };
   // easter egg
   TelemetryBayOpened: Record<string, never>;
   // engagement and traffic quality

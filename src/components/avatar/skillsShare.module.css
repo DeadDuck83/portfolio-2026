@@ -14,6 +14,7 @@
 .share.leaving { opacity: 0; }
 
 .grid {
+  position: relative;
   width: 100%;
   flex: none;
   display: grid;
@@ -88,6 +89,41 @@
   .label { font-size: 0.55rem; }
 }
 
+/* Opened by hand ("View my skills"): the same panels over a dimmed page.
+   Clicks between the panels reach the scrim and close it. */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 54;
+  background: rgba(14, 12, 9, 0.62);
+  animation: shareIn 0.35s ease both;
+  transition: opacity 0.45s ease;
+}
+.scrim.leaving { opacity: 0; }
+@keyframes shareIn { from { opacity: 0; } }
+.manual .group { pointer-events: auto; }
+/* on the grid's top-right corner, just above the panels */
+.closeBtn {
+  position: absolute;
+  top: -3.1rem;
+  right: 0;
+  pointer-events: auto;
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: #ece6da;
+  background: rgba(22, 20, 16, 0.6);
+  border: 1px solid rgba(236, 230, 218, 0.18);
+  border-radius: 8px;
+  height: 2.4rem;
+  padding: 0 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.closeBtn:hover { border-color: #9da767; color: #b0b48a; }
+.closeBtn:focus-visible { outline: 2px solid #9da767; outline-offset: 3px; }
+
 @media (prefers-reduced-motion: reduce) {
   .group, .item { transform: none; transition: opacity 0.2s ease; }
+  .scrim { animation: none; }
 }

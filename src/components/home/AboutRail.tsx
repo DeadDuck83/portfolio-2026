@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { aboutChapters, aboutCompanies, aboutIntro, aboutToday } from '../../data/aboutJourney';
 import { track } from '../../lib/analytics';
 import { useGuideFocus } from '../../lib/guide';
@@ -6,6 +6,9 @@ import { border, colors, fonts, layout } from '../../theme/tokens';
 import CompanyPopover from './CompanyPopover';
 import { createSquares, type SquaresController } from './aboutRailSquares';
 import '../../styles/about-rail.css';
+
+// "View my skills": the avatar's skills share without the avatar; loaded on first open
+const SkillsView = lazy(() => import('../avatar/SkillsView'));
 
 const SRC = '/background/journey.riv';
 /** Desktop: the card that has crossed this fraction of viewport height is active. */
@@ -318,7 +321,39 @@ export default function AboutRail() {
             </div>
           ))}
         </dl>
+        <SkillsButton />
       </div>
     </section>
+  );
+}
+
+/** Under "Today": every skill and tool at once, without the avatar having to say them. */
+function SkillsButton() {
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const close = useCallback(() => {
+    setOpen(false);
+    btnRef.current?.focus();
+  }, []);
+  return (
+    <>
+      <button
+        ref={btnRef}
+        type="button"
+        className="about-rail__btn"
+        aria-haspopup="dialog"
+        onClick={() => {
+          setOpen(true);
+          track('SkillsViewed', { source: 'about-today' });
+        }}
+      >
+        View my skills
+      </button>
+      {open && (
+        <Suspense fallback={null}>
+          <SkillsView onClose={close} />
+        </Suspense>
+      )}
+    </>
   );
 }

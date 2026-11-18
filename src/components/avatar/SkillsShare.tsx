@@ -49,12 +49,19 @@ export default function SkillsShare({
   t,
   leaving,
   card,
+  onClose,
 }: {
   cues: SkillCues;
   /** seconds into the line; Infinity shows everything */
   t: number;
   leaving?: boolean;
   card: RefObject<HTMLElement | null>;
+  /**
+   * Opened by hand ("View my skills"), not by the avatar: the share becomes a
+   * dialog over a dimmed page, with a Close button; Escape or a click outside
+   * the panels closes it too.
+   */
+  onClose?: () => void;
 }) {
   const [box, setBox] = useState<Box>(() => frame(card.current));
   const gridRef = useRef<HTMLDivElement>(null);
@@ -84,17 +91,47 @@ export default function SkillsShare({
     };
   }, [card]);
 
+  const closeRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!onClose) return;
+    closeRef.current?.focus();
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      // the only control is Close, so Tab stays on it
+      else if (e.key === 'Tab') {
+        e.preventDefault();
+        closeRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [onClose]);
+
   return (
+    <>
+    {onClose && <div className={`${styles.scrim} ${leaving ? styles.leaving : ''}`} onClick={onClose} aria-hidden="true" />}
     <div
-      className={`${styles.share} ${leaving ? styles.leaving : ''}`}
+      className={`${styles.share} ${onClose ? styles.manual : ''} ${leaving ? styles.leaving : ''}`}
       style={{ top: box.top, left: box.left, width: box.width, height: box.height, alignItems: box.align }}
-      aria-hidden="true"
+      {...(onClose
+        ? { role: 'dialog', 'aria-modal': true, 'aria-label': "Derek's skills" }
+        : { 'aria-hidden': true })}
     >
       <div
         ref={gridRef}
         className={styles.grid}
         style={fit < 1 ? { transform: `scale(${fit})`, transformOrigin: ORIGIN[box.align] } : undefined}
       >
+        {onClose && (
+          <button ref={closeRef} type="button" className={styles.closeBtn} onClick={onClose}>
+            Close
+          </button>
+        )}
         {SKILL_GROUPS.map((g, gi) => (
           <div
             key={g.title}
@@ -116,5 +153,6 @@ export default function SkillsShare({
         ))}
       </div>
     </div>
+    </>
   );
 }

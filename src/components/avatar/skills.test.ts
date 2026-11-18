@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import skillsTrack from '../../../public/avatar/speech/skills.json';
 import type { Track } from './lines';
-import { FOLLOW_S, SKILL_GROUPS, cueMoments, skillCues, type SkillGroup } from './skills';
+import { FOLLOW_S, SKILL_GROUPS, cascadeCues, cueMoments, skillCues, type SkillGroup } from './skills';
 
 const words = (skillsTrack as Track).words;
 const when = (word: string, after = 0) => words.find(([w, t]) => w === word && t >= after)![1];
@@ -39,5 +39,16 @@ describe('a tool he does not name out loud', () => {
     ];
     const cues = skillCues(words, groups)!;
     expect(cues.items[0][1]).toBeCloseTo(when('React') + FOLLOW_S, 5);
+  });
+});
+
+describe('View my skills (no voice)', () => {
+  it('brings every section and tool in, in order, within about a second and a half', () => {
+    const c = cascadeCues();
+    expect(c.groups).toHaveLength(SKILL_GROUPS.length);
+    c.items.forEach((items, gi) => expect(items).toHaveLength(SKILL_GROUPS[gi].items.length));
+    const moments = c.groups.flatMap((g, i) => [g, ...c.items[i]]);
+    expect(moments.every((t, i) => i === 0 || t >= c.groups[0])).toBe(true);
+    expect(Math.max(...cueMoments(c))).toBeLessThan(1.5);
   });
 });

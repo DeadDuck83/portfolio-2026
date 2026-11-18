@@ -153,5 +153,20 @@ export function skillCues(words: Track['words'], groups: SkillGroup[] = SKILL_GR
   return cues;
 }
 
+/**
+ * The same share without the voice ("View my skills"): every section and tool
+ * comes in on a quick cascade, about a second end to end, in the order he'd
+ * say them.
+ */
+export function cascadeCues(groups: SkillGroup[] = SKILL_GROUPS): SkillCues {
+  const cues: SkillCues = { groups: [], items: [] };
+  groups.forEach((g, gi) => {
+    const t = gi * 0.12;
+    cues.groups.push(t);
+    cues.items.push(g.items.map((_, ii) => t + 0.16 + ii * 0.05));
+  });
+  return cues;
+}
+
 /** Every cue time, sorted: the moments the screen share changes. */
 export const cueMoments = (c: SkillCues) => [...c.groups, ...c.items.flat()].sort((a, b) => a - b);
