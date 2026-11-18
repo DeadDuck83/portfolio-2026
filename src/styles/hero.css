@@ -390,21 +390,47 @@
 }
 
 /*
- * Fill: a 2×2 block exactly as tall as the name column, so there is no empty
- * band under it and no notches. The stagger now lives in the seams. The left
- * column breaks at 44%, the right at 56%, so the right column still reads as
- * dropped. Images crop with cover; each tile can set its own focal point
- * (work.ts `imageFocus`).
+ * Fill: a 2×2 block at least as tall as the name column, so there is no empty
+ * band under it and no notches; the stagger lives in the seams.
+ *
+ * The bottom two tiles (Parker & Ace, PLMC: still images) always show their
+ * whole image: each is sized to the image's own shape (1199 × 731) at its
+ * column's width. The left column is a little wider, so its bottom tile is
+ * taller and the right column's seam sits lower: the right column still
+ * reads as dropped, and both columns end on one line. The top two (Sage,
+ * Bexa: cover videos made with their key content in the middle) take the
+ * rest and crop with cover. They never get squashed past a wide letterbox:
+ * if the screen is too short for that, the block grows and the page scrolls
+ * a little instead.
  */
 @media (min-width: 1181px) {
   .hx__work {
-    height: 100svh;
-    min-height: 34rem;
+    min-height: 100svh;
+    /* the grid's width, for the rows below (cqw) */
+    container-type: inline-size;
   }
   .hx__grid {
-    height: 100%;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: 44fr 12fr 44fr;
+    --seam: 8px;
+    --img-ar: calc(1199 / 731);
+    /* column widths: 5 : 4 */
+    --w1: calc((100cqw - var(--seam)) * 5 / 9);
+    --w2: calc((100cqw - var(--seam)) * 4 / 9);
+    /* the screen's height (as before), unless that's too short for the rows'
+       minimums, then just tall enough: a definite height, so the top row is
+       always exactly the rest and never sized by the videos */
+    height: max(
+      calc(100svh - clamp(1.25rem, 4vh, 2.25rem) - var(--hx-pad)),
+      calc(34rem - clamp(1.25rem, 4vh, 2.25rem) - var(--hx-pad)),
+      calc(var(--w1) / 1.75 + var(--w1) / var(--img-ar) + var(--seam))
+    );
+    grid-template-columns: 5fr 4fr;
+    grid-template-rows:
+      /* top: the rest (the height above keeps it from going wider than 1.75 : 1) */
+      minmax(0, 1fr)
+      /* the stagger: left bottom tile's height less the right one's */
+      calc(var(--w1) / var(--img-ar) - var(--w2) / var(--img-ar) - var(--seam))
+      /* right bottom tile: its image's shape */
+      calc(var(--w2) / var(--img-ar));
   }
   .tile:nth-child(1) {
     grid-area: 1 / 1 / 2 / 2;
