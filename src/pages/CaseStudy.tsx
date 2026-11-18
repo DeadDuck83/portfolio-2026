@@ -293,7 +293,7 @@ export default function CaseStudy() {
 
         {/* The finished product first: a strip of flows, or the single hero figure */}
         {cs.flows?.length ? (
-          <FlowStrip flows={cs.flows} />
+          <FlowStrip flows={cs.flows} brand={cs.brand} />
         ) : (
           <Reveal style={{ padding: '0 clamp(1rem, 3vw, 2.5rem)' }}>
             <PlaceholderFigure figure={cs.heroFigure} prominent />

@@ -1,17 +1,25 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
-import type { ProductFlow } from '../../data/caseStudies/types';
+import type { Brand, FlowDevice, ProductFlow } from '../../data/caseStudies/types';
 import { colors, fonts, weights } from '../../theme/tokens';
 import styles from './flowStrip.module.css';
 
 const num = (i: number) => String(i + 1).padStart(2, '0');
+
+/** Screen shape (width / height) per device; a bare screen is a phone. */
+const SCREEN_AR: Record<FlowDevice, number> = {
+  phone: 393 / 852,
+  tablet: 4402 / 2982,
+  laptop: 1512 / 982,
+  monitor: 16 / 10,
+};
 
 /**
  * The finished product, first: one card per flow on a strip that runs off the
  * right edge. Scroll it sideways (trackpad or touch); click a card to see every
  * screen in that flow.
  */
-export default function FlowStrip({ flows }: { flows: ProductFlow[] }) {
+export default function FlowStrip({ flows, brand }: { flows: ProductFlow[]; brand?: Brand }) {
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [open, setOpen] = useState<number | null>(null);
 
@@ -22,13 +30,51 @@ export default function FlowStrip({ flows }: { flows: ProductFlow[] }) {
     });
   }, []);
 
+  // device pictures share one scale: the tallest fills the strip's height,
+  // and on a narrow screen the widest fits it
+  const frames = flows.flatMap((f) => (f.frame ? [f.frame] : []));
+  const trackStyle = frames.length
+    ? ({
+        '--tallest': Math.max(...frames.map((fr) => fr.size[1])),
+        '--widest': Math.max(...frames.map((fr) => fr.size[0])),
+        // the whole row of devices, for the floor light under it
+        '--sumw': frames.reduce((sum, fr) => sum + fr.size[0], 0),
+        '--n': frames.length,
+      } as CSSProperties)
+    : undefined;
+
   return (
-    <div className={styles.strip}>
-      <ol className={styles.track} aria-label="The finished product">
+    <div
+      className={styles.strip}
+      data-frames={frames.length > 0 || undefined}
+      data-highlight={(frames.length > 0 && brand?.highlight) || undefined}
+      style={brand ? ({ '--band': brand.color, '--ink': brand.ink, '--hl': brand.highlight } as CSSProperties) : undefined}
+    >
+      <ol className={styles.track} aria-label="The finished product" data-frames={frames.length > 0 || undefined} style={trackStyle}>
         {flows.map((f, i) => {
           const cover = f.screens[f.cover ?? 0] ?? f.screens[0];
+          const loading = i < 3 ? 'eager' : 'lazy';
+          const fr = f.frame;
+          const img = (
+            <img className={fr ? styles.shot : styles.screen} src={cover.src} alt="" loading={loading} draggable={false} />
+          );
+          const pct = (v: number) => `${(v * 100).toFixed(2)}%`;
           return (
-            <li key={f.title} className={styles.item}>
+            <li
+              key={f.title}
+              className={styles.item}
+              data-frame={fr ? '' : undefined}
+              style={fr ? ({ '--iw': fr.size[0], '--ih': fr.size[1], '--i': i } as CSSProperties) : undefined}
+            >
+              {fr && f.glow && (
+                <span className={styles.glow} aria-hidden="true">
+                  {f.glow.map((c, j) => (
+                    <span key={j} className={styles.blob} style={{ '--c': c } as CSSProperties}>
+                      <span />
+                    </span>
+                  ))}
+                </span>
+              )}
               <button
                 ref={(el) => {
                   cardRefs.current[i] = el;
@@ -39,7 +85,24 @@ export default function FlowStrip({ flows }: { flows: ProductFlow[] }) {
                 aria-label={`${f.title}: open all ${f.screens.length} screens`}
               >
                 <span className={styles.plate}>
-                  <img className={styles.screen} src={cover.src} alt="" loading={i < 3 ? 'eager' : 'lazy'} draggable={false} />
+                  {fr ? (
+                    <span
+                      className={styles.device}
+                      style={
+                        {
+                          '--sl': pct(fr.screen[0]),
+                          '--st': pct(fr.screen[1]),
+                          '--sw': pct(fr.screen[2]),
+                          '--sh': pct(fr.screen[3]),
+                        } as CSSProperties
+                      }
+                    >
+                      {img}
+                      <img className={styles.shell} src={fr.src} alt="" loading={loading} draggable={false} />
+                    </span>
+                  ) : (
+                    img
+                  )}
                 </span>
                 <span className={styles.caption}>
                   <span className={styles.title} style={{ fontFamily: fonts.display, fontWeight: weights.display }}>
@@ -86,6 +149,7 @@ function FlowViewer({
   const rowRef = useRef<HTMLOListElement>(null);
   const f = flows[index];
   const last = flows.length - 1;
+  const ar = SCREEN_AR[f.device ?? 'phone'];
   // the height left for the screens once the header has laid out, so they
   // size to the real space on every device instead of a guess
   const [room, setRoom] = useState<number | null>(null);
@@ -167,14 +231,15 @@ function FlowViewer({
       <ol
         ref={rowRef}
         className={styles.row}
-        style={{ '--n': f.screens.length, ...(room ? { '--room': `${room}px` } : {}) } as CSSProperties}
+        data-wide={ar > 1 || undefined}
+        style={{ '--n': f.screens.length, '--ar': ar, ...(room ? { '--room': `${room}px` } : {}) } as CSSProperties}
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
       >
         {f.screens.map((s, i) => (
           <li key={s.src} className={styles.step}>
-            <div className={styles.phone} data-scroll tabIndex={0} role="region" aria-label={s.label}>
+            <div className={styles.frame} data-scroll tabIndex={0} role="region" aria-label={s.label}>
               <img src={s.src} alt={s.alt} draggable={false} />
             </div>
             <span className={styles.stepLabel}>

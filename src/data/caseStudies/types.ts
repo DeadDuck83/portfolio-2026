@@ -117,6 +117,44 @@ export interface ProductFlow {
   screens: FlowScreen[];
   /** Which screen fronts the card. Defaults to the first. */
   cover?: number;
+  /**
+   * The screens' shape when the flow is open: phone 393×852 (the default),
+   * tablet 4402×2982, laptop 1512×982, monitor 16:10.
+   */
+  device?: FlowDevice;
+  /**
+   * The whole device on the card, the cover screen showing through it. Left
+   * out, the card shows a bare phone screen rising from a line (Sage).
+   */
+  frame?: FlowFrame;
+  /**
+   * The system's own colours (three), as soft shapes that drift very slowly
+   * behind its device on the card. Only drawn with a frame.
+   */
+  glow?: [string, string, string];
+}
+
+export type FlowDevice = 'phone' | 'tablet' | 'laptop' | 'monitor';
+
+export interface Brand {
+  /** The brand colour itself, e.g. the product's primary. */
+  color: string;
+  /** Text on it. Must keep 4.5:1 at 90% (captions are mixed from it toward the colour). */
+  ink: string;
+  /**
+   * The lightest colour in the brand's mix: a broad, soft oval of it lights
+   * the bottom third of the band under a strip of devices, like a floor.
+   */
+  highlight?: string;
+}
+
+/** A device picture on a transparent background, with its screen cut out. */
+export interface FlowFrame {
+  src: string;
+  /** The picture's size in px. Frames in one strip share a scale, so these set their sizes relative to each other. */
+  size: [number, number];
+  /** The screen hole as fractions of the picture: left, top, width, height. */
+  screen: [number, number, number, number];
 }
 
 export interface CaseStudy {
@@ -140,6 +178,12 @@ export interface CaseStudy {
    * stays in the image collage.
    */
   flows?: ProductFlow[];
+  /**
+   * The product's own colours, for the parts of the page that carry its brand
+   * rather than the portfolio's (today: the finished-product band). Left out,
+   * the band is the portfolio lime.
+   */
+  brand?: Brand;
 
   // 01 Context
   context: {

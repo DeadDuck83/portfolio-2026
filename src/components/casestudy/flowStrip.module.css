@@ -1,7 +1,8 @@
 /* The case-study hero strip: the finished product, one card per flow.
    Cards start on the page's content edge and run off the right of the screen,
    so it reads as "there's more" without a word. It sits on a full-width band
-   of the brand lime: the one bright stretch on a dark site, so the work is
+   in the product's own colour (the case study's `brand`; the portfolio lime
+   if it has none): the one bright stretch on a dark site, so the work is
    what the eye lands on. */
 
 .strip {
@@ -9,8 +10,13 @@
   /* where the page's text column starts (layout.maxWidth = 1240) */
   --inset: calc(max(0px, (100% - 1240px) / 2) + var(--side));
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --band: #9da767; /* colors.accentBright */
+  --band: #9da767; /* colors.accentBright; FlowStrip sets the brand's */
   --ink: #1a1712; /* colors.bg, as text on the lime */
+  /* the smaller caption text: ink mixed toward the band, never faded, so it
+     keeps 4.5:1 on any band the brand ink is chosen for */
+  --ink-soft: color-mix(in srgb, var(--ink) 90%, var(--band));
+  /* shadows take a deep shade of the band, so they read as cast on it */
+  --shade: color-mix(in srgb, var(--band) 22%, #000);
   position: relative;
   padding: clamp(2rem, 6vh, 3.5rem) 0 clamp(1rem, 3vh, 2rem);
   background: var(--band);
@@ -46,7 +52,7 @@
 .arrow:focus-visible,
 .close:focus-visible,
 .card:focus-visible,
-.phone:focus-visible { outline: 2px solid #9da767; outline-offset: 3px; }
+.frame:focus-visible { outline: 2px solid #9da767; outline-offset: 3px; }
 
 /* on the lime band: a dark focus ring */
 .strip .card:focus-visible { outline-color: var(--ink); }
@@ -57,8 +63,13 @@
   /* left: start on the page's text column; right: only the page gutter, so
      the scroll ends on the last card instead of a stretch of empty band */
   padding: 0 var(--side) 1.5rem var(--inset);
-  display: flex;
-  gap: clamp(12px, 1.4vw, 20px);
+  /* a row of cards that share two rows, picture and caption, so every
+     picture's line sits on one level even when the pictures differ in height */
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  grid-auto-columns: max-content;
+  column-gap: clamp(12px, 1.4vw, 20px);
   /* sideways only: nothing in a card may ever make the strip scroll up/down */
   overflow-x: auto;
   overflow-y: hidden;
@@ -70,13 +81,36 @@
 .track::-webkit-scrollbar { display: none; }
 
 .item {
-  /* short screens (a phone on its side): the whole card, title included, fits the height */
-  flex: 0 0 min(clamp(299px, 29.9vw, 429px), calc((100svh - 8rem) * 0.8));
+  /* the width of a phone card; short screens (a phone on its side): the
+     whole card, title included, fits the height */
+  --w: min(clamp(299px, 29.9vw, 429px), calc((100svh - 8rem) * 0.8));
+  width: var(--w);
+  grid-row: span 2;
+  display: grid;
+  grid-template-rows: subgrid;
   scroll-snap-align: start;
+}
+/* a whole device (Bexa): its picture at the strip's shared scale --k, one
+   image px to --k. The tallest device is a phone card's height; on a narrow
+   screen the widest one fits instead. (--iw/--ih per card, --tallest and
+   --widest on the track, all set by FlowStrip from the data.) */
+.track[data-frames] {
+  /* as .item's, so the track can size things to the row of devices */
+  --w: min(clamp(299px, 29.9vw, 429px), calc((100svh - 8rem) * 0.8));
+  --k: min(calc(var(--w) * 1.25 / var(--tallest)), calc(86vw / var(--widest)));
+}
+.item[data-frame] { width: calc(var(--iw) * var(--k)); }
+/* devices need room around them, not a seam (the pictures are trimmed to
+   the device and its shadow, so this is the space you see) */
+.track[data-frames] {
+  --gap: clamp(36px, 7vw, 112px);
+  column-gap: var(--gap);
 }
 
 .card {
-  display: block;
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
   width: 100%;
   padding: 0;
   border: 0;
@@ -93,6 +127,7 @@
    shadow is free to spread on the lime. */
 .plate {
   display: block;
+  align-self: end;
   position: relative;
   aspect-ratio: 4 / 5;
   overflow-x: visible;
@@ -119,12 +154,15 @@
   transform: translateX(-50%);
   /* an iPhone screen's corner (55pt on 393pt), scaled to the plate */
   border-radius: 9.2cqw;
-  box-shadow: 0 1.5cqw 4cqw rgba(30, 34, 8, 0.22), 0 6cqw 14cqw rgba(30, 34, 8, 0.3);
+  box-shadow:
+    0 1.5cqw 4cqw color-mix(in srgb, var(--shade) 24%, transparent),
+    0 6cqw 14cqw color-mix(in srgb, var(--shade) 32%, transparent);
   transition: transform 0.6s var(--ease);
   user-select: none;
 }
 
 .caption {
+  align-self: start;
   display: grid;
   row-gap: 0.35rem;
   padding: 0.95rem 0.15rem 0;
@@ -137,23 +175,169 @@
 .line {
   font-size: 0.78rem;
   line-height: 1.55;
-  color: rgba(26, 23, 18, 0.8);
+  color: var(--ink-soft);
 }
 .more {
   font-size: 0.68rem;
   letter-spacing: 0.06em;
-  color: rgba(26, 23, 18, 0.62);
+  color: var(--ink-soft);
   transition: color 0.2s ease;
+}
+
+/* ---- a whole device (Bexa) ----
+   Derek's device pictures sit whole in the band on their own soft shadow, so
+   the band can be any colour. The screen is cut out of the picture
+   (cover-videos/bexa/tools/prep_frames.py); the cover screenshot shows
+   through the hole. No line: the device rests in the section. */
+[data-frame] .plate {
+  aspect-ratio: var(--iw) / var(--ih);
+  overflow: visible;
+}
+[data-frame] .plate::after { display: none; }
+
+/* ---- the system's colours, drifting behind the devices ----
+   Three big soft shapes per card in the system's own colours (Derek's
+   blurred-blob look, from his Bexa background SVG). They sit in the top two
+   thirds of the band, well wider than their card, so neighbours overlap and
+   blend; they fade out above the captions. Each is a radial gradient, so
+   nothing is blurred or repainted while it moves: an outer layer drifts, an
+   inner one turns and stretches, on unrelated slow periods, so the shape
+   never stops changing and never visibly repeats. Transform only: it all
+   runs on the compositor. */
+.track[data-frames] {
+  /* the glows go under every card, not just their own */
+  isolation: isolate;
+  /* room above the cards for the colour */
+  --pt: clamp(3rem, 9vh, 5.5rem);
+  padding-top: var(--pt);
+}
+.strip[data-frames] { padding-block: 0; }
+/* the band's bottom padding moves inside the track, so the floor light
+   reaches the band's bottom edge */
+.track[data-frames] { padding-bottom: calc(1.5rem + clamp(1rem, 3vh, 2rem)); }
+
+/* the floor light: one broad oval of the brand's lightest colour under the
+   whole row, first device to last, in the band's bottom third. Brightest at
+   the bottom, fading up toward the devices and out toward both ends. */
+.strip[data-highlight] .track { position: relative; }
+.strip[data-highlight] .track::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: var(--inset);
+  width: calc(var(--sumw) * var(--k) + (var(--n) - 1) * var(--gap));
+  top: 66.7%;
+  bottom: 0;
+  background: radial-gradient(
+    50% 100% at 50% 100%,
+    color-mix(in srgb, var(--hl) 78%, transparent) 0%,
+    color-mix(in srgb, var(--hl) 62%, transparent) 45%,
+    color-mix(in srgb, var(--hl) 26%, transparent) 78%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+.item[data-frame] {
+  position: relative;
+  /* the tallest device's height: the colour field is sized from it */
+  --band-h: calc(var(--tallest) * var(--k));
+  --spread: calc(var(--band-h) * 0.5);
+}
+.glow {
+  position: absolute;
+  z-index: -1;
+  left: calc(-1 * var(--spread));
+  right: calc(-1 * var(--spread));
+  /* from the top of the band down to about two thirds of it */
+  top: calc(-1 * var(--pt));
+  height: calc((var(--pt) + var(--band-h)) * 0.86);
+  /* moving shapes stay inside this box, so they never widen the scroll */
+  overflow: clip;
+  pointer-events: none;
+}
+/* the last card's colour stops at the page gutter, so the strip still ends
+   on the last device */
+.item[data-frame]:last-child .glow { right: calc(-1 * min(var(--spread), var(--side))); }
+.blob {
+  position: absolute;
+  animation: drift var(--td) ease-in-out calc(var(--i, 0) * -9s - var(--td) * 0.37) infinite alternate;
+  will-change: transform;
+}
+.blob > span {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    var(--c) 0%,
+    color-mix(in srgb, var(--c) 82%, transparent) 34%,
+    color-mix(in srgb, var(--c) 36%, transparent) 66%,
+    transparent 100%
+  );
+  animation: morph var(--tm) ease-in-out calc(var(--i, 0) * -13s - var(--tm) * 0.61) infinite alternate;
+  will-change: transform;
+}
+/* where each shape sits in the colour field, and its own pace */
+.blob:nth-child(1) { left: 2%; top: 4%; width: 58%; height: 74%; --td: 27s; --tm: 37s; --r0: -8deg; --r1: 16deg; }
+.blob:nth-child(2) { left: 40%; top: 0%; width: 58%; height: 70%; --td: 31s; --tm: 43s; --r0: 12deg; --r1: -14deg; }
+.blob:nth-child(3) { left: 20%; top: 26%; width: 60%; height: 66%; --td: 35s; --tm: 47s; --r0: -18deg; --r1: 6deg; }
+@keyframes drift {
+  from { transform: translate(-5%, 3%); }
+  to { transform: translate(6%, -5%); }
+}
+@keyframes morph {
+  from { transform: rotate(var(--r0)) scale(1.1, 0.86); }
+  to { transform: rotate(var(--r1)) scale(0.88, 1.12); }
+}
+
+/* the caption sits centred under its device in short, even lines (about 7
+   to 9 words); under a narrow device it may spread into the gaps beside it */
+[data-frame] .caption {
+  justify-self: center;
+  justify-items: center;
+  width: calc(100% + var(--gap));
+  padding-inline: 0;
+  text-align: center;
+}
+[data-frame] .line {
+  max-width: 42ch;
+  text-wrap: balance;
+}
+.device {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+  transition: transform 0.6s var(--ease);
+}
+.shot {
+  position: absolute;
+  left: var(--sl);
+  top: var(--st);
+  width: var(--sw);
+  height: var(--sh);
+  object-fit: cover;
+  object-position: top;
+  background: #fff;
+  user-select: none;
+}
+.shell {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
 }
 
 @media (hover: hover) {
   .card:hover .screen { transform: translate(-50%, -3.5%); }
+  .card:hover .device { transform: scale(1.025); }
   .card:hover .more { color: var(--ink); }
 }
 
 /* phones: as big as a card can be with the next one still peeking in */
 @media (max-width: 640px) {
-  .item { flex-basis: min(86vw, calc((100svh - 8rem) * 0.8)); }
+  .item,
+  .track[data-frames] { --w: min(86vw, calc((100svh - 8rem) * 0.8)); }
 }
 
 /* ---- the open flow ---- */
@@ -204,11 +388,13 @@
   /* the tallest a screen can be: the measured row height (JS) less its label
      and padding; the fallback covers the first frame */
   --tall: calc(var(--room, calc(100svh - 11rem)) - var(--pad-b) - var(--label));
-  /* the height at which every screen in the flow fits across (852/393 = 2.168) */
-  --fit: calc((100vw - 2 * var(--pad) - (var(--n, 3) - 1) * var(--gap)) / var(--n, 3) * 2.168);
+  /* the height at which every screen in the flow fits across
+     (--ar: the screen's width over its height, set per flow) */
+  --fit: calc((100vw - 2 * var(--pad) - (var(--n, 3) - 1) * var(--gap)) / var(--n, 3) / var(--ar, 0.4613));
   /* wide screens: the whole flow at once, while that stays readable;
      past that it scrolls sideways */
   --h: min(var(--tall), 760px, max(var(--fit), 420px));
+  --rad: calc(var(--h) * 0.065);
   list-style: none;
   margin: 0;
   padding: 0 var(--pad) var(--pad-b);
@@ -222,10 +408,18 @@
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--pad);
 }
+/* desktop and tablet screens: one at a time, as big as the room allows,
+   with the next one peeking in */
+.row[data-wide] {
+  --h: min(var(--tall), calc((100vw - 2 * var(--pad)) * 0.86 / var(--ar)));
+  --rad: calc(var(--h) * 0.014);
+  justify-content: flex-start;
+}
+.row[data-wide] .step { scroll-snap-align: start; }
 
 .step {
   flex: none;
-  width: calc(var(--h) * 393 / 852);
+  width: calc(var(--h) * var(--ar, 0.4613));
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -238,19 +432,19 @@
 .step:nth-child(5) { animation-delay: 0.24s; }
 @keyframes stepIn { from { opacity: 0; transform: translateY(16px); } }
 
-/* a phone-sized window; screens taller than a phone scroll inside it */
-.phone {
+/* a device-sized window; screens taller than the device scroll inside it */
+.frame {
   width: 100%;
   height: var(--h);
   overflow-y: auto;
   overscroll-behavior: contain;
-  border-radius: calc(var(--h) * 0.065);
+  border-radius: var(--rad);
   background: #f2efe9;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   scrollbar-width: none;
 }
-.phone::-webkit-scrollbar { display: none; }
-.phone img { display: block; width: 100%; height: auto; }
+.frame::-webkit-scrollbar { display: none; }
+.frame img { display: block; width: 100%; height: auto; }
 
 .stepLabel {
   font-size: 0.78rem;
@@ -267,7 +461,7 @@
 /* tablets and phones: bigger screens that swipe, the next one peeking in */
 @media (max-width: 1099px) {
   .row {
-    --h: min(var(--tall), 760px, calc(42vw * 2.168));
+    --h: min(var(--tall), 760px, calc(42vw / var(--ar, 0.4613)));
     justify-content: flex-start;
   }
   .step { scroll-snap-align: start; }
@@ -280,7 +474,8 @@
   .barActions { gap: 4px; }
   .barActions .arrow,
   .barActions .close { height: 2.2rem; min-width: 2.2rem; padding: 0 0.6rem; font-size: 0.85rem; }
-  .row { --h: min(var(--tall), calc(80vw * 2.168)); }
+  .row { --h: min(var(--tall), calc(80vw / var(--ar, 0.4613))); }
+  .row[data-wide] { --h: min(var(--tall), calc((100vw - 2 * var(--pad)) * 0.94 / var(--ar))); }
 }
 
 /* short screens (small phones, any phone on its side): the title and the
@@ -299,7 +494,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .strip, .viewer, .step { animation: none; }
+  .strip, .viewer, .step, .blob, .blob > span { animation: none; }
   .screen { transition: none; }
   .card:hover .screen { transform: translateX(-50%); }
+  .card:hover .device { transform: none; }
 }

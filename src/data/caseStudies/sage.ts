@@ -28,6 +28,9 @@ export const sage: CaseStudy = {
     src: '/case-studies/sage/Sage-01.jpg',
     alt: 'Sage Healthspan hero — lifespan to healthspan with app screens',
   },
+  // Sage green: the app's primary (buttons, rings, charts)
+  brand: { color: '#589077', ink: '#0e0c09' },
+
   flows: [
     {
       title: 'Scan your tests',

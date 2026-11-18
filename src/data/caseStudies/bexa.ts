@@ -31,6 +31,123 @@ export const bexa: CaseStudy = {
     alt: 'Bexa handheld breast screening device and suite',
   },
 
+  // Bexa lavender: the base of the brand background, and MyBexa's date card
+  // highlight: the cream, the lightest colour in the brand background
+  brand: { color: '#948AAB', ink: '#0e0c09', highlight: '#F9EAE5' },
+
+  // The four apps in the order one exam moves through them, each on the
+  // device it runs on: Derek's device pictures (transparent, screen cut out by
+  // cover-videos/bexa/tools/prep_frames.py). Mock data throughout (names
+  // patched in cover-videos/bexa). `device` is the screens' shape when open.
+  flows: [
+    {
+      title: 'BexaSupport',
+      line: 'The ops team sets up clients, locations, and exam events in one place.',
+      device: 'monitor',
+      frame: { src: '/case-studies/bexa/frames/support.webp', size: [642, 542], screen: [0.0312, 0.0867, 0.9174, 0.5775] },
+      // its logo's periwinkle, light blue (the brand set), cream
+      glow: ['#7FA6D6', '#C8D9EB', '#F9EAE5'],
+      screens: [
+        {
+          src: '/case-studies/bexa/flows/support-1-client.webp',
+          alt: 'BexaSupport client page for Riverbend ISD: contact details, landing page settings, and its list of school locations',
+          label: 'A client and its locations',
+        },
+        {
+          src: '/case-studies/bexa/flows/support-2-event.webp',
+          alt: 'Create an event, step 1 of 2: choose the location for a new exam event from a searchable list',
+          label: 'Create an exam event',
+        },
+      ],
+    },
+    {
+      title: 'MyBexa',
+      line: 'Patients book, check in with a code, and get results, all on their phone.',
+      device: 'phone',
+      frame: { src: '/case-studies/bexa/frames/mybexa.webp', size: [247, 542], screen: [0.0729, 0.083, 0.8583, 0.81] },
+      // teal, the Book Exam pink, the sign-in aqua
+      glow: ['#3FB7AA', '#E3A6B8', '#A8E0E2'],
+      cover: 3,
+      screens: [
+        {
+          src: '/case-studies/bexa/flows/mybexa-1-login.webp',
+          alt: 'Welcome to myBexa: accurate, pain-free breast exams, with Sign in with Microsoft',
+          label: 'Sign in with Microsoft',
+        },
+        {
+          src: '/case-studies/bexa/flows/mybexa-2-schedule.webp',
+          alt: 'No exam booked yet: Schedule your exam today, with a Book Exam button',
+          label: 'Nothing booked yet',
+        },
+        {
+          src: '/case-studies/bexa/flows/mybexa-3-book.webp',
+          alt: 'Select appointment: pick a location, a day in the calendar, and an afternoon time slot',
+          label: 'Pick a place, a day, a time',
+        },
+        {
+          src: '/case-studies/bexa/flows/mybexa-4-exam.webp',
+          alt: 'The booked exam on Feb 27 at 2:00 PM, with the location and a QR code to show at check-in',
+          label: 'The exam, with a code to check in',
+        },
+        {
+          src: '/case-studies/bexa/flows/mybexa-5-results.webp',
+          alt: 'Exams: the upcoming exam above a list of past results by date',
+          label: 'Every result in one place',
+        },
+      ],
+    },
+    {
+      title: 'BexaClinical',
+      line: 'Examiners run the exam and log every finding, right in the room.',
+      device: 'tablet',
+      frame: { src: '/case-studies/bexa/frames/clinical.webp', size: [661, 511], screen: [0.0575, 0.1468, 0.8094, 0.5832] },
+      // the Clinical teal, aqua, cream
+      glow: ['#1FAAA9', '#98D8D8', '#F9EAE5'],
+      screens: [
+        {
+          src: '/case-studies/bexa/flows/clinical-1-exam.webp',
+          alt: 'An open exam: finding locations on both breast diagrams, exam details, status, patient information, and notes',
+          label: 'The exam at a glance',
+        },
+        {
+          src: '/case-studies/bexa/flows/clinical-2-findings.webp',
+          alt: 'Findings: each finding location with its scan position, classification status, and ultrasound results',
+          label: 'Each finding, located and classified',
+        },
+      ],
+    },
+    {
+      title: 'BexaQuality',
+      line: 'Every metric held to a pass range, so a drifting device gets caught.',
+      device: 'laptop',
+      frame: { src: '/case-studies/bexa/frames/quality.webp', size: [581, 482], screen: [0.0826, 0.0954, 0.7728, 0.5166] },
+      // the dashboard's plum and violet, the brand's darker plum
+      glow: ['#4A2563', '#C08AF0', '#877BA3'],
+      screens: [
+        {
+          src: '/case-studies/bexa/flows/quality-1-dashboard.webp',
+          alt: 'BexaQuality dashboard: discovery and referral rates against their ranges, mass findings, and total exams',
+          label: 'Every metric against its range',
+        },
+        {
+          src: '/case-studies/bexa/flows/quality-2-filter.webp',
+          alt: 'The filter panel over the dashboard: date range, client, location, age, ethnicity, and size',
+          label: 'Narrow it to any group',
+        },
+        {
+          src: '/case-studies/bexa/flows/quality-3-examiners.webp',
+          alt: 'Examiners and mechanics: each examiner with completed exams and a pass or fail for every device check',
+          label: 'Every examiner, every check',
+        },
+        {
+          src: '/case-studies/bexa/flows/quality-4-examiner.webp',
+          alt: 'One examiner: exam overview, BI-RADS chart, scheduling metrics, and alarms for exam time and force',
+          label: 'One examiner, up close',
+        },
+      ],
+    },
+  ],
+
   context: {
     chapter: {
       label: 'Context',
