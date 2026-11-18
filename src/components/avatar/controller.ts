@@ -6,13 +6,12 @@
  * so the whole face punctuates the words, not just the mouth.
  */
 import type { Rive, ViewModelInstance } from '@rive-app/react-webgl2';
+import { SILENCE, voiceElement } from './audioUnlock';
 import { lineAudio, lineTrack, type LineId, type Track } from './lines';
 
 export const State = { Idle: 0, Listening: 1, Thinking: 2, Confused: 3, WarmAck: 4, Shocked: 5, Speaking: 6 } as const;
 
 const ANTICIPATION_MS = 220; // re-centre gaze, settle the mouth, then speak
-/** A silent clip to start the shared element with from a tap. */
-const SILENCE = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
 
 /** How a line ended: played out, cut off (stopped or interrupted), or the browser wouldn't (or couldn't) play it. */
 export type Spoken = 'done' | 'cut' | 'blocked';
@@ -63,10 +62,8 @@ export class AvatarController {
   }
 
   private player() {
-    if (!this.el) {
-      this.el = new Audio();
-      this.el.preload = 'auto';
-    }
+    // the page-wide element: a tap may already have started it (audioUnlock.ts)
+    if (!this.el) this.el = voiceElement();
     return this.el;
   }
 

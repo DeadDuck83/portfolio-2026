@@ -20,6 +20,7 @@ import {
   type Shirt,
 } from './lines';
 import { cornerStyle, nearestCorner, type Corner } from './corner';
+import { primeVoice } from './audioUnlock';
 import { dockSlotRect, registerAudioUnlock } from './dock';
 import { useEyeFollow } from './eyeFollow';
 import SkillsShare from './SkillsShare';
@@ -78,6 +79,8 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
   // muted only because the browser wouldn't allow sound yet (not the visitor's
   // choice): the first thing they ask turns the sound on
   const autoMuted = useRef(false);
+  // ...and while that's so, the sound button asks for the tap
+  const [soundHint, setSoundHint] = useState(false);
   const [camera, setCamera] = useState(true);
   const [muted, setMuted] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -128,9 +131,10 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rive]);
 
-  // the tap that opens the card (hero tile, floating button) unlocks his voice
+  // the tap that opens the card (hero tile, floating button) unlocks his voice,
+  // even if the avatar is still loading
   useEffect(() => {
-    registerAudioUnlock(() => ctl.current?.unlock());
+    registerAudioUnlock(() => (ctl.current ? ctl.current.unlock() : primeVoice()));
     return () => registerAudioUnlock(null);
   }, []);
 
@@ -413,6 +417,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
       // The browser wouldn't play sound without a fresh tap: carry on muted,
       // with captions. The next tap (or the sound button) turns it back on.
       autoMuted.current = true;
+      setSoundHint(true);
       setMuted(true);
       c.setMuted(true);
       result = await c.speak(line, onTime);
@@ -442,6 +447,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     if (!open || !ctlReady || live) return;
     if (auto) {
       autoMuted.current = true;
+      setSoundHint(true);
       setMuted(true);
       ctl.current?.setMuted(true);
     }
@@ -472,6 +478,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
     ctl.current?.unlock();
     if (!autoMuted.current) return;
     autoMuted.current = false;
+    setSoundHint(false);
     setMuted(false);
     ctl.current?.setMuted(false);
   };
@@ -639,6 +646,7 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
   const toggleSound = () => {
     ctl.current?.unlock();
     autoMuted.current = false;
+    setSoundHint(false);
     const m = !muted;
     track('AvatarSettingChanged', { setting: 'sound', on: !m });
     setMuted(m);
@@ -690,11 +698,21 @@ export default function AvatarCall({ open, auto, corner, onCorner, onReady, onCl
         )}
         {live && (
           <div className={styles.tileControls}>
-            {camera && (
-              <button onClick={toggleSound} aria-pressed={!muted}>
-                {muted ? 'Unmute' : 'Mute'}
-              </button>
-            )}
+            {camera &&
+              (soundHint && muted ? (
+                // muted only because the browser held the sound back: say so, and one tap fixes it
+                <button className={styles.soundHint} onClick={toggleSound} aria-pressed={false}>
+                  <svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true">
+                    <path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor" />
+                    <path d="M11.5 5.5a4 4 0 0 1 0 5M13.5 3.5a7 7 0 0 1 0 9" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                  </svg>
+                  Tap for sound
+                </button>
+              ) : (
+                <button onClick={toggleSound} aria-pressed={!muted}>
+                  {muted ? 'Unmute' : 'Mute'}
+                </button>
+              ))}
             <button onClick={toggleCamera}>{camera ? 'Camera off' : 'Camera on'}</button>
           </div>
         )}

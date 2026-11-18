@@ -59,6 +59,19 @@
   padding: 4px 8px; border-radius: 999px; font: inherit; font-size: 9px; color: #fff; cursor: pointer;
   background: rgba(20, 18, 14, 0.55); border: 1px solid rgba(255, 255, 255, 0.18); backdrop-filter: blur(6px);
 }
+/* the browser held his sound back (no tap yet): the sound button asks for one */
+.tileControls .soundHint {
+  display: inline-flex; align-items: center; gap: 4px; font-weight: 600;
+  color: #17140f; background: #9da767; border-color: #9da767;
+  animation: soundPulse 2.4s ease-in-out infinite;
+}
+@keyframes soundPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(157, 167, 103, 0.55); }
+  50% { box-shadow: 0 0 0 6px rgba(157, 167, 103, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tileControls .soundHint { animation: none; }
+}
 
 /* chat */
 .chat { position: relative; display: flex; flex-direction: column; min-height: 0; min-width: 0; padding: 10px 10px 8px; gap: 6px; }

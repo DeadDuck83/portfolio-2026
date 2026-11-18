@@ -1,3 +1,4 @@
+import { primeVoice } from './audioUnlock';
 /**
  * Tiny shared state between the hero's live avatar tile and the global
  * AvatarGuide:
@@ -59,9 +60,13 @@ export function dockSlotRect(): DOMRect | null {
 export function registerAudioUnlock(fn: (() => void) | null) {
   unlock = fn;
 }
-/** Call from a tap that opens the card, so his greeting can have sound. */
+/**
+ * Call from a tap that opens the card, so his greeting can have sound. Before
+ * the card has loaded, it starts the shared voice element itself.
+ */
 export function unlockAvatarAudio() {
-  unlock?.();
+  if (unlock) unlock();
+  else primeVoice();
 }
 
 /** Ask the guide to open its call card. Call from the tap itself. */
