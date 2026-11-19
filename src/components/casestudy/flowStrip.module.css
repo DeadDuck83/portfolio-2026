@@ -80,6 +80,40 @@
 }
 .track::-webkit-scrollbar { display: none; }
 
+/* ← → over the band's top right, on the text column's edge. Only while the
+   strip runs past the screen: the next card doesn't always peek in, and a
+   mouse wheel can't scroll sideways. */
+.stripNav {
+  position: absolute;
+  z-index: 2;
+  top: clamp(0.9rem, 2.6vh, 1.5rem);
+  right: calc(max(0px, (100% - 1240px) / 2) + var(--side));
+  display: flex;
+  gap: 6px;
+}
+.stripArrow {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--band) 80%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+.stripArrow:hover:not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--band) 55%, #fff);
+  border-color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+.stripArrow[aria-disabled='true'] { opacity: 0.35; cursor: default; }
+.stripArrow:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
 .item {
   /* the width of a phone card; short screens (a phone on its side): the
      whole card, title included, fits the height */
@@ -526,7 +560,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .strip, .viewer, .step, .blob, .blob > span { animation: none; }
-  .screen { transition: none; }
   .card:hover .screen { transform: translateX(-50%); }
   .card:hover .device { transform: none; }
 }
+/* motion paused on the site (src/lib/motion.ts): the devices don't lift */
+:root[data-motion='off'] .card:hover .screen { transform: translateX(-50%); }
+:root[data-motion='off'] .card:hover .device { transform: none; }

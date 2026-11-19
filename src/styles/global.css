@@ -128,6 +128,12 @@ a {
   }
 }
 
+/* Reduced motion, from the system or the visitor's Pause motion
+   (src/lib/motion.ts sets data-motion="off" for either). Loops stop, and
+   anything that animates in arrives at once. Fades stay as they are: cutting
+   them too makes every hover snap, which is harsher than the motion it
+   replaces. Movement (transform, position, size) never animates; the hover
+   lifts and zooms themselves are switched off where they're defined. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *,
@@ -135,18 +141,16 @@ a {
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-property: opacity, color, background-color, border-color, outline-color, text-decoration-color, box-shadow, fill, stroke, filter !important;
   }
 }
-/* the same when the visitor pauses motion (src/lib/motion.ts): loops stop,
-   and anything that animates in arrives at once */
 :root[data-motion='off'] { scroll-behavior: auto; }
 :root[data-motion='off'] *,
 :root[data-motion='off'] *::before,
 :root[data-motion='off'] *::after {
   animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
-  transition-duration: 0.001ms !important;
+  transition-property: opacity, color, background-color, border-color, outline-color, text-decoration-color, box-shadow, fill, stroke, filter !important;
 }
 
 /* Pause motion / Play motion (MotionToggle): takes its type from wherever

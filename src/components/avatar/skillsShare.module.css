@@ -127,3 +127,6 @@
   .group, .item { transform: none; transition: opacity 0.2s ease; }
   .scrim { animation: none; }
 }
+/* motion paused on the site (src/lib/motion.ts): fade in, don't rise or pop */
+:root[data-motion='off'] .group,
+:root[data-motion='off'] .item { transform: none; transition: opacity 0.2s ease; }

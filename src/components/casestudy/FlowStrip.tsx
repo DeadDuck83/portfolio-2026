@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import type { Brand, FlowDevice, ProductFlow } from '../../data/caseStudies/types';
+import { motionOff } from '../../lib/motion';
 import { colors, fonts, weights } from '../../theme/tokens';
 import styles from './flowStrip.module.css';
 
@@ -24,6 +25,40 @@ const SCREEN_AR: Record<FlowDevice, number> = {
 export default function FlowStrip({ flows, brand }: { flows: ProductFlow[]; brand?: Brand }) {
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [open, setOpen] = useState<number | null>(null);
+  const trackRef = useRef<HTMLOListElement | null>(null);
+  const trackId = useId();
+  const [edges, setEdges] = useState({ back: false, more: false });
+
+  // Is there more of the strip either side? The next card doesn't always
+  // peek in, and a mouse wheel can't scroll sideways, so ← → say so.
+  useEffect(() => {
+    const t = trackRef.current;
+    if (!t) return;
+    const measure = () => {
+      const max = t.scrollWidth - t.clientWidth;
+      const back = t.scrollLeft > 2;
+      const more = t.scrollLeft < max - 2;
+      setEdges((e) => (e.back === back && e.more === more ? e : { back, more }));
+    };
+    measure();
+    t.addEventListener('scroll', measure, { passive: true });
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
+    ro?.observe(t);
+    return () => {
+      t.removeEventListener('scroll', measure);
+      ro?.disconnect();
+    };
+  }, []);
+
+  // one card at a time: the next (or previous) card lines up on the text column
+  const step = (dir: 1 | -1) => {
+    const t = trackRef.current;
+    if (!t) return;
+    const line = t.getBoundingClientRect().left + (parseFloat(getComputedStyle(t).paddingLeft) || 0);
+    const offsets = Array.from(t.children, (li) => li.getBoundingClientRect().left - line);
+    const by = dir > 0 ? offsets.find((o) => o > 2) : offsets.reverse().find((o) => o < -2);
+    if (by !== undefined) t.scrollBy({ left: by, behavior: motionOff() ? 'auto' : 'smooth' });
+  };
 
   const close = useCallback(() => {
     setOpen((i) => {
@@ -52,7 +87,14 @@ export default function FlowStrip({ flows, brand }: { flows: ProductFlow[]; bran
       data-highlight={(frames.length > 0 && brand?.highlight) || undefined}
       style={brand ? ({ '--band': brand.color, '--ink': brand.ink, '--hl': brand.highlight } as CSSProperties) : undefined}
     >
-      <ol className={styles.track} aria-label="The finished product" data-frames={frames.length > 0 || undefined} style={trackStyle}>
+      <ol
+        ref={trackRef}
+        id={trackId}
+        className={styles.track}
+        aria-label="The finished product"
+        data-frames={frames.length > 0 || undefined}
+        style={trackStyle}
+      >
         {flows.map((f, i) => {
           const cover = f.screens[f.cover ?? 0] ?? f.screens[0];
           const loading = i < 3 ? 'eager' : 'lazy';
@@ -121,6 +163,31 @@ export default function FlowStrip({ flows, brand }: { flows: ProductFlow[]; bran
           );
         })}
       </ol>
+
+      {(edges.back || edges.more) && (
+        <div className={styles.stripNav}>
+          <button
+            type="button"
+            className={styles.stripArrow}
+            aria-label="Previous"
+            aria-controls={trackId}
+            aria-disabled={!edges.back}
+            onClick={() => edges.back && step(-1)}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            className={styles.stripArrow}
+            aria-label="Next"
+            aria-controls={trackId}
+            aria-disabled={!edges.more}
+            onClick={() => edges.more && step(1)}
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      )}
 
       {open !== null &&
         createPortal(

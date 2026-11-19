@@ -652,7 +652,22 @@
   .hx *::after {
     animation: none !important;
   }
-  .tile__pic {
-    transition: none;
-  }
+}
+
+/*
+ * Motion off (paused, or reduced by the system: both set data-motion="off").
+ * Hovering the work moves nothing: no zoom, no blur. The other tiles only
+ * dim, and the one-liner fades in where it sits, so nothing jumps.
+ */
+:root[data-motion='off'] .hx .tile__pic,
+:root[data-motion='off'] .hx .tile__title,
+:root[data-motion='off'] .hx .tile__go,
+:root[data-motion='off'] .hx__btn,
+:root[data-motion='off'] .hx-avatar,
+:root[data-motion='off'] .hx-avatar__go {
+  transform: none !important;
+}
+:root[data-motion='off'] .hx__work:has(.tile:hover) .tile:not(:hover) .tile__pic,
+:root[data-motion='off'] .hx__work:has(.tile:focus-visible) .tile:not(:focus-visible) .tile__pic {
+  filter: saturate(0.55) brightness(0.72);
 }
