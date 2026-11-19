@@ -2,8 +2,8 @@ import { Fragment } from 'react';
 import { Link } from 'react-router';
 import Wordmark from '../Wordmark';
 import EmailLink from '../EmailLink';
-import { border, colors, radius } from '../../theme/tokens';
-import { outlinedCtaHover } from '../../lib/hover';
+import { border, colors } from '../../theme/tokens';
+import { buttonClass } from '../../ui/buttonClass';
 
 export interface Chapter {
   id: string;
@@ -66,18 +66,8 @@ export default function CaseStudyHeader({
           </Link>
           <EmailLink
             source="case-header"
-            className="cs-head__cta"
-            style={{
-              fontSize: '0.7rem',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              padding: '0.5rem clamp(0.6rem, 2vw, 1rem)',
-              border: `1px solid ${border.accentMed}`,
-              borderRadius: radius.control,
-              color: colors.accentTint,
-              whiteSpace: 'nowrap',
-            }}
-            {...outlinedCtaHover}
+            plain={false}
+            className={buttonClass({ variant: 'outline', size: 'compact' }, 'cs-head__cta')}
           >
             Contact
           </EmailLink>

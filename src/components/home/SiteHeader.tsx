@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import Wordmark from '../Wordmark';
 import { border, colors, fonts, layout, radius } from '../../theme/tokens';
-import { accentLinkHover, outlinedCtaHover } from '../../lib/hover';
+import { accentLinkHover } from '../../lib/hover';
+import Button from '../../ui/Button';
 import { track } from '../../lib/analytics';
 
 const MOBILE_BP = 820;
@@ -110,22 +111,14 @@ export default function SiteHeader() {
             <a href="#work" style={navLinkStyle} {...accentLinkHover(colors.textBody)}>
               Work
             </a>
-            <a
+            <Button
+              variant="outline"
+              size="compact"
               href="#contact"
-              style={{
-                fontSize: '0.72rem',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                padding: '0.55rem 1.1rem',
-                border: `1px solid ${border.accentMed}`,
-                borderRadius: radius.control,
-                color: colors.accentTint,
-              }}
-              {...outlinedCtaHover}
               onClick={() => track('GetInTouchClick', { source: 'header' })}
             >
               Contact
-            </a>
+            </Button>
           </nav>
         )}
 

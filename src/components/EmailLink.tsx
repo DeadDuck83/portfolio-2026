@@ -35,11 +35,18 @@ export default function EmailLink({
   source,
   onClick,
   style,
+  plain = true,
   ...rest
 }: Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & {
   children: ReactNode;
   /** where this copy button sits, for the EmailCopied event */
   source: AnalyticsEvents['EmailCopied']['source'];
+  /**
+   * Draw it as plain text in the surrounding font and colour (the default).
+   * Pass `plain={false}` when a class such as buttonClass() styles it, because
+   * these inline styles would override the class.
+   */
+  plain?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef(0);
@@ -51,11 +58,8 @@ export default function EmailLink({
       type="button"
       {...rest}
       style={{
-        font: 'inherit',
+        ...(plain ? { font: 'inherit', border: 'none', background: 'none', color: 'inherit' } : null),
         cursor: 'pointer',
-        border: 'none',
-        background: 'none',
-        color: 'inherit',
         textAlign: 'inherit',
         userSelect: 'text',
         WebkitUserSelect: 'text',

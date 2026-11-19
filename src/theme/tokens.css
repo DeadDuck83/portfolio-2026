@@ -17,12 +17,14 @@
   --sand-100-a08: rgba(236,230,218,0.08);
   --sand-100-a10: rgba(236,230,218,0.1);
   --sand-100-a12: rgba(236,230,218,0.12);
+  --sand-100-a15: rgba(236,230,218,0.15);
   --sand-100-a18: rgba(236,230,218,0.18);
   --sand-100-a22: rgba(236,230,218,0.22);
 
   --olive-300: #b0b48a;
   --olive-400: #9da767;
   --olive-500: #848945;
+  --olive-500-a14: rgba(132,137,69,0.14);
   --olive-500-a40: rgba(132,137,69,0.4);
   --olive-500-a50: rgba(132,137,69,0.5);
   --olive-500-a60: rgba(132,137,69,0.6);
@@ -54,6 +56,7 @@
   --color-accent: var(--olive-500);
   --color-accent-bright: var(--olive-400);
   --color-accent-tint: var(--olive-300);
+  --color-accent-wash: var(--olive-500-a14);
   --color-success: var(--forest-500);
   --color-placeholder-bg: var(--stone-200);
   --color-placeholder-x: var(--stone-300);
@@ -67,6 +70,7 @@
   --border-hairline-faint: var(--sand-100-a06);
   --border-chip: var(--sand-100-a22);
   --border-menu-button: var(--sand-100-a18);
+  --border-control: var(--sand-100-a15);
   --border-accent-soft: var(--olive-500-a40);
   --border-accent-med: var(--olive-500-a50);
   --border-accent-strong: var(--olive-500-a60);

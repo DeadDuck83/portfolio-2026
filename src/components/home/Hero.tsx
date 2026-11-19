@@ -24,6 +24,7 @@ import { RESUME_URL } from '../../data/site';
 import { noteCaseStudySource, projectIdFromPath, track } from '../../lib/analytics';
 import { motionOff, useMotionOff } from '../../lib/motion';
 import EmailLink from '../EmailLink';
+import Button from '../../ui/Button';
 import HeroAvatar from '../avatar/HeroAvatar';
 // PixelCameo (the camera that brings out pixel Derek) is off for this
 // iteration; the component and its test stay for a later one.
@@ -54,16 +55,16 @@ export default function Hero() {
             set.
           </p>
           <div className="hx__actions">
-            <a
-              className="hx__btn hx__btn--solid"
+            <Button
+              variant="solid"
               href="#contact"
               onClick={() => track('GetInTouchClick', { source: 'hero' })}
             >
               Get in touch
-            </a>
-            <a className="hx__btn" href="#about">
+            </Button>
+            <Button variant="outline" href="#about">
               About me
-            </a>
+            </Button>
           </div>
         </div>
 

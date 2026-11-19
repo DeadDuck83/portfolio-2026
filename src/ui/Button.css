@@ -1,0 +1,70 @@
+/*
+ * Button (Button.tsx, buttonClass.ts): the one button for the whole site, in
+ * the hero, the About rail, Contact and both headers. It matches the hero
+ * buttons it replaced (.hx__btn), and uses tokens.css variables only.
+ */
+.ui-button {
+  --ui-button-ease: cubic-bezier(0.16, 1, 0.3, 1); /* the hero's --hx-ease */
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-body);
+  background: none;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--ui-button-ease),
+    border-color 0.25s var(--ui-button-ease),
+    color 0.25s var(--ui-button-ease),
+    transform 0.35s var(--ui-button-ease);
+}
+.ui-button:hover {
+  color: var(--color-accent-tint);
+  background: var(--color-accent-wash);
+}
+.ui-button:active {
+  transform: scale(0.97);
+}
+.ui-button:focus-visible {
+  outline: 2px solid var(--color-accent-bright);
+  outline-offset: 3px;
+}
+
+/* solid: the main action */
+.ui-button--solid {
+  padding-inline: 1.7rem;
+  border-color: var(--color-accent);
+  font-weight: 700;
+  color: var(--color-button-text-on-accent);
+  background: var(--color-accent);
+}
+.ui-button--solid:hover {
+  border-color: var(--color-accent-bright);
+  color: var(--color-button-text-on-accent);
+  background: var(--color-accent-bright);
+}
+
+/* compact: the Contact button in both headers */
+.ui-button--compact {
+  padding: 0.5rem clamp(0.6rem, 2vw, 1rem);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+}
+.ui-button--outline.ui-button--compact {
+  border-color: var(--border-accent-med);
+  color: var(--color-accent-tint);
+}
+
+/* Motion off (paused, or reduced by the system): no press effect. */
+:root[data-motion='off'] .ui-button {
+  transform: none !important;
+}

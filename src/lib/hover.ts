@@ -18,25 +18,3 @@ export function accentLinkHover(rest: string) {
     },
   };
 }
-
-/** Outlined CTA: tinted background + accent-tint text on hover. */
-export const outlinedCtaHover = {
-  onMouseEnter: (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = 'rgba(132,137,69,0.14)';
-    e.currentTarget.style.color = colors.accentTint;
-  },
-  onMouseLeave: (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = 'none';
-    e.currentTarget.style.color = colors.textBody;
-  },
-};
-
-/** Solid accent CTA: brightens on hover. */
-export const solidCtaHover = {
-  onMouseEnter: (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = colors.accentBright;
-  },
-  onMouseLeave: (e: MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.background = colors.accent;
-  },
-};

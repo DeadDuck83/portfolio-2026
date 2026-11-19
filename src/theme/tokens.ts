@@ -29,6 +29,7 @@ export const primitive = {
   sand100A08: 'rgba(236,230,218,0.08)',
   sand100A10: 'rgba(236,230,218,0.1)',
   sand100A12: 'rgba(236,230,218,0.12)',
+  sand100A15: 'rgba(236,230,218,0.15)',
   sand100A18: 'rgba(236,230,218,0.18)',
   sand100A22: 'rgba(236,230,218,0.22)',
 
@@ -36,6 +37,7 @@ export const primitive = {
   olive300: '#b0b48a',
   olive400: '#9da767',
   olive500: '#848945',
+  olive500A14: 'rgba(132,137,69,0.14)',
   olive500A40: 'rgba(132,137,69,0.4)',
   olive500A50: 'rgba(132,137,69,0.5)',
   olive500A60: 'rgba(132,137,69,0.6)',
@@ -69,6 +71,7 @@ export const colors = {
   accent: primitive.olive500, // buttons, rules, dots (warm olive)
   accentBright: primitive.olive400, // italic emphasis, hover, chapter numerals
   accentTint: primitive.olive300, // active nav, outlined-CTA text
+  accentWash: primitive.olive500A14, // outline-button hover fill
   success: primitive.forest500, // "open to work" — soft forest, not neon
   placeholderBg: primitive.stone200, // image placeholder fill
   placeholderX: primitive.stone300, // placeholder corner-to-corner X
@@ -102,6 +105,7 @@ export const border = {
   hairlineFaint: primitive.sand100A06,
   chip: primitive.sand100A22,
   menuButton: primitive.sand100A18,
+  control: primitive.sand100A15, // outline-button border
   accentSoft: primitive.olive500A40,
   accentMed: primitive.olive500A50,
   accentStrong: primitive.olive500A60,

@@ -285,31 +285,10 @@
   border: 1px solid var(--grid);
 }
 
-/* "View my skills": the site's outline button (hero, contact) */
+/* "View my skills": the shared Button (src/ui/Button.css), a little below the stats */
 .about-rail__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
   margin-top: 0.6rem;
-  padding: 1rem 1.5rem;
-  border: 1px solid rgba(236, 230, 218, 0.15);
-  border-radius: 8px;
-  font: inherit;
-  font-size: 0.74rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #b3a996;
-  background: none;
-  cursor: pointer;
-  transition: background-color 0.25s ease, color 0.25s ease, transform 0.35s ease;
 }
-.about-rail__btn:hover {
-  color: #b0b48a;
-  background: rgba(132, 137, 69, 0.14);
-}
-.about-rail__btn:active { transform: scale(0.97); }
-.about-rail__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 .about-rail__stat {
   background: var(--c-bg);

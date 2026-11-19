@@ -1,21 +1,9 @@
-import { border, colors, fonts, radius, weights } from '../../theme/tokens';
+import { border, colors, fonts, weights } from '../../theme/tokens';
 import EmailLink from '../EmailLink';
-import { outlinedCtaHover, solidCtaHover } from '../../lib/hover';
+import Button from '../../ui/Button';
+import { buttonClass } from '../../ui/buttonClass';
 import { CONTACT_EMAIL, RESUME_URL } from '../../data/site';
 import { track } from '../../lib/analytics';
-
-const outlinedCta = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '0.6rem',
-  fontSize: '0.74rem',
-  letterSpacing: '0.14em',
-  textTransform: 'uppercase' as const,
-  color: colors.textBody,
-  border: '1px solid rgba(236,230,218,0.15)',
-  borderRadius: radius.control,
-  padding: '1rem 1.5rem',
-};
 
 /**
  * Contact section — display headline with an accent-coloured word, short
@@ -71,46 +59,28 @@ export default function ContactSection({ showResume = true }: { showResume?: boo
             marginTop: 'clamp(2.2rem, 6vh, 3.2rem)',
           }}
         >
-          <EmailLink
-            source="contact"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.7rem',
-              background: colors.accent,
-              color: colors.buttonTextOnAccent,
-              fontSize: '0.74rem',
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              fontWeight: 700,
-              padding: '1rem 1.7rem',
-              borderRadius: radius.control,
-            }}
-            {...solidCtaHover}
-          >
+          <EmailLink source="contact" plain={false} className={buttonClass({ variant: 'solid' })}>
             {CONTACT_EMAIL}
           </EmailLink>
-          <a
+          <Button
+            variant="outline"
             href="https://linkedin.com/in/derekjmoore1"
             target="_blank"
             rel="noopener"
             onClick={() => track('ExternalProfileClick', { profile: 'linkedin', source: 'contact' })}
-            style={outlinedCta}
-            {...outlinedCtaHover}
           >
             LinkedIn
-          </a>
+          </Button>
           {showResumeLink && (
-            <a
+            <Button
+              variant="outline"
               href={resumeHref}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track('ResumeClick', { source: 'contact' })}
-              style={outlinedCta}
-              {...outlinedCtaHover}
             >
               Résumé ↗
-            </a>
+            </Button>
           )}
         </div>
       </div>

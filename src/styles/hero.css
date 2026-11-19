@@ -95,46 +95,7 @@
   animation: hxRise 0.9s 0.41s var(--hx-ease) backwards;
 }
 
-/* Same buttons as the contact section: small tracked caps, solid olive for
-   the main action, a hairline outline for the second; 8px corners like the
-   work tiles (tokens.ts `radius.control`). */
-.hx__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 1rem 1.5rem;
-  border: 1px solid rgba(236, 230, 218, 0.15);
-  border-radius: 8px;
-  font-size: 0.74rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #b3a996;
-  background: none;
-  transition:
-    background-color 0.25s var(--hx-ease),
-    color 0.25s var(--hx-ease),
-    transform 0.35s var(--hx-ease);
-}
-.hx__btn:hover {
-  color: #b0b48a;
-  background: rgba(132, 137, 69, 0.14);
-}
-.hx__btn:active {
-  transform: scale(0.97);
-}
-.hx__btn--solid {
-  padding-inline: 1.7rem;
-  border-color: #848945;
-  font-weight: 700;
-  color: #17140f;
-  background: #848945;
-}
-.hx__btn--solid:hover {
-  border-color: #9da767;
-  color: #17140f;
-  background: #9da767;
-}
+/* The buttons are the shared Button (src/ui/Button.css). */
 
 /* takes the column's spare height; the avatar tile grows into it */
 .hx__foot {
@@ -661,7 +622,6 @@
 :root[data-motion='off'] .hx .tile__pic,
 :root[data-motion='off'] .hx .tile__title,
 :root[data-motion='off'] .hx .tile__go,
-:root[data-motion='off'] .hx__btn,
 :root[data-motion='off'] .hx-avatar,
 :root[data-motion='off'] .hx-avatar__go {
   transform: none !important;

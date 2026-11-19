@@ -4,6 +4,7 @@ import { track } from '../../lib/analytics';
 import { useGuideFocus } from '../../lib/guide';
 import { motionOff, subscribeMotion } from '../../lib/motion';
 import { border, colors, fonts, layout } from '../../theme/tokens';
+import Button from '../../ui/Button';
 import CompanyPopover from './CompanyPopover';
 import { createSquares, type SquaresController } from './aboutRailSquares';
 import '../../styles/about-rail.css';
@@ -338,9 +339,9 @@ function SkillsButton() {
   }, []);
   return (
     <>
-      <button
+      <Button
         ref={btnRef}
-        type="button"
+        variant="outline"
         className="about-rail__btn"
         aria-haspopup="dialog"
         onClick={() => {
@@ -349,7 +350,7 @@ function SkillsButton() {
         }}
       >
         View my skills
-      </button>
+      </Button>
       {open && (
         <Suspense fallback={null}>
           <SkillsView onClose={close} />
