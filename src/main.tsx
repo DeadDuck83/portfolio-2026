@@ -6,6 +6,7 @@ import { applyOptOutParam, initAnalytics } from './lib/analytics';
 import { captureFirstTouchAttribution } from './lib/attribution';
 import { startEngagementTracking } from './lib/engagement';
 import { initMotion } from './lib/motion';
+import './theme/tokens.css';
 import './styles/global.css';
 
 // opt-out first, so ?analytics=off stops this very visit from being recorded

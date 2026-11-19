@@ -1,0 +1,85 @@
+/* Generated from src/theme/tokens.ts by `npm run tokens`. Do not edit by hand. */
+
+:root {
+  /* Primitives: raw values */
+  --umber-910: #1d1912;
+  --umber-920: #1a1712;
+  --umber-930: #181510;
+  --umber-940: #17140f;
+  --umber-950: #16130e;
+
+  --sand-100: #ece6da;
+  --sand-300: #b3a996;
+  --sand-400: #8f8674;
+  --sand-500: #6f6858;
+  --sand-600: #5c5648;
+  --sand-100-a06: rgba(236,230,218,0.06);
+  --sand-100-a08: rgba(236,230,218,0.08);
+  --sand-100-a10: rgba(236,230,218,0.1);
+  --sand-100-a12: rgba(236,230,218,0.12);
+  --sand-100-a18: rgba(236,230,218,0.18);
+  --sand-100-a22: rgba(236,230,218,0.22);
+
+  --olive-300: #b0b48a;
+  --olive-400: #9da767;
+  --olive-500: #848945;
+  --olive-500-a40: rgba(132,137,69,0.4);
+  --olive-500-a50: rgba(132,137,69,0.5);
+  --olive-500-a60: rgba(132,137,69,0.6);
+
+  --forest-500: #5a9a6e;
+
+  --stone-200: #c9c7c2;
+  --stone-300: #b0aea9;
+  --stone-500: #77746e;
+  --stone-700: #55524c;
+
+  --font-big-shoulders: 'Big Shoulders', 'Arial Narrow', sans-serif;
+  --font-host-grotesk: 'Host Grotesk', system-ui, sans-serif;
+
+  --weight-800: 800;
+
+  --radius-8: 8px;
+
+  /* Semantic: roles, each pointing at a primitive */
+  --color-bg: var(--umber-920);
+  --color-bg-alt: var(--umber-950);
+  --color-card-active: var(--umber-910);
+  --color-card-rest: var(--umber-930);
+  --color-text: var(--sand-100);
+  --color-text-body: var(--sand-300);
+  --color-text-muted: var(--sand-400);
+  --color-text-faint: var(--sand-500);
+  --color-text-faintest: var(--sand-600);
+  --color-accent: var(--olive-500);
+  --color-accent-bright: var(--olive-400);
+  --color-accent-tint: var(--olive-300);
+  --color-success: var(--forest-500);
+  --color-placeholder-bg: var(--stone-200);
+  --color-placeholder-x: var(--stone-300);
+  --color-placeholder-dims: var(--stone-700);
+  --color-placeholder-label: var(--stone-500);
+  --color-button-text-on-accent: var(--umber-940);
+
+  --border-hairline: var(--sand-100-a08);
+  --border-hairline-strong: var(--sand-100-a10);
+  --border-hairline-stronger: var(--sand-100-a12);
+  --border-hairline-faint: var(--sand-100-a06);
+  --border-chip: var(--sand-100-a22);
+  --border-menu-button: var(--sand-100-a18);
+  --border-accent-soft: var(--olive-500-a40);
+  --border-accent-med: var(--olive-500-a50);
+  --border-accent-strong: var(--olive-500-a60);
+  --border-grid-bg: var(--sand-100-a10);
+  --border-grid-bg-faint: var(--sand-100-a08);
+
+  --font-display: var(--font-big-shoulders);
+  --font-text: var(--font-host-grotesk);
+
+  --font-weight-display: var(--weight-800);
+
+  --radius-control: var(--radius-8);
+
+  --layout-max-width: 1240px;
+  --layout-side-pad: clamp(1.5rem, 6vw, 6rem);
+}

@@ -14,6 +14,9 @@ Cloudflare Workers (static assets).
 - **Vitest + React Testing Library** for component tests.
 - No CSS framework: design tokens in `src/theme/tokens.ts`, styles applied
   inline to match the design reference 1:1 (all reference styling was inline).
+  Tokens come in two layers (raw `primitive` values, and semantic roles that
+  point at them); `src/theme/tokens.css` is generated from them as CSS
+  variables (`--olive-500`, `--color-accent: var(--olive-500)`).
 
 ## Local development
 
@@ -25,6 +28,7 @@ npm run preview   # serve the built dist/ locally
 npm run lint      # oxlint
 npm test          # run the Vitest suite once
 npm run test:watch # re-run tests on change
+npm run tokens    # regenerate src/theme/tokens.css after editing tokens.ts
 ```
 
 ## Testing
@@ -71,7 +75,8 @@ src/
       types.ts             # CaseStudy content model
       plmc.ts              # Metagenics/PLMC case study (master template)
       index.ts             # slug → CaseStudy registry
-  theme/tokens.ts          # colors, borders, fonts, layout constants
+  theme/tokens.ts          # primitives + semantic roles (colors, borders, fonts, layout)
+  theme/tokens.css         # generated CSS variables (npm run tokens; a test checks it)
   styles/global.css        # resets, fonts, keyframes
   styles/about-journey.css # About journey layout + stack-mode overrides
 public/
