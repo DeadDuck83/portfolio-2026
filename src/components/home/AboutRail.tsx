@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSPrope
 import { aboutChapters, aboutCompanies, aboutIntro, aboutToday } from '../../data/aboutJourney';
 import { track } from '../../lib/analytics';
 import { useGuideFocus } from '../../lib/guide';
+import { motionOff, subscribeMotion } from '../../lib/motion';
 import { border, colors, fonts, layout } from '../../theme/tokens';
 import CompanyPopover from './CompanyPopover';
 import { createSquares, type SquaresController } from './aboutRailSquares';
@@ -37,9 +38,6 @@ const sectionVars = {
   '--grid': border.gridBg,
 } as CSSProperties;
 
-function prefersReducedMotion() {
-  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
 
 /** "at Mob Media and Metagenics" — each name a popover, joined with commas / and. */
 function companyNodes(keys: string[]): ReactNode[] {
@@ -94,7 +92,7 @@ export default function AboutRail() {
   // Step n+1 (TODAY) brings the closing "Today, I bring it together" block up.
   const focusChapter = useCallback((step: number) => {
     const section = sectionRef.current;
-    const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
+    const behavior: ScrollBehavior = motionOff() ? 'auto' : 'smooth';
     if (step === TODAY) {
       const today = section?.querySelector<HTMLElement>('.about-rail__today');
       if (today) window.scrollTo({ top: window.scrollY + today.getBoundingClientRect().top - window.innerHeight * 0.25, behavior });
@@ -127,11 +125,13 @@ export default function AboutRail() {
   }, []);
   useGuideFocus('about', focusChapter);
 
+  // Pause motion / Play motion: the squares hold their pose, or move again
+  useEffect(() => subscribeMotion(() => controllerRef.current?.setReducedMotion(motionOff())), []);
+
   useEffect(() => {
     const section = sectionRef.current;
     const canvas = canvasRef.current;
     if (!section || !canvas) return;
-    const reduceMotion = prefersReducedMotion();
     const swipeMq = window.matchMedia(SWIPE_QUERY);
     const cards = Array.from(section.querySelectorAll<HTMLElement>('.about-rail__card'));
     const track = section.querySelector<HTMLElement>('.about-rail__cards');
@@ -159,7 +159,8 @@ export default function AboutRail() {
         if (loaded || !entries.some((e) => e.isIntersecting)) return;
         loaded = true;
         loader.disconnect();
-        createSquares(canvas, { src: SRC, reducedMotion: reduceMotion })
+        // read now, not when the section mounted: motion may have been paused since
+        createSquares(canvas, { src: SRC, reducedMotion: motionOff() })
           .then((ctrl) => {
             controllerRef.current = ctrl;
             ctrl.setMark(desiredMark.current);

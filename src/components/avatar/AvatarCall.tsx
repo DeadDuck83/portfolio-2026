@@ -22,6 +22,7 @@ import {
 import { cornerStyle, nearestCorner, type Corner } from './corner';
 import { primeVoice } from './audioUnlock';
 import { dockSlotRect, registerAudioUnlock } from './dock';
+import { motionOff } from '../../lib/motion';
 import { useEyeFollow } from './eyeFollow';
 import SkillsShare from './SkillsShare';
 import { SKILLS_LINE, cueMoments, skillCues, type SkillCues } from './skills';
@@ -31,7 +32,7 @@ const IDLE_MS = 4000; // untouched this long (and not talking) → compact
 const SHARE_HOLD_MS = 6000; // the finished skills "screen share" stays up this long
 
 const canHover = () => window.matchMedia('(hover: hover)').matches;
-const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const calm = motionOff;
 const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
 /** transform that lays a box of `to`'s size over `from` (origin top-left) */

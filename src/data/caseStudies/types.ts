@@ -21,6 +21,8 @@ export interface Figure {
   caption?: FigureCaption;
   /** Final image/video path under /public when the asset is ready. */
   src?: string;
+  /** For an animated GIF `src`: a still frame, shown instead while motion is off. */
+  still?: string;
   /** Accessible alt text; defaults to `innerLabel` when omitted. */
   alt?: string;
   /**

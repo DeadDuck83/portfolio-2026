@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { motionOff } from '../../lib/motion';
 import SkillsShare from './SkillsShare';
 import { cascadeCues, cueMoments } from './skills';
 
@@ -19,7 +20,7 @@ export default function SkillsView({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     const end = Math.max(...cueMoments(cues));
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    if (motionOff()) {
       setT(Infinity);
       return;
     }

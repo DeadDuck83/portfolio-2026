@@ -16,6 +16,8 @@ export interface SquaresOptions {
 export interface SquaresController {
   /** Show chapter `index` (0 intro .. 5 today). */
   setMark(index: number): void;
+  /** Motion paused or resumed: hold each pose still, or move again. */
+  setReducedMotion(on: boolean): void;
   /** Re-fit the drawing surface to the canvas's CSS box. */
   resize(): void;
   destroy(): void;
@@ -57,6 +59,10 @@ export async function createSquares(canvas: HTMLCanvasElement, opts: SquaresOpti
   return {
     setMark(index) {
       if (chapter) chapter.value = index;
+      if (visible) rive.play();
+    },
+    setReducedMotion(on) {
+      if (reduced) reduced.value = on ? 1 : 0;
       if (visible) rive.play();
     },
     resize() {

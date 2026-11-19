@@ -5,6 +5,7 @@ import { collectCaseStudyImages } from '../data/caseStudies/figures';
 import { border, colors, fonts, layout, weights } from '../theme/tokens';
 import { useScrollProgress } from '../hooks/useScrollProgress';
 import { useGuideFocus } from '../lib/guide';
+import { motionOff } from '../lib/motion';
 import { useSectionViews } from '../hooks/useSectionViews';
 import { projectIdFromPath, takeCaseStudySource, track, type CaseSectionId } from '../lib/analytics';
 import Grain from '../components/Grain';
@@ -81,7 +82,7 @@ export default function CaseStudy() {
 
   // The avatar narrates a case study section by section: bring each one up as he starts it.
   const focusSection = useCallback((id: string) => {
-    const behavior: ScrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    const behavior: ScrollBehavior = motionOff() ? 'auto' : 'smooth';
     if (id === 'c0') window.scrollTo({ top: 0, behavior });
     else document.getElementById(id)?.scrollIntoView({ behavior, block: 'start' });
   }, []);

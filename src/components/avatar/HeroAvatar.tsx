@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useMotionOff } from '../../lib/motion';
 import { AVATAR_BASE } from './lines';
 import { callOpen, openAvatar, registerDockSlot, setDockVisible, subscribeDock } from './dock';
 
@@ -17,8 +18,8 @@ export default function HeroAvatar() {
   const [load, setLoad] = useState(false);
   const [live, setLive] = useState(false);
   const away = useSyncExternalStore(subscribeDock, callOpen, () => false);
-  // reduced motion: he loads, draws one frame and holds still
-  const [still] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  // motion off (paused, or reduced): he loads, draws one frame and holds still
+  const still = useMotionOff();
 
   useEffect(() => {
     const el = ref.current;

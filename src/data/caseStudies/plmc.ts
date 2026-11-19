@@ -358,6 +358,7 @@ export const plmc: CaseStudy = {
         aspect: '4/3',
         innerLabel: 'Health Summary — full dashboard',
         src: '/case-studies/plmc/PLMC-04-solution-dashboard2.gif',
+        still: '/case-studies/plmc/PLMC-04-solution-dashboard2-still.webp',
         alt: 'PLMC Health Summary TV dashboard with biometrics, blood panel, lifestyle, and 5 Functions of Health',
         objectFit: 'cover',
         objectPosition: 'center top',

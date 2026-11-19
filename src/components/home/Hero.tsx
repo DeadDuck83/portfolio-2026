@@ -22,7 +22,9 @@ import { Link } from 'react-router';
 import { work, type WorkItem } from '../../data/work';
 import { RESUME_URL } from '../../data/site';
 import { noteCaseStudySource, projectIdFromPath, track } from '../../lib/analytics';
+import { motionOff, useMotionOff } from '../../lib/motion';
 import EmailLink from '../EmailLink';
+import MotionToggle from '../MotionToggle';
 import HeroAvatar from '../avatar/HeroAvatar';
 // PixelCameo (the camera that brings out pixel Derek) is off for this
 // iteration; the component and its test stay for a later one.
@@ -98,6 +100,10 @@ export default function Hero() {
                 </a>
               </li>
             )}
+            {/* the one link that stays on phones: the tiles play there by themselves */}
+            <li className="hx__links-motion">
+              <MotionToggle source="hero" className="hx__link" />
+            </li>
           </ul>
         </div>
       </div>
@@ -174,13 +180,14 @@ function Tile({ item, position, eager }: { item: WorkItem; position: number; eag
  * poster (the hero image, which needn't be a frame of the video) and the video
  * plays only while the tile is hovered or focused, so the grid stays calm;
  * leaving fades the poster back over it and rewinds. Touch screens can't
- * hover, so there it plays whenever it's on screen. Reduced motion shows the
- * poster.
+ * hover, so there it plays whenever it's on screen. With motion off (paused,
+ * or reduced by the system) it's the poster, and pausing mid-play swaps the
+ * poster back in.
  */
 function TileVideo({ video, eager }: { video: NonNullable<WorkItem['video']>; eager: boolean }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const stillRef = useRef<HTMLSpanElement | null>(null);
-  const [still] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const still = useMotionOff();
   const [hoverPlay] = useState(() => window.matchMedia('(hover: hover) and (pointer: fine)').matches);
 
   useEffect(() => {
@@ -298,7 +305,7 @@ function useRackFocus() {
   useLayoutEffect(() => {
     const grid = ref.current;
     if (!grid || typeof IntersectionObserver === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (motionOff()) return;
     grid.classList.add('is-armed');
     return () => grid.classList.remove('is-armed');
   }, []);

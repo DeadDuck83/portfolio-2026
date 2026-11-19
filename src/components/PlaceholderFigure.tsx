@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { Figure } from '../data/caseStudies/types';
+import { useMotionOff } from '../lib/motion';
 import { fonts, colors } from '../theme/tokens';
 
 /**
@@ -19,7 +20,9 @@ export default function PlaceholderFigure({
   src?: string;
   alt?: string;
 }) {
-  const imageSrc = src ?? figure.src;
+  // an animated GIF holds on its still frame while motion is off
+  const still = useMotionOff() && figure.still;
+  const imageSrc = src ?? (still || figure.src);
   const imageAlt = alt ?? figure.alt ?? figure.innerLabel;
 
   const blockStyle: CSSProperties = {

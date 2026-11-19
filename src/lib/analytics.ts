@@ -50,6 +50,8 @@ export type AnalyticsEvents = {
   AvatarSettingChanged: { setting: 'camera' | 'sound'; on: boolean };
   AvatarError: { errorCategory: 'avatar-load' | 'audio-blocked' };
   SkillsViewed: { source: 'about-today' };
+  // accessibility
+  MotionToggled: { paused: boolean; source: 'hero' | 'header' | 'menu' | 'case-header' };
   // easter egg
   TelemetryBayOpened: Record<string, never>;
   // engagement and traffic quality

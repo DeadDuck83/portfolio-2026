@@ -1,6 +1,7 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import type { Figure } from '../../data/caseStudies/types';
 import { isVideoFigure } from '../../data/caseStudies/figures';
+import { useMotionOff } from '../../lib/motion';
 import { border, colors, fonts, weights } from '../../theme/tokens';
 
 /**
@@ -166,6 +167,7 @@ function Media({
   label: string;
   interactive?: boolean;
 }) {
+  const off = useMotionOff();
   const mediaStyle = interactive
     ? {
         display: 'block' as const,
@@ -183,29 +185,71 @@ function Media({
 
   if (isVideoFigure(figure) && figure.src) {
     return (
-      <video
+      <LoopVideo
         src={figure.src}
-        aria-label={label}
-        autoPlay
-        muted
-        loop
-        playsInline
-        controls={interactive}
+        label={label}
+        interactive={interactive}
         style={mediaStyle}
-        onClick={interactive ? (e) => e.stopPropagation() : undefined}
       />
     );
   }
 
   return (
     <img
-      src={figure.src}
+      src={(off && figure.still) || figure.src}
       alt={label}
       loading={interactive ? undefined : 'lazy'}
       style={{
         ...mediaStyle,
         ...(interactive ? { cursor: 'zoom-out' } : {}),
       }}
+    />
+  );
+}
+
+/**
+ * A muted looping demo. It plays by itself unless motion is off (paused, or
+ * reduced by the system); then it holds its first frame, and in the lightbox
+ * its controls can still play it.
+ */
+function LoopVideo({
+  src,
+  label,
+  interactive,
+  style,
+}: {
+  src: string;
+  label: string;
+  interactive: boolean;
+  style: CSSProperties;
+}) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const off = useMotionOff();
+  const first = useRef(true);
+  // autoPlay starts it; after that, follow Pause motion / Play motion
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    if (off) el.pause();
+    else void Promise.resolve(el.play()).catch(() => {});
+  }, [off]);
+  return (
+    <video
+      ref={ref}
+      src={src}
+      aria-label={label}
+      autoPlay={!off}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      controls={interactive}
+      style={style}
+      onClick={interactive ? (e) => e.stopPropagation() : undefined}
     />
   );
 }

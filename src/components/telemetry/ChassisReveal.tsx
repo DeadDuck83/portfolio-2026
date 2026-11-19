@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { track } from '../../lib/analytics';
 import { guideNudge } from '../../lib/guide';
+import { motionOff } from '../../lib/motion';
 import { colors } from '../../theme/tokens';
 import ShirtBay from './ShirtBay';
 import '../../styles/telemetry.css';
@@ -33,10 +34,8 @@ type DragState = {
   maxPush: number;
 };
 
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
+/** Motion paused on the site, or reduced by the system (src/lib/motion.ts). */
+const prefersReducedMotion = motionOff;
 
 function isHandle(target: EventTarget | null, attr: string): boolean {
   return target instanceof Element && Boolean(target.closest(`[${attr}]`));
