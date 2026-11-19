@@ -89,9 +89,9 @@ export const plmc: CaseStudy = {
           label: 'The whole patient, on one screen',
         },
         {
-          src: '/case-studies/plmc/flows/tv-9-plan.webp',
-          alt: 'Your Personalized Plan: recommendations by function, labs and appointments, prescriptions and supplements, and notes from the exam',
-          label: 'Their plan, to take home',
+          src: '/case-studies/plmc/flows/tv-9-biometrics.webp',
+          alt: 'Biometric Screening dashboard: vitals and a blood pressure chart, body water and mass mapped on a body outline, and the InBody body composition, obesity and muscle-fat analysis',
+          label: 'Biometrics, in depth',
         },
       ],
     },
