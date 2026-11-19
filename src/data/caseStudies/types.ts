@@ -119,7 +119,8 @@ export interface ProductFlow {
   cover?: number;
   /**
    * The screens' shape when the flow is open: phone 393×852 (the default),
-   * tablet 4402×2982, laptop 1512×982, monitor 16:10.
+   * tablet 4402×2982 (on its side), ipad 1024×1366 (upright), laptop
+   * 1512×982, monitor 16:10, tv 16:9.
    */
   device?: FlowDevice;
   /**
@@ -134,7 +135,7 @@ export interface ProductFlow {
   glow?: [string, string, string];
 }
 
-export type FlowDevice = 'phone' | 'tablet' | 'laptop' | 'monitor';
+export type FlowDevice = 'phone' | 'tablet' | 'ipad' | 'laptop' | 'monitor' | 'tv';
 
 export interface Brand {
   /** The brand colour itself, e.g. the product's primary. */
@@ -151,10 +152,19 @@ export interface Brand {
 /** A device picture on a transparent background, with its screen cut out. */
 export interface FlowFrame {
   src: string;
-  /** The picture's size in px. Frames in one strip share a scale, so these set their sizes relative to each other. */
+  /**
+   * The picture's size, in px or any unit. Frames in one strip share a scale,
+   * so these set their sizes relative to each other.
+   */
   size: [number, number];
   /** The screen hole as fractions of the picture: left, top, width, height. */
   screen: [number, number, number, number];
+  /**
+   * The cover screen fills the hole's width. When it's taller than the hole,
+   * which part shows: the top (the default, a page at the top of its scroll)
+   * or the middle (a fixed screen a little wider than its picture's hole).
+   */
+  align?: 'top' | 'center';
 }
 
 export interface CaseStudy {

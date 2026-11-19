@@ -10,8 +10,10 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
 const SCREEN_AR: Record<FlowDevice, number> = {
   phone: 393 / 852,
   tablet: 4402 / 2982,
+  ipad: 1024 / 1366,
   laptop: 1512 / 982,
   monitor: 16 / 10,
+  tv: 16 / 9,
 };
 
 /**
@@ -94,6 +96,7 @@ export default function FlowStrip({ flows, brand }: { flows: ProductFlow[]; bran
                           '--st': pct(fr.screen[1]),
                           '--sw': pct(fr.screen[2]),
                           '--sh': pct(fr.screen[3]),
+                          '--sy': fr.align === 'center' ? '50%' : undefined,
                         } as CSSProperties
                       }
                     >
@@ -232,6 +235,7 @@ function FlowViewer({
         ref={rowRef}
         className={styles.row}
         data-wide={ar > 1 || undefined}
+        data-device={f.device ?? 'phone'}
         style={{ '--n': f.screens.length, '--ar': ar, ...(room ? { '--room': `${room}px` } : {}) } as CSSProperties}
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();

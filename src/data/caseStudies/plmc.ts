@@ -29,6 +29,166 @@ export const plmc: CaseStudy = {
     alt: 'PLMC health summary UI — wide crop of the clinic app dashboard',
   },
 
+  // PLMC's own teal (its primary buttons and in-range values); highlight: a
+  // pale mint, the lightest colour under the devices
+  brand: { color: '#30AE90', ink: '#0e0c09', highlight: '#E6F6F0' },
+
+  // One exam, on the two screens in the room, then the scheduler around it.
+  // Derek's device pictures (transparent, screens cut out by
+  // cover-videos/plmc/tools/prep_frames.py; sizes are layout units, so the TV
+  // and the iPad stand the same height). Mock data throughout (contact
+  // details patched in cover-videos/plmc/tools/patch_screens.py).
+  flows: [
+    {
+      title: 'The exam room',
+      line: 'The patient follows each step, then reads the whole picture with their clinician.',
+      device: 'tv',
+      frame: { src: '/case-studies/plmc/frames/tv.webp', size: [1911, 1170], screen: [0.0341, 0.0375, 0.9319, 0.8229], align: 'center' },
+      // the five functions of health: yellow, teal, green
+      glow: ['#F5BC22', '#5AC1B9', '#89C45A'],
+      cover: 7,
+      screens: [
+        {
+          src: '/case-studies/plmc/flows/tv-1-welcome.webp',
+          alt: 'Welcome screen: the Personalized Lifestyle Medical Center logo over stacked stones and bamboo',
+          label: 'Welcome',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-2-vitals.webp',
+          alt: 'Vitals and Nutritional Physical: heart rate, oxygen saturation and blood pressure, with fingernail, skin and tongue photos',
+          label: 'Vitals and nutrition photos',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-3-blood.webp',
+          alt: 'Blood Panel: how the blood draw works and which panels are being analysed',
+          label: 'What the blood draw measures',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-4-profile.webp',
+          alt: 'Profile for Jane Doe: reason for visit, wellness goals, contact details, health status, willingness to change and emotional wellbeing',
+          label: 'The patient, in their own words',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-5-history.webp',
+          alt: 'Medical History: conditions, a timeline, supplements and medications, family history and allergies',
+          label: 'Medical history',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-6-biometric.webp',
+          alt: 'Biometric Screening: height, weight and body composition from the scanner',
+          label: 'Biometric screening',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-7-motor.webp',
+          alt: 'Motor Skills: balance results as pass or fail, and dexterity and motor scores for each hand',
+          label: 'Motor skills',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-8-summary.webp',
+          alt: 'Health Summary: biometrics, blood panel, lifestyle and activity, questionnaires, medical history and the five functions of health on one screen',
+          label: 'The whole patient, on one screen',
+        },
+        {
+          src: '/case-studies/plmc/flows/tv-9-plan.webp',
+          alt: 'Your Personalized Plan: recommendations by function, labs and appointments, prescriptions and supplements, and notes from the exam',
+          label: 'Their plan, to take home',
+        },
+      ],
+    },
+    {
+      title: "The clinician's iPad",
+      line: 'The clinician runs each step here; every reading appears on the TV.',
+      device: 'ipad',
+      frame: { src: '/case-studies/plmc/frames/ipad.webp', size: [906, 1152], screen: [0.1324, 0.0395, 0.7332, 0.8106] },
+      // casting blue, the active-step pink, a pale blue
+      glow: ['#58A0E0', '#FF5C8A', '#A8D0F0'],
+      cover: 1,
+      screens: [
+        {
+          src: '/case-studies/plmc/flows/ipad-1-welcome.webp',
+          alt: 'Videos to cast to the TV while the patient settles in: the five functions, about PLMC, diet and supplementation',
+          label: 'Videos while they settle in',
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-2-vitals.webp',
+          alt: 'Vitals: start the exam on the machine, enter readings, launch the NPX app by QR code, and take fingernail, skin and tongue photos',
+          label: 'Start the vitals',
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-3-photo.webp',
+          alt: 'Camera: place the middle finger inside the guideline to photograph the fingernail',
+          label: 'Photograph the fingernail',
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-4-blood.webp',
+          alt: 'Select tests for the blood draw: basic metabolic, lipid panel, electrolyte and general chemistry 13, then hand over the iPad for a quiz',
+          label: 'Choose the blood tests',
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-5-profile.webp',
+          alt: 'Profile, contact info: name, date of birth, doctor, height, how to reach the patient and their address',
+          label: "The patient's details",
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-6-history.webp',
+          alt: 'Medical History, conditions: each condition with its treatment and the year diagnosed',
+          label: 'Add their history',
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-7-biometric.webp',
+          alt: "Biometric Screening: a video to play during the exam and the patient's InBody ID",
+          label: 'Biometric screening',
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-8-motor.webp',
+          alt: "Motor skills: the patient's NIH ID and QR code, with balance, dexterity and motor results to enter",
+          label: 'Motor skills',
+        },
+        {
+          src: '/case-studies/plmc/flows/ipad-9-modules.webp',
+          alt: 'Select a module to expand: the health summary, each of its sections, the five functions of health, and notes',
+          label: 'Open any part of the summary',
+        },
+      ],
+    },
+    {
+      title: 'The scheduler',
+      line: "The day's visits by type, each patient's questionnaires and labs a tap away.",
+      device: 'ipad',
+      frame: { src: '/case-studies/plmc/frames/ipad.webp', size: [906, 1152], screen: [0.1324, 0.0395, 0.7332, 0.8106] },
+      // the visit types: follow-up yellow, acute red, video-call blue
+      glow: ['#F5BC22', '#B53C5C', '#58A0E0'],
+      cover: 1,
+      screens: [
+        {
+          src: '/case-studies/plmc/flows/sched-1-day.webp',
+          alt: "The day's schedule for April 9, 2020: appointments coloured by type: new patient, follow-up, acute or video call",
+          label: 'The day, by visit type',
+        },
+        {
+          src: '/case-studies/plmc/flows/sched-2-new.webp',
+          alt: 'A new patient selected: reasons for the visit, wellness goals, completed questionnaires and recent blood tests',
+          label: 'A new patient, ready for their exam',
+        },
+        {
+          src: '/case-studies/plmc/flows/sched-3-week.webp',
+          alt: 'The week of April 9 to 13: appointments by day and type',
+          label: 'The week at a glance',
+        },
+        {
+          src: '/case-studies/plmc/flows/sched-4-block.webp',
+          alt: 'Schedule a time block: pick a slot, a duration and a reason, with the open times shown on the schedule',
+          label: 'Block out time',
+        },
+        {
+          src: '/case-studies/plmc/flows/sched-5-record.webp',
+          alt: "A patient's record: weight trajectory, lifestyle education, medical foods and supplements, labs, questionnaires and functional assessments",
+          label: "The patient's plan",
+        },
+      ],
+    },
+  ],
+
   context: {
     chapter: {
       label: 'Context',
