@@ -314,11 +314,30 @@ Revised on Nov 19. The original said to take the installer's defaults, which inc
 
 ```text
 Storybook is installed. Set it up for this site:
-1. In .storybook/main.ts, turn on features: { componentsManifest: true } and make sure @storybook/addon-mcp is in addons.
-2. In .storybook/preview.tsx, import src/styles/global.css and src/theme/tokens.css, load the same fonts as index.html, and use #1a1712 as the default background.
+1. In .storybook/main.ts, turn on features: { componentsManifest: true }, make sure
+   @storybook/addon-mcp is in addons, and set typescript: { reactDocgen:
+   'react-docgen-typescript' } so props imported from another file (Button's variant
+   and size) reach the manifest.
+2. In .storybook/preview.tsx, import src/theme/tokens.css and then
+   src/styles/global.css, as src/main.tsx does. Put the same font preconnect links
+   as index.html in .storybook/preview-head.html. Make the site's page background
+   (colors.bg in tokens.ts, #1a1712) the default background.
 3. Delete the sample stories Storybook created.
-4. Write stories in src/ui/ for Button, Chip and Eyebrow under a UI folder in the sidebar: one story per variant, plus a short description of when to use each component.
+4. Write stories in src/ui/ for Button, Chip and Eyebrow under a UI folder in the
+   sidebar: one story per variant, with real copy from src/data. Put the short
+   description of when to use each component in the component's own JSDoc, with an
+   @import tag, because that's what the MCP server reads. Write allowed prop values
+   out as unions so they show. Keep any interaction test in its own story, so the
+   other stories open at rest.
+Then check each story against the same element on the live site.
 ```
+
+Revised on Nov 19 after running it. The original asked for steps 1 to 4 without the details, and running it showed why each is needed:
+- **Fonts:** the fonts load through an `@import` in `global.css`. `index.html` only adds two preconnect links, which `preview-head.html` copies.
+- **Background:** Storybook 10 sets a default background with `parameters.backgrounds.options` and `initialGlobals.backgrounds.value`. The colour comes from `tokens.ts`, so there's no hard-coded hex.
+- **Descriptions:** the MCP server's `docs-list` and `docs-show` read each component's JSDoc, not the story file. Without an `@import` tag, the manifest invents `import { Button } from 'portfolio'`, a package that doesn't exist.
+- **Props:** the default docgen (`react-docgen`) only reads types declared in the component's own file, so Button showed no props at all. A type alias shows as its name (`ButtonVariant`), not its values.
+- **Interaction tests:** a play function that clicks leaves the button focused, so that story would open with its focus ring showing.
 
 Then start Storybook in Terminal 1:
 
@@ -326,9 +345,9 @@ Then start Storybook in Terminal 1:
 npm run storybook
 ```
 
-**You'll see:** a sidebar with a **UI** folder holding Button (Solid and Outline), Chip and Eyebrow. Each one shows on your dark background in Big Shoulders or Host Grotesk. The **Controls** panel under a story lists its props.
+**You'll see:** a sidebar with a **UI** folder holding Button (Solid, Outline, Compact and Keyboard Focus), Chip (Default and Skill List) and Eyebrow (Chapter Label and Case Study Line). Each one shows on your dark background in Big Shoulders or Host Grotesk. The **Controls** panel under a story lists its props, and the **Accessibility** panel reports no violations.
 
-**Done when:** each story looks like the same element on your live site. Commit with the message `Storybook stories for UI components`.
+**Done when:** each story looks like the same element on your live site (checked by comparing computed styles at rest, on hover and on keyboard focus), and `docs-show` from the Storybook MCP gives each component's description, props with their allowed values, and a working import. Commit with the message `Storybook stories for UI components`.
 
 **If not:** if fonts or colours look wrong, tell Claude Code what you see. A white background usually means the preview didn't load your CSS.
 

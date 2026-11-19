@@ -127,6 +127,27 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
   **Why:** they broke `npm run build`, which would have broken the Cloudflare deploy
   on push. **Status:** Done (before anything was pushed).
 
+## Storybook stories (Move 9)
+
+- **Decision:** the preview loads tokens.css and global.css in the site's order, copies
+  index.html's font preconnects into preview-head.html, and takes its default
+  background from `colors.bg` in tokens.ts. **Why:** the fonts come from global.css's
+  `@import`, and a token avoids a second copy of `#1a1712`. **Status:** Done.
+- **Decision:** each component's "when to use" text lives in its own JSDoc, with an
+  `@import` tag. **Why:** the MCP server reads the component's JSDoc, not the story
+  file, and without the tag the manifest invents `import { Button } from 'portfolio'`.
+  **Status:** Done.
+- **Decision:** Storybook uses `react-docgen-typescript`, and Button's allowed values are
+  written out as unions. **Why:** the default docgen dropped Button's props, which are
+  imported from buttonClass.ts, and an alias showed as `ButtonVariant` instead of its
+  values. Costs a slower manifest (about 1.2s instead of 19ms). **Status:** Done.
+- **Decision:** the click and keyboard test lives in its own Keyboard Focus story.
+  **Why:** a play function that clicks leaves the Solid story opening with its focus
+  ring showing. **Status:** Done.
+- **Result:** every story's computed styles match the same element on the live site in
+  every state; the Accessibility panel reports 0 violations on all 8 stories; the
+  site is unchanged (0 px after recapturing one text-antialiasing flake).
+
 ---
 
 ## Scope and governance (from the chat about the guide)

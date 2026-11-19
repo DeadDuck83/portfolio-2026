@@ -1,14 +1,16 @@
 import './Button.css';
 
-export type ButtonVariant = 'solid' | 'outline';
-export type ButtonSize = 'default' | 'compact';
-
+// The allowed values are written out here (not as aliases) so Storybook's docs
+// and its MCP server show them to whoever reads the component.
 export interface ButtonStyleProps {
   /** `solid` for the main action (olive fill), `outline` for the rest. */
-  variant?: ButtonVariant;
+  variant?: 'solid' | 'outline';
   /** `compact` is the smaller, accent-outlined Contact button in the headers. */
-  size?: ButtonSize;
+  size?: 'default' | 'compact';
 }
+
+export type ButtonVariant = NonNullable<ButtonStyleProps['variant']>;
+export type ButtonSize = NonNullable<ButtonStyleProps['size']>;
 
 /**
  * The Button's class names, for elements that render their own tag
