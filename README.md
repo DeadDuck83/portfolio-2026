@@ -77,7 +77,8 @@ src/
       index.ts             # slug → CaseStudy registry
   theme/tokens.ts          # primitives + semantic roles (colors, borders, fonts, layout)
   theme/tokens.css         # generated CSS variables (npm run tokens; a test checks it)
-  ui/                      # shared components: Button (+ buttonClass for EmailLink / Link)
+  ui/                      # shared components: Button (+ buttonClass for EmailLink / Link),
+                           #   Chip, Eyebrow
   styles/global.css        # resets, fonts, keyframes
   styles/about-journey.css # About journey layout + stack-mode overrides
 public/

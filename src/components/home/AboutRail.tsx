@@ -5,6 +5,7 @@ import { useGuideFocus } from '../../lib/guide';
 import { motionOff, subscribeMotion } from '../../lib/motion';
 import { border, colors, fonts, layout } from '../../theme/tokens';
 import Button from '../../ui/Button';
+import Chip from '../../ui/Chip';
 import CompanyPopover from './CompanyPopover';
 import { createSquares, type SquaresController } from './aboutRailSquares';
 import '../../styles/about-rail.css';
@@ -302,7 +303,9 @@ export default function AboutRail() {
               <p className="about-rail__lede">{c.body}</p>
               <ul className="about-rail__tags" aria-label="Skills">
                 {c.tags.map((t) => (
-                  <li key={t}>{t}</li>
+                  <Chip as="li" key={t}>
+                    {t}
+                  </Chip>
                 ))}
               </ul>
             </li>

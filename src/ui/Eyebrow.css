@@ -1,0 +1,11 @@
+/*
+ * Eyebrow (Eyebrow.tsx): the small uppercase label above a section or headline.
+ * Taken from the case-study chapter labels, and uses tokens.css variables only.
+ * Other small caps (nav links, Role / Org / Timeline, stat labels) are other roles.
+ */
+.ui-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}

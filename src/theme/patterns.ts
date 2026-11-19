@@ -2,8 +2,9 @@ import type { CSSProperties } from 'react';
 import { border, colors } from './tokens';
 
 /**
- * Recurring inline-style patterns shared across home sections. Buttons are the
- * shared Button component (src/ui/Button.tsx).
+ * Recurring inline-style patterns shared across home sections. Only WorkList and
+ * AboutJourney use these, and nothing renders them right now. The live site uses
+ * the shared components in src/ui: Button, Chip and Eyebrow.
  */
 
 /** Small outlined skill / tag chip. */

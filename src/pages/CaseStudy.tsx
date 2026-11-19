@@ -21,6 +21,7 @@ import NextCaseFooter from '../components/casestudy/NextCaseFooter';
 import Reveal from '../components/casestudy/Reveal';
 import ImageCollage from '../components/casestudy/ImageCollage';
 import FlowStrip from '../components/casestudy/FlowStrip';
+import Eyebrow from '../ui/Eyebrow';
 
 // Shared section-level style fragments.
 const sectionInner = {
@@ -175,7 +176,7 @@ export default function CaseStudy() {
               animation: 'floatIn 0.7s ease both',
             }}
           >
-            <span style={eyebrow}>Case study {cs.caseNumber}</span>
+            <Eyebrow>Case study {cs.caseNumber}</Eyebrow>
             <span
               style={{
                 flex: '0 0 46px',
@@ -185,7 +186,7 @@ export default function CaseStudy() {
                 animation: 'hairline 0.9s 0.3s ease both',
               }}
             />
-            <span style={eyebrow}>{cs.eyebrowRight}</span>
+            <Eyebrow>{cs.eyebrowRight}</Eyebrow>
           </div>
 
           <h1
@@ -654,13 +655,6 @@ export default function CaseStudy() {
     </div>
   );
 }
-
-const eyebrow = {
-  fontSize: '0.7rem',
-  letterSpacing: '0.24em',
-  textTransform: 'uppercase' as const,
-  color: colors.textMuted,
-};
 
 function MetaCell({ label, value }: { label: string; value: string }) {
   return (

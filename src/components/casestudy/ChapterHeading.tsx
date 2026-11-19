@@ -1,5 +1,6 @@
 import type { ChapterMeta } from '../../data/caseStudies/types';
 import { colors, fonts } from '../../theme/tokens';
+import Eyebrow from '../../ui/Eyebrow';
 
 /**
  * Chapter heading: uppercase label and an italic subtitle, baseline-aligned in
@@ -8,16 +9,7 @@ import { colors, fonts } from '../../theme/tokens';
 export default function ChapterHeading({ meta }: { meta: ChapterMeta }) {
   return (
     <div style={{ display: 'flex', alignItems: 'baseline', gap: '1.4rem', flexWrap: 'wrap' }}>
-      <span
-        style={{
-          fontSize: '0.68rem',
-          letterSpacing: '0.24em',
-          textTransform: 'uppercase',
-          color: colors.textMuted,
-        }}
-      >
-        {meta.label}
-      </span>
+      <Eyebrow>{meta.label}</Eyebrow>
       <span
         style={{
           fontFamily: fonts.text,

@@ -183,14 +183,7 @@
   list-style: none;
 }
 
-.about-rail__tags li {
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--c-body);
-  padding: 0.26rem 0.5rem;
-  border: 1px solid var(--rule);
-}
+/* the tags themselves are the shared Chip (src/ui/Chip.css) */
 
 /* Company name popover */
 

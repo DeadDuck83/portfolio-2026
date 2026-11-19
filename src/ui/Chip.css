@@ -1,0 +1,13 @@
+/*
+ * Chip (Chip.tsx): a small outlined label for a skill or tag. Taken from the
+ * About rail's skill tags (.about-rail__tags li), and uses tokens.css variables only.
+ */
+.ui-chip {
+  display: inline-block;
+  padding: 0.26rem 0.5rem;
+  border: 1px solid var(--border-chip);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-body);
+}
