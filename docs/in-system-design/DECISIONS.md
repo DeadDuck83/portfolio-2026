@@ -121,8 +121,8 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
 - **Decision:** install docs and a11y only, no test feature, telemetry off, with
   explicit installer flags. **Why:** the default would have rewritten the test setup
   that has been the gate for every move, and the installer answers its own prompts
-  when it detects Claude Code. **Status:** Done; commit waiting on Derek's OK at the
-  time of writing.
+  when it detects Claude Code. **Status:** Done (Storybook 10.6.7, commit "Install
+  Storybook", approved by Derek).
 - **Decision:** delete two unused React imports in Storybook's sample files.
   **Why:** they broke `npm run build`, which would have broken the Cloudflare deploy
   on push. **Status:** Done (before anything was pushed).
@@ -157,5 +157,13 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
   CLAUDE.md), and the branch is pushed so every session reads the same thing.
   **Why:** Derek: "I am a little worried that my claw code and what we're talking
   about is starting to branch off." **Status:** Agreed 2026-11-19, when Derek asked
-  for the build docs to go into the repo. gaps.md stays
-  outside the repo for now; the guide's GAPS.md (Moves 18 to 19) is where it lands.
+  for the build docs to go into the repo; Done in `87c0522`, and the branch was pushed.
+  gaps.md stays outside the repo for now; the guide's GAPS.md (Moves 18 to 19) is
+  where it lands. The old DECISIONS.md in the case-study folder was deleted, so this
+  file is the only copy.
+- **Decision:** fix the guide where it drifted from what was run: Move 5 stages files
+  by name, the "Done when" lines for Moves 6 and 7 point to the approved differences,
+  the intro's counts are corrected (223 style blocks; the patterns weren't used),
+  Move 8 shows the install command that actually ran, and Prompt D names
+  `preview.tsx`, which is what Storybook 10.6 creates. **Why:** CLAUDE.md's rule
+  (update the guide with each move). **Status:** Done with the Move 8 commit.

@@ -21,9 +21,9 @@ You already have about half of the foundation: a token file, tests and a Cloudfl
 
 | Her flow needs | portfolio-2026 today | Gap |
 | --- | --- | --- |
-| A coded component library | Page-level components (Hero, WorkList, CaseStudyHeader) and 225 inline style blocks | Pull out primitives first |
+| A coded component library | Page-level components (Hero, WorkList, CaseStudyHeader) and 223 inline style blocks | Pull out primitives first |
 | Tokens in two layers, raw values and semantic roles | `src/theme/tokens.ts`, one flat layer of hex values plus a `paper` palette | Split into primitive and semantic, add CSS variables |
-| Repeated patterns named once | `src/theme/patterns.ts` has `solidCta`, `chip` and `eyebrow`, used 44 times | These become your first three components |
+| Repeated patterns named once | `src/theme/patterns.ts` has `solidCta`, `chip` and `eyebrow`, but nothing the site renders uses them (an earlier "used 44 times" was a word count) | The live buttons, chips and labels they describe become your first three components (see the revised Prompts A to C) |
 | Storybook 10+ with the components manifest | None | Install it |
 | An agent rules file | `PRODUCT.md` (Impeccable) and `README.md`, no `CLAUDE.md` | Add one |
 | CI that runs checks before merge | Vitest and oxlint scripts exist, but no CI workflow runs them | Add a GitHub Actions workflow |
@@ -184,9 +184,11 @@ Revised on Nov 19 after checking the guide against the code; the original and th
 **Done when:** you run `npm run dev`, the site looks exactly like your baseline, and you commit:
 
 ```bash
-git add -A
+git add src/theme/tokens.ts src/theme/tokens.css src/theme/tokensCss.ts src/theme/tokens.test.ts scripts/tokens.mjs src/main.tsx package.json README.md
 git commit -m "Tokens: primitive and semantic layers with CSS variables"
 ```
+
+Stage files by name, never `git add -A`, so the untracked Rive file in `public/background/` stays out.
 
 **If not:** tell Claude Code what looks different. To throw the whole change away, ask it to undo, or run `git restore .`.
 
@@ -239,7 +241,7 @@ Revised on Nov 19: the original built Button from `solidCta`, which nothing impo
 
 **You'll see:** a new `src/ui/Button.tsx` and a list of the files that now use it.
 
-**Done when:** the buttons on the site look and hover exactly as before, and you commit with the message `Button component`.
+**Done when:** the buttons look and hover as before, apart from the differences you approved one by one (listed in `DECISIONS.md`), and you commit with the message `Button component`.
 
 **If not:** describe the difference to Claude Code, for example "the hero button lost its arrow gap."
 
@@ -275,7 +277,7 @@ Revised on Nov 19: the original worked from `patterns.ts`, whose chip and eyebro
 
 **You'll see:** `src/ui/` now holds `Button.tsx`, `Chip.tsx` and `Eyebrow.tsx`.
 
-**Done when:** the site matches your baseline screenshots and you commit with the message `Chip and Eyebrow components`.
+**Done when:** the site matches your baseline screenshots, apart from the Eyebrow size change you approved (see `DECISIONS.md`), and you commit with the message `Chip and Eyebrow components`.
 
 **If not:** same as before. Describe the difference, or undo with `git restore .`.
 
@@ -285,25 +287,22 @@ By the end of 1B your three components show in Storybook in your browser, Claude
 
 ### 8. Install Storybook
 
-**Where:** Terminal 1.
+**Where:** Terminal 1, or Claude Code (it runs the same commands).
 
 **Type:**
 
 ```bash
-npm create storybook@latest
+STORYBOOK_DISABLE_TELEMETRY=true npm create storybook@latest -- --features docs a11y --type react --builder vite --no-dev --no-agent --yes --disable-telemetry
+STORYBOOK_DISABLE_TELEMETRY=true npx storybook add @storybook/addon-mcp --yes --disable-telemetry
 ```
 
-If it asks which framework, pick **React + Vite**. For anything else it asks, take the default.
+Then turn telemetry off for the project: in `.storybook/main.ts`, add `"core": { "disableTelemetry": true }`.
 
-**You'll see:** your browser opens `http://localhost:6006` with Storybook's sample stories in the left sidebar.
+Revised on Nov 19. The original said to take the installer's defaults, which include a `test` feature: Storybook's Vitest addon and Chromatic's addon, a Vitest config that runs every story in a real browser, and a Chromium download. Nothing later in this guide needs it, and `npm test` is the check for every move. The installer also answers its own prompts when it detects an AI agent (it checks `CLAUDECODE`), so the flags make the install the same whoever runs it. Both addons print "Could not resolve the postinstall hook"; that's harmless, because neither ships one.
 
-**Done when:** that page loads. Press `Ctrl+C` in Terminal 1, then add the agent add-on:
+**You'll see:** "Storybook was successfully installed in your project!", and Storybook's sample stories in `src/stories/`.
 
-```bash
-npx storybook add @storybook/addon-mcp
-```
-
-Commit with the message `Install Storybook`.
+**Done when:** `npm run storybook` opens `http://localhost:6006` with the sample stories in the left sidebar, and `npm run build` still passes. If the build fails on an unused `import React` in `src/stories/Button.tsx` or `Header.tsx`, delete that line: the project's strict TypeScript rejects it, and Move 9 deletes the samples anyway. Commit with the message `Install Storybook`, staging `.gitignore`, `package.json`, `package-lock.json`, `.storybook/` and `src/stories/` by name.
 
 **If not:** copy the error and paste it into Claude Code with "Storybook install failed, what do I do?"
 
@@ -316,7 +315,7 @@ Commit with the message `Install Storybook`.
 ```text
 Storybook is installed. Set it up for this site:
 1. In .storybook/main.ts, turn on features: { componentsManifest: true } and make sure @storybook/addon-mcp is in addons.
-2. In .storybook/preview.ts, import src/styles/global.css and src/theme/tokens.css, load the same fonts as index.html, and use #1a1712 as the default background.
+2. In .storybook/preview.tsx, import src/styles/global.css and src/theme/tokens.css, load the same fonts as index.html, and use #1a1712 as the default background.
 3. Delete the sample stories Storybook created.
 4. Write stories in src/ui/ for Button, Chip and Eyebrow under a UI folder in the sidebar: one story per variant, plus a short description of when to use each component.
 ```
