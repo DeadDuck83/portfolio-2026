@@ -191,3 +191,38 @@ a {
     white-space: nowrap;
   }
 }
+
+/* Case-study header on phones (CaseStudyHeader): the wordmark, Pause motion,
+   ← Work and Contact share one line down to 360px wide */
+@media (max-width: 480px) {
+  .cs-head__row,
+  .cs-head__chapters {
+    padding-inline: 1rem !important;
+  }
+  .cs-head__row {
+    gap: 0.75rem !important;
+  }
+  .cs-head__nav {
+    gap: 0.75rem !important;
+  }
+  .cs-head__all {
+    display: none;
+  }
+  .cs-head__link,
+  .cs-head__cta {
+    letter-spacing: 0.12em !important;
+  }
+  .cs-head__cta {
+    padding-inline: 0.55rem !important;
+  }
+}
+@media (max-width: 380px) {
+  .cs-head__brand > span {
+    font-size: 1.45rem !important;
+  }
+}
+@media (max-width: 340px) {
+  .cs-head__brand > span {
+    font-size: 1.3rem !important;
+  }
+}

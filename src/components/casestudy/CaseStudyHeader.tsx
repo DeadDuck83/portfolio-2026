@@ -37,6 +37,7 @@ export default function CaseStudyHeader({
       }}
     >
       <div
+        className="cs-head__row"
         style={{
           maxWidth: 1240,
           margin: '0 auto',
@@ -47,10 +48,10 @@ export default function CaseStudyHeader({
           gap: '1rem',
         }}
       >
-        <Link to="/">
+        <Link to="/" className="cs-head__brand">
           <Wordmark size={1.5} />
         </Link>
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.9rem, 3vw, 2rem)' }}>
+        <nav className="cs-head__nav" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.9rem, 3vw, 2rem)' }}>
           {/* on phones just the icon: the bar is tight there */}
           <MotionToggle
             source="case-header"
@@ -64,6 +65,7 @@ export default function CaseStudyHeader({
           />
           <Link
             to="/#work"
+            className="cs-head__link"
             style={{
               fontSize: '0.7rem',
               letterSpacing: '0.18em',
@@ -72,10 +74,11 @@ export default function CaseStudyHeader({
               whiteSpace: 'nowrap',
             }}
           >
-            ← All work
+            ← <span className="cs-head__all">All </span>work
           </Link>
           <EmailLink
             source="case-header"
+            className="cs-head__cta"
             style={{
               fontSize: '0.7rem',
               letterSpacing: '0.18em',
@@ -95,6 +98,7 @@ export default function CaseStudyHeader({
 
       <nav style={{ borderTop: `1px solid ${border.hairlineFaint}`, overflowX: 'auto' }}>
         <div
+          className="cs-head__chapters"
           style={{
             maxWidth: 1240,
             margin: '0 auto',
