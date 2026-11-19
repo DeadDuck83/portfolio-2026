@@ -634,9 +634,8 @@
     font-size: clamp(4.4rem, 23vw, 7.3rem);
   }
   /* LinkedIn / email live in the contact section; up here they were one
-     thing too many to look at. Pause motion stays: the tiles play by
-     themselves on phones */
-  .hx__links > li:not(.hx__links-motion) {
+     thing too many to look at */
+  .hx__links {
     display: none;
   }
   /* full-bleed: the stack runs edge to edge */

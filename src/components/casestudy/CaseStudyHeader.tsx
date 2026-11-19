@@ -4,7 +4,6 @@ import Wordmark from '../Wordmark';
 import EmailLink from '../EmailLink';
 import { border, colors, radius } from '../../theme/tokens';
 import { outlinedCtaHover } from '../../lib/hover';
-import MotionToggle from '../MotionToggle';
 
 export interface Chapter {
   id: string;
@@ -52,17 +51,6 @@ export default function CaseStudyHeader({
           <Wordmark size={1.5} />
         </Link>
         <nav className="cs-head__nav" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.9rem, 3vw, 2rem)' }}>
-          {/* on phones just the icon: the bar is tight there */}
-          <MotionToggle
-            source="case-header"
-            squeeze
-            style={{
-              fontSize: '0.7rem',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: colors.textBody,
-            }}
-          />
           <Link
             to="/#work"
             className="cs-head__link"

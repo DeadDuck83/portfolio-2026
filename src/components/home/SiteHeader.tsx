@@ -3,7 +3,6 @@ import Wordmark from '../Wordmark';
 import { border, colors, fonts, layout, radius } from '../../theme/tokens';
 import { accentLinkHover, outlinedCtaHover } from '../../lib/hover';
 import { track } from '../../lib/analytics';
-import MotionToggle from '../MotionToggle';
 
 const MOBILE_BP = 820;
 
@@ -105,7 +104,6 @@ export default function SiteHeader() {
 
         {!isMobile && (
           <nav style={{ display: 'flex', alignItems: 'center', gap: '2.2rem' }}>
-            <MotionToggle source="header" style={navLinkStyle} {...accentLinkHover(colors.textBody)} />
             <a href="#about" style={navLinkStyle} {...accentLinkHover(colors.textBody)}>
               About
             </a>
@@ -189,17 +187,6 @@ export default function SiteHeader() {
           >
             Work
           </a>
-          <MotionToggle
-            source="menu"
-            style={{
-              padding: '0.85rem 0',
-              fontSize: '0.8rem',
-              letterSpacing: '0.16em',
-              textTransform: 'uppercase',
-              color: colors.textBody,
-              borderBottom: `1px solid ${border.hairlineFaint}`,
-            }}
-          />
           <a
             href="#contact"
             onClick={() => {

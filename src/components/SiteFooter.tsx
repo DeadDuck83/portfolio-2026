@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import Wordmark from './Wordmark';
 import EmailLink from './EmailLink';
+import MotionToggle from './MotionToggle';
 import { border, colors, layout } from '../theme/tokens';
 import { accentLinkHover } from '../lib/hover';
 import { track } from '../lib/analytics';
@@ -43,7 +44,7 @@ export default function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'c
       >
         <Wordmark size={1.3} />
 
-        <div style={{ display: 'flex', gap: '1.6rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem 1.6rem' }}>
           {variant === 'home' ? (
             <>
               <a href="#about" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
@@ -71,6 +72,9 @@ export default function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'c
               </EmailLink>
             </>
           )}
+          {/* the site-wide pause for the videos and animations: tucked down
+              here so it doesn't take room in the header */}
+          <MotionToggle source="footer" style={linkStyle} {...accentLinkHover(colors.textMuted)} />
         </div>
 
         <div style={{ fontSize: '0.66rem', letterSpacing: '0.1em', color: colors.textFaint }}>

@@ -24,7 +24,6 @@ import { RESUME_URL } from '../../data/site';
 import { noteCaseStudySource, projectIdFromPath, track } from '../../lib/analytics';
 import { motionOff, useMotionOff } from '../../lib/motion';
 import EmailLink from '../EmailLink';
-import MotionToggle from '../MotionToggle';
 import HeroAvatar from '../avatar/HeroAvatar';
 // PixelCameo (the camera that brings out pixel Derek) is off for this
 // iteration; the component and its test stay for a later one.
@@ -100,10 +99,6 @@ export default function Hero() {
                 </a>
               </li>
             )}
-            {/* the one link that stays on phones: the tiles play there by themselves */}
-            <li className="hx__links-motion">
-              <MotionToggle source="hero" className="hx__link" />
-            </li>
           </ul>
         </div>
       </div>

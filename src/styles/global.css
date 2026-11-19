@@ -176,28 +176,8 @@ a {
   height: 0.8em;
   flex: none;
 }
-@media (max-width: 640px) {
-  .motion-toggle--squeeze {
-    min-width: 24px;
-    min-height: 24px;
-    justify-content: center;
-  }
-  .motion-toggle--squeeze svg {
-    width: 12px;
-    height: 12px;
-  }
-  .motion-toggle--squeeze .motion-toggle__text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-}
-
-/* Case-study header on phones (CaseStudyHeader): the wordmark, Pause motion,
-   ← Work and Contact share one line down to 360px wide */
+/* Case-study header on phones (CaseStudyHeader): the wordmark, ← Work and
+   Contact share one line down to 320px wide */
 @media (max-width: 480px) {
   .cs-head__row,
   .cs-head__chapters {

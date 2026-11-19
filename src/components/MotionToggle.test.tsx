@@ -12,7 +12,7 @@ describe('MotionToggle', () => {
 
   it('pauses the site and plays it again', async () => {
     const user = userEvent.setup();
-    render(<MotionToggle source="hero" />);
+    render(<MotionToggle source="footer" />);
     await user.click(screen.getByRole('button', { name: 'Pause motion' }));
     expect(document.documentElement.dataset.motion).toBe('off');
     await user.click(screen.getByRole('button', { name: 'Play motion' }));
@@ -30,7 +30,7 @@ describe('MotionToggle', () => {
           removeEventListener: vi.fn(),
         }) as unknown as MediaQueryList,
     );
-    render(<MotionToggle source="hero" />);
+    render(<MotionToggle source="footer" />);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });

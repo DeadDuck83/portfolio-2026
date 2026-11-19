@@ -51,7 +51,7 @@ export type AnalyticsEvents = {
   AvatarError: { errorCategory: 'avatar-load' | 'audio-blocked' };
   SkillsViewed: { source: 'about-today' };
   // accessibility
-  MotionToggled: { paused: boolean; source: 'hero' | 'header' | 'menu' | 'case-header' };
+  MotionToggled: { paused: boolean; source: 'footer' };
   // easter egg
   TelemetryBayOpened: Record<string, never>;
   // engagement and traffic quality

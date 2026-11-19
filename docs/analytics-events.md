@@ -56,7 +56,7 @@ Your known Chrome/Mac visitor is `6367bdcf-4326-4a8c-aa8c-825ea7b0ac4b`. Opt-out
 | `AvatarSettingChanged` | `setting`: camera, sound, `on` | Camera or sound toggled. Camera off = they prefer reading. |
 | `AvatarError` | `errorCategory`: avatar-load, audio-blocked | The avatar failed to load, or the browser blocked his voice. At most once per page load each. |
 | `SkillsViewed` | `source`: about-today | "View my skills" under About's "Today" chapter opened the skills display. |
-| `MotionToggled` | `paused`, `source`: hero, header, menu, case-header | The Pause motion / Play motion control was used. `paused: true` = they stopped the site's motion (videos, animations). Remembered per browser, so it fires on the change, not on each visit. |
+| `MotionToggled` | `paused`, `source`: footer | The Pause motion / Play motion control (in the footer) was used. `paused: true` = they stopped the site's motion (videos, animations). Remembered per browser, so it fires on the change, not on each visit. |
 | `TelemetryBayOpened` | none | *(was "Footer pulled up")* The footer easter egg was pulled open. |
 | `EngagedSession` | `activeSeconds`, `interactions` | Once per browser session, after **15 s of active, visible time and 2 deliberate inputs** (tap, click, key, wheel or touch scroll). Background-tab time and time more than 30 s after the last input don't count, and scripted input is ignored. Thresholds live in `ENGAGEMENT` in `src/lib/engagement.ts`. |
 | `AutomatedBrowser` | none | The browser reports it's driven by automation (`navigator.webdriver`: Playwright, Selenium, Puppeteer). Once per page load. |
