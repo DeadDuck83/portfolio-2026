@@ -420,6 +420,8 @@ Revised on Nov 19 after running it. The original said "matches your four baselin
 
 Cloudflare builds every push to this branch but deploys only `main`, so pushing the branch doesn't change derekjmoore.com. That was checked on the live site and in the Cloudflare dashboard; see DECISIONS.md.
 
+Found later, during TextLink: Chrome won't capture more than 16,384 device pixels in one screenshot. The case studies on phone are taller than that, so the bottom of those pages (PLMC's included) is blank in every capture and was never compared. The "0 px" results here hold above that point; see DECISIONS.md.
+
 ## Step 2: Claude Code builds your Figma library
 
 By the end of step 2 an empty Figma file holds your tokens as variables, your text styles, and Button, Chip and Eyebrow as components that match Storybook. You do nothing in Figma except make the empty file and check the results.
@@ -577,6 +579,8 @@ Don't change any code yet. Show me the table and the contact sheet when you're d
 
 Partly run early, on Nov 19, straight after Move 12: you reviewed the list of repeated elements and a contact sheet of the small caps (`step-13/compare.html`), and decided five things, logged in DECISIONS.md under "Component inventory". The Wait rows went into a new `GAPS.md` at the repo root. `COMPONENTS.md` isn't written yet, so this move still runs.
 
+After that, TextLink was promoted on its own (commit `TextLink`), the same way as Button: the footer links and the "← Gallery" link above a gallery piece now use `src/ui/TextLink`. When this move runs, list it in `src/ui/` with the others.
+
 ### 21. Prompt K: the case study kit
 
 **Where:** Claude Code.
@@ -623,6 +627,8 @@ Run the checks, check each Accessibility tab, and log anything flagged in GAPS.m
 **You'll see:** a Site folder and a fuller UI folder.
 
 **Done when:** the header collapses to Menu in its narrow story exactly as on your phone, you've approved every page that changed, and you commit with the message `Site and UI stories`.
+
+Note from Nov 19: SiteFooter's links are TextLink now (`src/ui/TextLink`, which already has stories in UI). EmailLink and MotionToggle each have one more use to cover: `textLinkClass()` in the case footer, with `plain={false}` on EmailLink.
 
 **If not:** if a story crashes with a router error, ask Claude Code to add the MemoryRouter decorator to that story.
 

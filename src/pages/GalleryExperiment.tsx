@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router';
 import { HealthspanSimulator } from '../components/healthspan';
 import { getGalleryPiece, type GalleryPiece } from '../data/gallery';
-import { accentLinkHover } from '../lib/hover';
 import { border, colors, fonts } from '../theme/tokens';
+import { textLinkClass } from '../ui/textLinkClass';
 
 /**
  * Full-bleed host for a gallery study. HTML pieces run in an iframe;
@@ -43,17 +43,7 @@ export default function GalleryExperiment() {
           background: colors.bgAlt,
         }}
       >
-        <Link
-          to="/gallery"
-          style={{
-            fontSize: '0.66rem',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: colors.textMuted,
-            textDecoration: 'none',
-          }}
-          {...accentLinkHover(colors.textMuted)}
-        >
+        <Link to="/gallery" className={textLinkClass()}>
           ← Gallery
         </Link>
         <span

@@ -2,16 +2,10 @@ import { Link } from 'react-router';
 import Wordmark from './Wordmark';
 import EmailLink from './EmailLink';
 import MotionToggle from './MotionToggle';
+import TextLink from '../ui/TextLink';
+import { textLinkClass } from '../ui/textLinkClass';
 import { border, colors, layout } from '../theme/tokens';
-import { accentLinkHover } from '../lib/hover';
 import { track } from '../lib/analytics';
-
-const linkStyle = {
-  fontSize: '0.66rem',
-  letterSpacing: '0.16em',
-  textTransform: 'uppercase' as const,
-  color: colors.textMuted,
-};
 
 /**
  * Shared footer. `variant="home"` links to the on-page sections; `variant="case"`
@@ -47,34 +41,25 @@ export default function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'c
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem 1.6rem' }}>
           {variant === 'home' ? (
             <>
-              <a href="#about" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
-                About
-              </a>
-              <a href="#work" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
-                Work
-              </a>
-              <a
-                href="#contact"
-                style={linkStyle}
-                {...accentLinkHover(colors.textMuted)}
-                onClick={() => track('GetInTouchClick', { source: 'footer' })}
-              >
+              <TextLink href="#about">About</TextLink>
+              <TextLink href="#work">Work</TextLink>
+              <TextLink href="#contact" onClick={() => track('GetInTouchClick', { source: 'footer' })}>
                 Contact
-              </a>
+              </TextLink>
             </>
           ) : (
             <>
-              <Link to="/#work" style={linkStyle} {...accentLinkHover(colors.textMuted)}>
+              <Link to="/#work" className={textLinkClass()}>
                 All work
               </Link>
-              <EmailLink style={linkStyle} {...accentLinkHover(colors.textMuted)} source="footer">
+              <EmailLink className={textLinkClass()} plain={false} source="footer">
                 Contact
               </EmailLink>
             </>
           )}
           {/* the site-wide pause for the videos and animations: tucked down
               here so it doesn't take room in the header */}
-          <MotionToggle source="footer" style={linkStyle} {...accentLinkHover(colors.textMuted)} />
+          <MotionToggle source="footer" className={textLinkClass()} />
         </div>
 
         <div style={{ fontSize: '0.66rem', letterSpacing: '0.1em', color: colors.textFaint }}>

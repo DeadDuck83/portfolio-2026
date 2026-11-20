@@ -154,8 +154,9 @@ a {
 }
 
 /* Pause motion / Play motion (MotionToggle): takes its type from wherever
-   it sits */
-.motion-toggle {
+   it sits. :where() keeps this reset at zero specificity, so a class passed in
+   (textLinkClass() in the footer) wins whichever stylesheet loads first. */
+:where(.motion-toggle) {
   appearance: none;
   display: inline-flex;
   align-items: center;

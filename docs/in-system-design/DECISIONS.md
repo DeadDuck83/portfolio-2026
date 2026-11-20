@@ -294,6 +294,71 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   **Why:** Derek asked for the Wait rows in GAPS.md and the fix in gaps.md. **Status:**
   Done. Moving gaps.md's entries into GAPS.md is still open.
 
+## TextLink (after the component inventory)
+
+- **Decision:** one `src/ui/TextLink.tsx` for the small uppercase text link: the home
+  footer's About, Work and Contact, the case footer's All work, Contact and Pause
+  motion, and "← Gallery" above a gallery piece. It renders an `<a>`;
+  `textLinkClass()` (`src/ui/textLinkClass.ts`) gives the same class to React
+  Router's Link, EmailLink (with `plain={false}`) and MotionToggle. CSS `:hover` and
+  `:focus-visible` replace `accentLinkHover`. It has no props of its own, because
+  all seven places are one style. **Why:** Derek: "promote TextLink only, same
+  pattern as Button." **Status:** Done (commit "TextLink").
+- **Decision:** no `<button>` form. **Why:** the two buttons that use the style
+  (EmailLink, MotionToggle) render their own element, so the branch would have no
+  user. **Status:** Done.
+- **Decision:** hover stays instant, with no transition. **Why:** it matches the JS
+  hover it replaced, so nothing moves. **Status:** Done.
+- **Decision:** the MotionToggle reset in `global.css` is wrapped in `:where()`.
+  **Why:** on the site, component CSS loads before global.css (`main.tsx` imports
+  App first), so the reset's `inherit` values tied with TextLink's class and won.
+  In Storybook the order is reversed. `:where()` lets any class win in both.
+  **Status:** Done.
+- **Decision:** keyboard focus on all seven links gets Button's ring (accent bright,
+  2px solid, 3px out) instead of the browser's blue ring (auto, 1px). Contrast is
+  6.94:1 on `colors.bg` and 7.20:1 on `colors.bgAlt`, against 3:1 needed. **Why:**
+  Derek: "Approve the focus ring." **Status:** Done.
+- **Decision:** "← Gallery" on `/gallery/lifespan-vs-healthspan` takes TextLink's
+  letter spacing, 0.16em instead of 0.14em, so it's 1.9px wider; nothing else on the
+  page moves. **Why:** Derek: "Approve ... the Gallery letter spacing." **Status:**
+  Done.
+- **Decision:** buttons styled as TextLink lose the browser's button padding
+  (`padding: 0` in TextLink.css). Until now the case footer's Contact (EmailLink)
+  had 1px top and bottom and 6px each side. **Why:** Derek: "Drop the browser
+  padding on the case footer's Contact." **Result:** Contact now sits the row's
+  1.6rem gap (25.6px) from its neighbours instead of 31.6px. The three links' text
+  is now level (All work used to sit 1px higher). On desktop the group is 12px
+  narrower and stays centred (All work moves 6px right, Pause motion 6px left). On
+  phone the footer is 2px shorter. Its focus ring now sits 3px from the text.
+  Derek asked to see the row before and after on desktop and phone, and to commit if
+  it looked right. Claude Code checked it (`step-13/textlink/footer-row.html`, opened
+  for Derek) and committed. **Status:** Done.
+- **Result:** each place was switched on its own, then checked with:
+  - exact pixel diffs of home, Sage, Gallery and the gallery piece, desktop and
+    phone, with reduced motion;
+  - the three footers shot on their own without reduced motion, so Pause motion
+    shows;
+  - each link at rest, on hover, after hover and on keyboard focus, plus its
+    computed styles.
+
+  Everything was 0 px except the focus ring and the Gallery link. Dropping the
+  padding then changed only the case footer (on case studies and Gallery). Home
+  desktop showed about 500 px three times in the decorative grid at CSS y
+  1393–1743, the box behind Move 12's 6-pixel floor; retakes were 0 px. Build, 111
+  tests and lint pass. The three stories have 0 axe violations, the Keyboard Focus
+  play test passes, and the story styles match the live footer link.
+  `accentLinkHover` stays in `src/lib/hover.ts`, because SiteHeader and Gallery
+  still use it.
+- **Found:** Chrome won't capture more than 16,384 device pixels in one screenshot.
+  A full-page capture taller than that is blank below it, on both sides of a diff,
+  so that part of the page is never compared. That covers every case study on phone
+  (21,225 to 25,164 px at 3×) and Bexa on desktop (16,612 px at 2×). Every capture
+  of those since Move 3 has missed the bottom of the page: on Sage's phone page, the
+  last 1,809 CSS px, footer included. For TextLink, the footers were also shot on
+  their own, so the switch is covered. **Status:** Open. The earlier "0 px" results
+  for those pages hold only above the cut-off. Capturing long pages in parts would
+  close the gap.
+
 ---
 
 ## Scope and governance (from the chat about the guide)

@@ -1,0 +1,28 @@
+/*
+ * TextLink (TextLink.tsx, textLinkClass.ts): the small uppercase text link in the
+ * site footer and the gallery piece header. It matches the footer links it replaced
+ * (muted at rest, accent bright on hover, no transition), and uses tokens.css
+ * variables only.
+ */
+.ui-text-link {
+  font: inherit;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.ui-text-link:hover {
+  color: var(--color-accent-bright);
+}
+.ui-text-link:focus-visible {
+  outline: 2px solid var(--color-accent-bright);
+  outline-offset: 3px;
+}
+
+/* On a <button> (EmailLink, MotionToggle): no browser border, fill or padding. */
+button.ui-text-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
