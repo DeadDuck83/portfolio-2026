@@ -1,6 +1,16 @@
 # CLAUDE.md
 
-Rules for Claude Code in this repo. Move 11 of the In-System Design guide adds the rest.
+Rules for any agent working in this repo.
+
+## Building UI
+
+- Build UI only from components in `src/ui/` and tokens from `src/theme/`. Never invent
+  a prop or a hex value.
+- Before building UI, call the Storybook MCP tools `docs-list`, then `docs-show`, then
+  `get-storybook-story-instructions`.
+- If something has to be built by hand, add it to `GAPS.md` at the repo root (create it
+  if it's missing) with the component that should replace it.
+- Read `PRODUCT.md` for who the site is for.
 
 ## Build docs
 

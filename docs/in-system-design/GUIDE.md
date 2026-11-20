@@ -381,16 +381,19 @@ Revised on Nov 19 after running it. The original's second line was `claude`, wit
 **Paste:**
 
 ```text
-Create CLAUDE.md at the repo root with short rules for any agent working here:
+CLAUDE.md at the repo root already has a Build docs section. Keep it as it is, and
+add a Building UI section above it with short rules for any agent working here:
 - Build UI only from components in src/ui/ and tokens from src/theme/. Never invent a prop or a hex value.
 - Before building UI, call the Storybook MCP tools docs-list, then docs-show, then get-storybook-story-instructions.
-- If something has to be built by hand, add it to GAPS.md with the component that should replace it.
+- If something has to be built by hand, add it to GAPS.md at the repo root (create it if it's missing) with the component that should replace it.
 - Read PRODUCT.md for who the site is for.
 ```
 
-**You'll see:** a new `CLAUDE.md` of about ten lines.
+Revised on Nov 19 after running it. The original said to create `CLAUDE.md`, but the repo already had one holding the rule that keeps this guide up to date, so the rules are added beside it. `GAPS.md` doesn't exist until something is logged in it, so the rule says where it goes.
 
-**Done when:** you type `/exit`, start `claude` again, ask `Which component should I use for a section label?`, and it answers Eyebrow. Commit with the message `Agent rules`.
+**You'll see:** `CLAUDE.md` with a Building UI section of four rules above Build docs, about 25 lines in all.
+
+**Done when:** you type `/exit`, start a new session with `claude` at the terminal prompt (not `claude --continue`, so it knows nothing from this conversation), ask `Which component should I use for a section label?`, and it answers Eyebrow. Commit `CLAUDE.md` and the build docs with the message `Agent rules`.
 
 **If not:** if it suggests building a new element, ask it to re-read `CLAUDE.md`, and tighten the wording with it.
 

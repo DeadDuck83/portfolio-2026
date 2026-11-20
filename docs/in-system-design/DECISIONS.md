@@ -161,6 +161,20 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
 - **Result:** `docs-list` returns Button (4 stories), Chip (2) and Eyebrow (2), each
   with its JSDoc description.
 
+## Agent rules (Move 11)
+
+- **Decision:** the four agent rules go into the existing CLAUDE.md as a Building UI
+  section, and the Build docs rule stays as it was. **Why:** Prompt E said to create
+  CLAUDE.md, which would have overwritten the rule that keeps GUIDE.md and this file
+  up to date. Derek: "adding the agent rules to the existing CLAUDE.md and keeping the
+  build-docs rule." **Status:** Done.
+- **Decision:** the GAPS.md rule says the file goes at the repo root and is created
+  when missing. **Why:** no move has created it yet (Moves 19 and 25 commit it), and
+  the old gaps.md lived outside the repo. **Status:** Done.
+- **Result:** in a new session, `Which component should I use for a section label?`
+  got Eyebrow, found with `docs-list` and `docs-show`. The answer also showed that the
+  docs' import snippets read `import { Eyebrow } from 'portfolio'`, which doesn't exist.
+
 ---
 
 ## Scope and governance (from the chat about the guide)
