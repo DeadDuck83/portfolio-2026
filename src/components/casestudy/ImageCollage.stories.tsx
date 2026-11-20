@@ -38,15 +38,19 @@ export const Collage: Story = {
 };
 
 /**
- * After clicking an image: the full-size view, over the collage. Escape or Close goes
- * back to the collage. Known gap (GAPS.md): focus stays on the collage's Close behind
- * it instead of moving to this view's Close.
+ * After clicking an image: the full-size view, over the collage. Focus moves to its
+ * Close and stays inside the view (Tab and Shift+Tab go round its controls). Escape or
+ * Close goes back to the collage, with focus on the image that opened it.
  */
 export const FullSizeView: Story = {
   play: async ({ canvas, userEvent }) => {
     const first = images[0];
     await userEvent.click(canvas.getByRole('button', { name: `View larger: ${first.alt}` }));
     await waitFor(() => expect(canvas.getByRole('dialog', { name: first.alt })).toBeVisible());
-    await expect(canvas.getByRole('button', { name: 'Close full-size media' })).toBeVisible();
+    const close = canvas.getByRole('button', { name: 'Close full-size media' });
+    await expect(close).toHaveFocus();
+    // an image's view has one control, so Tab comes back round to it
+    await userEvent.tab();
+    await expect(close).toHaveFocus();
   },
 };

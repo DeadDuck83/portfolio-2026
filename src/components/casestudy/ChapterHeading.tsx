@@ -20,7 +20,7 @@ export default function ChapterHeading({ meta }: { meta: ChapterMeta }) {
           fontFamily: fonts.text,
           fontStyle: 'italic',
           fontSize: '1.05rem',
-          color: colors.textFaint,
+          color: colors.textMuted,
         }}
       >
         {meta.subtitle}

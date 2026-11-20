@@ -10,8 +10,9 @@ import Label from '../../ui/Label';
  * Every image in a case study at once, in columns with their captions, over the
  * whole window. Clicking an image opens it full size; Escape backs out (the full-size
  * view first, then the collage), and Close or the backdrop also closes. Focus starts
- * on Close. Open it from the TL;DR Callout's link ("Show me the images →"), only when
- * the case study has images. Data: a `title` (the case study's name line,
+ * on Close; in the full-size view it stays inside the view, and goes back to the
+ * image when the view closes. Open it from the TL;DR Callout's link ("Show me the
+ * images →"), only when the case study has images. Data: a `title` (the case study's name line,
  * `caseStudy.eyebrowRight`), the `figures` that have an image
  * (`collectCaseStudyImages(caseStudy)`), and `onClose`.
  *
@@ -28,27 +29,38 @@ export default function ImageCollage({
 }) {
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement | null>(null);
+  // the image that opened the full-size view, to go back to when it closes
+  const openerRef = useRef<HTMLElement | null>(null);
   const [lightbox, setLightbox] = useState<Figure | null>(null);
 
+  // once, as it opens: the page behind stops scrolling, and focus starts on Close.
+  // (Not again when the full-size view opens: that would take focus from it.)
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     closeRef.current?.focus();
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      if (lightbox) {
-        setLightbox(null);
-        return;
-      }
-      onClose();
-    };
-    window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = prev;
-      window.removeEventListener('keydown', onKey);
     };
+  }, []);
+
+  // Escape backs out: the full-size view first, then the collage
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      if (lightbox) setLightbox(null);
+      else onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [onClose, lightbox]);
+
+  // when the full-size view closes, focus goes back to the image that opened it
+  useEffect(() => {
+    if (lightbox) return;
+    openerRef.current?.focus();
+    openerRef.current = null;
+  }, [lightbox]);
 
   return (
     <div
@@ -127,7 +139,10 @@ export default function ImageCollage({
             <CollageItem
               key={`${fig.src}-${fig.placeholder}`}
               figure={fig}
-              onOpen={() => setLightbox(fig)}
+              onOpen={(opener) => {
+                openerRef.current = opener;
+                setLightbox(fig);
+              }}
             />
           ))}
         </div>
@@ -234,7 +249,7 @@ function LoopVideo({
   );
 }
 
-function CollageItem({ figure, onOpen }: { figure: Figure; onOpen: () => void }) {
+function CollageItem({ figure, onOpen }: { figure: Figure; onOpen: (opener: HTMLElement) => void }) {
   const cap = figure.caption;
   const label = figure.alt ?? figure.innerLabel;
   const video = isVideoFigure(figure);
@@ -248,7 +263,7 @@ function CollageItem({ figure, onOpen }: { figure: Figure; onOpen: () => void })
     >
       <button
         type="button"
-        onClick={onOpen}
+        onClick={(e) => onOpen(e.currentTarget)}
         aria-label={video ? `Play larger: ${label}` : `View larger: ${label}`}
         style={{
           display: 'block',
@@ -312,7 +327,11 @@ function CollageItem({ figure, onOpen }: { figure: Figure; onOpen: () => void })
   );
 }
 
+/** A stop in the full-size view's Tab loop: it takes no space and can't be seen. */
+const FOCUS_STOP: CSSProperties = { position: 'absolute', width: 1, height: 1, overflow: 'hidden', clipPath: 'inset(50%)' };
+
 function Lightbox({ figure, onClose }: { figure: Figure; onClose: () => void }) {
+  const viewRef = useRef<HTMLDivElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const label = figure.alt ?? figure.innerLabel;
 
@@ -320,8 +339,15 @@ function Lightbox({ figure, onClose }: { figure: Figure; onClose: () => void }) 
     closeRef.current?.focus();
   }, []);
 
+  // focus stays inside the view: an invisible stop before its controls and one after
+  // them send Tab and Shift+Tab round to the other end (Close, or a video's controls)
+  const controls = () => [...(viewRef.current?.querySelectorAll<HTMLElement>('button, video[controls]') ?? [])];
+  const toFirst = () => controls()[0]?.focus();
+  const toLast = () => controls()[controls().length - 1]?.focus();
+
   return (
     <div
+      ref={viewRef}
       role="dialog"
       aria-modal="true"
       aria-label={label}
@@ -336,6 +362,7 @@ function Lightbox({ figure, onClose }: { figure: Figure; onClose: () => void }) 
       }}
       onClick={onClose}
     >
+      <span tabIndex={0} onFocus={toLast} style={FOCUS_STOP} />
       <div
         style={{
           display: 'flex',
@@ -375,6 +402,7 @@ function Lightbox({ figure, onClose }: { figure: Figure; onClose: () => void }) 
           {figure.caption.desc}
         </p>
       )}
+      <span tabIndex={0} onFocus={toFirst} style={FOCUS_STOP} />
     </div>
   );
 }

@@ -1,0 +1,6 @@
+/* DecisionLog (DecisionLog.tsx): each row's button gets the site's focus ring, the
+   one Button, TextLink and the Callout's link draw. Its other styles are inline. */
+.row:focus-visible {
+  outline: 2px solid var(--color-accent-bright);
+  outline-offset: 3px;
+}

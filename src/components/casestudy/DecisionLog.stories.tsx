@@ -31,6 +31,17 @@ export const FirstRowOpen: Story = {
     await expect(canvas.getByText(plmc.process.decisions[0].choice)).toBeVisible();
     await expect(canvas.getByText(plmc.process.decisions[0].cost)).toBeVisible();
     await expect(canvas.getByText(plmc.process.decisions[1].choice)).not.toBeVisible();
+    // each row says whether it's open
+    await expect(canvas.getByRole('button', { name: /Five functions/ })).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getByRole('button', { name: /Let them watch/ })).toHaveAttribute('aria-expanded', 'false');
+  },
+};
+
+/** The first row with keyboard focus: the site's focus ring, as on Button and TextLink. */
+export const KeyboardFocus: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    await expect(canvas.getByRole('button', { name: /Five functions/ })).toHaveFocus();
   },
 };
 

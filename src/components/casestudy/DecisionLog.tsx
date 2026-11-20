@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { Decision } from '../../data/caseStudies/types';
 import { border, colors, fonts, weights } from '../../theme/tokens';
 import Label from '../../ui/Label';
+import styles from './decisionLog.module.css';
 
 /**
  * The decision log in a case study's Process chapter: one row per call that was
  * made (numeral, title, a chevron that turns), opening to two columns: the call,
  * and what it cost or paid off. One row open at a time: opening another closes the
- * first, and clicking the open one closes it. The first row starts open. Use it for
- * the few big calls in a project, not a full changelog. Data: a `Decision[]`
+ * first, and clicking the open one closes it. The first row starts open. Each row
+ * says whether it's open (`aria-expanded`), a closed row's text is hidden from
+ * screen readers, and the rows take the site's focus ring. Use it for the few big
+ * calls in a project, not a full changelog. Data: a `Decision[]`
  * (`caseStudy.process.decisions`); `choiceLabel` and `costLabel` rename the columns
  * ("The call" and "What it cost" unless the case study says otherwise).
  *
@@ -24,14 +27,19 @@ export default function DecisionLog({
   costLabel?: string;
 }) {
   const [open, setOpen] = useState(0);
+  const id = useId();
 
   return (
     <div style={{ borderTop: `1px solid ${border.hairlineStrong}` }}>
       {decisions.map((d, i) => {
         const isOpen = open === i;
+        const panelId = `${id}-${i}`;
         return (
           <div key={d.title} style={{ borderBottom: `1px solid ${border.hairlineStrong}` }}>
             <button
+              className={styles.row}
+              aria-expanded={isOpen}
+              aria-controls={panelId}
               onClick={() => setOpen((cur) => (cur === i ? -1 : i))}
               style={{
                 width: '100%',
@@ -76,6 +84,8 @@ export default function DecisionLog({
               </span>
             </button>
             <div
+              id={panelId}
+              aria-hidden={!isOpen}
               style={{
                 overflow: 'hidden',
                 maxHeight: isOpen ? 900 : 0,

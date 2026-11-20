@@ -705,6 +705,58 @@ grid with 1px lines, and the hand-built buttons. The review page is
 - **Status:** Derek, after the review page: "Reviewed, looks right." Committed as
   "Case study stories".
 
+## Case study fixes (after Move 21)
+
+Derek, on the four findings: "fix items 1, 2 and 4 … Leave item 3 as a known
+exception alongside EmailLink in GAPS.md". His reason for all four: "fix real
+failures, stay consistent on 2.5.3."
+
+- **Decision:** ChapterHeading's subtitle, PersonaCard's subtitle and ContextPanel's
+  caption change from `colors.textFaint` (3.23 to 3.34:1) to `colors.textMuted`
+  (4.96 to 5.28:1), the grey Label already uses. **Why:** they failed WCAG 1.4.3
+  (AA). **Status:** Done. NextCaseFooter's italic note is still `textFaint`; it
+  fails only on a phone and wasn't in this decision, so it stays in GAPS.md.
+- **Decision:** focus stays inside the image collage's full-size view.
+  - The collage focuses its Close once, when it opens, in its own effect. Before,
+    that effect also handled Escape and depended on the full-size view, so it ran
+    again when the view opened and took focus back to the collage's Close.
+  - Two invisible focus stops, before and after the view's controls, send Tab and
+    Shift+Tab round to the other end. That keeps a video's own controls in the loop.
+  - Closing the view, with Escape or Close, returns focus to the image that opened
+    it.
+
+  **Why:** it failed WCAG 2.4.3 (Focus Order, Level A). Enter on the hidden Close
+  closed the whole collage. **Status:** Done.
+- **Decision:** DecisionLog's rows get `aria-expanded` and `aria-controls`, and the
+  site's focus ring. The ring is Button's and TextLink's, set in a small
+  `decisionLog.module.css`, because inline styles can't target `:focus-visible`. A
+  closed row's text gets `aria-hidden`, so it isn't read out while `aria-expanded`
+  says the row is closed. **Why:** screen readers didn't hear whether a row was
+  open, and the browser's blue ring didn't match the site. **Status:** Done.
+- **Decision:** the flow cards' accessible names stay as they are: "{title}: open
+  all {n} screens", which doesn't contain all their visible words (WCAG 2.5.3,
+  Level A). It's a known exception alongside EmailLink's, in GAPS.md. **Why:** "stay
+  consistent on 2.5.3". **Status:** Kept.
+- **Result:** checked against `4b63ad7`. The before/after page is
+  `portfolio-2026-case-study/step-21/fixes/review.html`.
+  - Pages, all five, desktop and phone: home and the headers are 0 px. On each case
+    study, every changed pixel is inside a recoloured line (8 on PLMC, 5 on the
+    others), and no page changed height.
+  - Overlays: 0 px, apart from the tidied panel's caption, and Bexa's phone flow
+    viewer, where Bexa's Context subtitle shows through the blurred 97% backdrop.
+  - DecisionLog's row: 0 px at rest, on hover and after hover. On keyboard focus,
+    the browser's blue ring is now the site's olive one.
+  - Keyboard, on production builds: focus lands on the full-size view's Close and
+    stays inside the view (with a video, through its six controls and back).
+    Escape or Close returns it to the image.
+  - Stories: 21 render and pass, with a new DecisionLog Keyboard Focus. Each
+    still matches its block on the page. axe is 0 except the flow cards (the
+    exception).
+  - Build, 130 tests (5 new) and lint pass.
+- **Found** (in GAPS.md, not changed): closing the collage doesn't return focus to
+  "Show me the images →". NextCaseFooter's `textFaint` note still fails on a phone.
+- **Status:** committed as "Case study fixes".
+
 ---
 
 ## Scope and governance (from the chat about the guide)

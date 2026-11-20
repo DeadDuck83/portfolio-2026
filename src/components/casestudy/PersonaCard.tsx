@@ -23,7 +23,7 @@ export default function PersonaCard({ persona }: { persona: Persona }) {
           fontFamily: fonts.text,
           fontStyle: 'italic',
           fontSize: '1rem',
-          color: colors.textFaint,
+          color: colors.textMuted,
           marginTop: '0.3rem',
         }}
       >

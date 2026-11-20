@@ -29,6 +29,25 @@ describe('DecisionLog', () => {
     expect(bodyFor(/Five functions/)).toHaveStyle({ maxHeight: '0px' });
   });
 
+  it('says which row is open, and hides closed rows from screen readers', async () => {
+    const user = userEvent.setup();
+    render(<DecisionLog decisions={decisions} />);
+    const first = screen.getByRole('button', { name: /Five functions/ });
+    const second = screen.getByRole('button', { name: /Let them watch/ });
+
+    expect(first).toHaveAttribute('aria-expanded', 'true');
+    expect(second).toHaveAttribute('aria-expanded', 'false');
+    // each row's button controls the body under it
+    expect(first).toHaveAttribute('aria-controls', bodyFor(/Five functions/).id);
+    expect(bodyFor(/Five functions/)).toHaveAttribute('aria-hidden', 'false');
+    expect(bodyFor(/Let them watch/)).toHaveAttribute('aria-hidden', 'true');
+
+    await user.click(second);
+    expect(first).toHaveAttribute('aria-expanded', 'false');
+    expect(second).toHaveAttribute('aria-expanded', 'true');
+    expect(bodyFor(/Let them watch/)).toHaveAttribute('aria-hidden', 'false');
+  });
+
   it('clicking the open row collapses it', async () => {
     const user = userEvent.setup();
     render(<DecisionLog decisions={decisions} />);

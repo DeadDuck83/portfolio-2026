@@ -95,7 +95,7 @@ export default function ContextPanel({
             fontFamily: fonts.text,
             fontStyle: 'italic',
             fontSize: '0.95rem',
-            color: colors.textFaint,
+            color: colors.textMuted,
           }}
         >
           {herded ? captionAfter : captionBefore}
