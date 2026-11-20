@@ -412,11 +412,13 @@ Revised on Nov 19 after running it. The original said to create `CLAUDE.md`, but
 
 **You'll see:** the build finish, and all tests and lint pass.
 
-**Done when:** `npm run dev` shows a site that matches your four baseline screenshots. Step 1 is finished, with about six commits on your branch.
+**Done when:** `npm run dev` shows a site that matches your four baseline screenshots, apart from the differences you approved in Moves 6 and 7 (the Contact email button, the smaller header Contact, the case-study eyebrow at .68rem). Claude Code proves it with an exact diff of `main` against the branch and a layout compare of every element. Step 1 is finished, with nine commits on your branch.
 
 **If not:** ask Claude Code to compare the failing page with what changed on the branch.
 
-Nothing has left your laptop yet. When you want a backup, `git push -u origin feature/design-system-foundation` sends the branch to GitHub. Per your README, Cloudflare only deploys `main`, so pushing a branch doesn't change derekjmoore.com.
+Revised on Nov 19 after running it. The original said "matches your four baseline screenshots", but the branch changes the site on purpose, so an exact match can't happen. The test is that nothing changed beyond what you approved. The original also said nothing had left your laptop. In fact the branch has been on GitHub since the build docs went in.
+
+Cloudflare builds every push to this branch but deploys only `main`, so pushing the branch doesn't change derekjmoore.com. That was checked on the live site and in the Cloudflare dashboard; see DECISIONS.md.
 
 ## Step 2: Claude Code builds your Figma library
 

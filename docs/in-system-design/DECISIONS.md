@@ -55,6 +55,28 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
 - **Why:** changing dependencies mid-refactor means "nothing moved" can't be proven.
 - **Status:** Open. Fix on a separate branch after this one merges.
 
+### Pushing the branch doesn't deploy derekjmoore.com
+- **Decision:** keep pushing `feature/design-system-foundation` as a backup. Cloudflare
+  builds every branch push, but branch builds run `npx wrangler versions upload`,
+  which uploads a version without deploying it. Only `main` runs `npx wrangler deploy`.
+- **Why:** each pushed tip from `87c0522` on got a "Workers Builds: portfolio-2026"
+  check on GitHub with a Version ID and no Preview URL, and after all of them the live
+  site still served main's build (`index-74ec8GQs.js`, the file a local build of
+  `a987ef8` makes; the branch builds `index-DWaJDR4d.js`). Derek checked the Cloudflare
+  dashboard on 2026-11-19: "The dashboard's non-main command is the Version command:
+  npx wrangler versions upload (Deploy command for main is npx wrangler deploy)."
+- **Status:** Done. Earlier notes ("builds main only", "no check runs") were wrong:
+  branches are built, just not deployed.
+
+### No Version URLs for now
+- **Decision:** `preview_urls` stays `false` in `wrangler.jsonc`, so an uploaded branch
+  version has no workers.dev link of its own.
+- **Why:** the project deploys straight to production, and Cloudflare's docs say
+  disabling Version URLs "disables routing to Version URLs and aliased Version URLs".
+  Derek: false "for now". Turning it on would give each branch version a link to check
+  before merging.
+- **Status:** Agreed for now.
+
 ---
 
 ## Tokens (Move 5)
@@ -194,6 +216,21 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
 - **Result:** the manifest gives `import Eyebrow from '../ui/Eyebrow';` (and the same
   for Button and Chip), checked on a second Storybook with this config. A Storybook
   that was already running needs a restart to pick up the change.
+
+## Check that nothing moved (Move 12)
+
+- **Decision:** Move 12 passes when the branch differs from `main` only where Derek
+  approved in Moves 6 and 7, not when it "matches the baseline screenshots". **Why:**
+  the branch changes the Contact email button, the header Contact and the case-study
+  eyebrow on purpose, so an exact match can't happen. **Status:** Done; Derek approved
+  the revised "Done when" line.
+- **Result:** build, 106 tests and lint pass. Against Move 9's captures: 0 px on all
+  five. Against `main` on the four baseline pages: home desktop 2,752 px (Move 6's
+  2,746 in the Contact buttons, plus 6 single pixels on one rounded box, the control
+  floor); home phone 2px taller, with the same 4,928 + 37 px Move 6 recorded; PLMC 1px
+  (desktop) and 3px (phone) shorter. The layout compare matches Moves 6 and 7 element
+  for element. Derek's look at main (:5174) and the branch (:5173): "Site looks right
+  on both."
 
 ---
 
