@@ -8,7 +8,7 @@ import './Eyebrow.css';
  * are in Eyebrow.css. Import Eyebrow (a default export) from src/ui/Eyebrow with a
  * relative path; the project has no `src/` alias.
  *
- * @import import Eyebrow from 'src/ui/Eyebrow';
+ * @import import Eyebrow from '../ui/Eyebrow';
  */
 export default function Eyebrow({ className, ...props }: HTMLAttributes<HTMLSpanElement>) {
   return <span {...props} className={className ? `ui-eyebrow ${className}` : 'ui-eyebrow'} />;

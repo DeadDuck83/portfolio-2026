@@ -12,7 +12,7 @@ export type ChipProps = HTMLAttributes<HTMLElement> & {
  * chapter are. Styles are in Chip.css. Import Chip (a default export) from
  * src/ui/Chip with a relative path; the project has no `src/` alias.
  *
- * @import import Chip from 'src/ui/Chip';
+ * @import import Chip from '../ui/Chip';
  */
 export default function Chip({ as: Tag = 'span', className, ...props }: ChipProps) {
   return <Tag {...props} className={className ? `ui-chip ${className}` : 'ui-chip'} />;

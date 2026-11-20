@@ -136,7 +136,8 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
 - **Decision:** each component's "when to use" text lives in its own JSDoc, with an
   `@import` tag. **Why:** the MCP server reads the component's JSDoc, not the story
   file, and without the tag the manifest invents `import { Button } from 'portfolio'`.
-  **Status:** Done.
+  **Status:** Done, but the tag had no effect until the engine change under "Docs import
+  snippets" below.
 - **Decision:** Storybook uses `react-docgen-typescript`, and Button's allowed values are
   written out as unions. **Why:** the default docgen dropped Button's props, which are
   imported from buttonClass.ts, and an alias showed as `ButtonVariant` instead of its
@@ -174,6 +175,25 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
 - **Result:** in a new session, `Which component should I use for a section label?`
   got Eyebrow, found with `docs-list` and `docs-show`. The answer also showed that the
   docs' import snippets read `import { Eyebrow } from 'portfolio'`, which doesn't exist.
+
+## Docs import snippets (after Move 11)
+
+- **Decision:** the manifest is built with `features.experimentalReactComponentMeta`,
+  and Controls keep `react-docgen-typescript`. **Why:** in Storybook 10.6.7 the
+  react-docgen-typescript manifest looks for `@import` in the component description,
+  and react-docgen-typescript 2.4.0 keeps tags out of it, so the tag was ignored and
+  every snippet fell back to the package name. The new engine reads the tag and lists
+  the same props and descriptions (Button's unions intact), plus Button's `href`.
+  Derek asked for the snippets to show the real default import; Claude Code chose the
+  engine over patching Storybook or rewriting the manifest in main.ts. **Status:**
+  Done. The flag is experimental: if an upgrade breaks the manifest, check this first.
+- **Decision:** the `@import` tags read `'../ui/Button'`, `'../ui/Chip'` and
+  `'../ui/Eyebrow'`. **Why:** `'src/ui/…'` doesn't resolve (no `src/` alias).
+  `'../ui/…'` is how `src/pages` imports them, and matches the `'../data/…'` lines in
+  the same snippets. **Status:** Done.
+- **Result:** the manifest gives `import Eyebrow from '../ui/Eyebrow';` (and the same
+  for Button and Chip), checked on a second Storybook with this config. A Storybook
+  that was already running needs a restart to pick up the change.
 
 ---
 

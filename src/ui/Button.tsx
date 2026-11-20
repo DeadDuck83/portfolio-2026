@@ -16,7 +16,7 @@ export type ButtonProps = LinkButtonProps | NativeButtonProps;
  * use `buttonClass()` from src/ui/buttonClass.ts instead. Import Button (a default
  * export) from src/ui/Button with a relative path; the project has no `src/` alias.
  *
- * @import import Button from 'src/ui/Button';
+ * @import import Button from '../ui/Button';
  */
 export default function Button({ variant, size, className, ...props }: ButtonProps) {
   const cls = buttonClass({ variant, size }, className);

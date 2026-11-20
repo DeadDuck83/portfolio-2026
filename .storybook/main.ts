@@ -8,7 +8,11 @@ const config: StorybookConfig = {
   "addons": ["@storybook/addon-a11y", "@storybook/addon-docs", "@storybook/addon-mcp"],
   "framework": "@storybook/react-vite",
   // The components manifest feeds the MCP server's docs tools (docs-list, docs-show).
-  "features": { "componentsManifest": true },
+  // experimentalReactComponentMeta builds it with the TypeScript language service, the
+  // only manifest engine in 10.6.7 that reads a component's @import tag (with
+  // react-docgen-typescript every snippet said `from 'portfolio'`). Controls still use
+  // the reactDocgen setting below.
+  "features": { "componentsManifest": true, "experimentalReactComponentMeta": true },
   // react-docgen-typescript reads prop types imported from other files (Button's
   // variant and size live in buttonClass.ts), so the manifest and Controls list them.
   "typescript": { "reactDocgen": "react-docgen-typescript" },

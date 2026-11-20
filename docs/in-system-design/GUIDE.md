@@ -314,10 +314,11 @@ Revised on Nov 19. The original said to take the installer's defaults, which inc
 
 ```text
 Storybook is installed. Set it up for this site:
-1. In .storybook/main.ts, turn on features: { componentsManifest: true }, make sure
-   @storybook/addon-mcp is in addons, and set typescript: { reactDocgen:
-   'react-docgen-typescript' } so props imported from another file (Button's variant
-   and size) reach the manifest.
+1. In .storybook/main.ts, turn on features: { componentsManifest: true,
+   experimentalReactComponentMeta: true } so the manifest reads each component's
+   @import tag, make sure @storybook/addon-mcp is in addons, and set typescript:
+   { reactDocgen: 'react-docgen-typescript' } so props imported from another file
+   (Button's variant and size) reach Controls.
 2. In .storybook/preview.tsx, import src/theme/tokens.css and then
    src/styles/global.css, as src/main.tsx does. Put the same font preconnect links
    as index.html in .storybook/preview-head.html. Make the site's page background
@@ -326,7 +327,8 @@ Storybook is installed. Set it up for this site:
 4. Write stories in src/ui/ for Button, Chip and Eyebrow under a UI folder in the
    sidebar: one story per variant, with real copy from src/data. Put the short
    description of when to use each component in the component's own JSDoc, with an
-   @import tag, because that's what the MCP server reads. Write allowed prop values
+   @import tag giving the real relative import (import Button from '../ui/Button'),
+   because that's what the MCP server reads. Write allowed prop values
    out as unions so they show. Keep any interaction test in its own story, so the
    other stories open at rest.
 Then check each story against the same element on the live site.
@@ -337,6 +339,7 @@ Revised on Nov 19 after running it. The original asked for steps 1 to 4 without 
 - **Background:** Storybook 10 sets a default background with `parameters.backgrounds.options` and `initialGlobals.backgrounds.value`. The colour comes from `tokens.ts`, so there's no hard-coded hex.
 - **Descriptions:** the MCP server's `docs-list` and `docs-show` read each component's JSDoc, not the story file. Without an `@import` tag, the manifest invents `import { Button } from 'portfolio'`, a package that doesn't exist.
 - **Props:** the default docgen (`react-docgen`) only reads types declared in the component's own file, so Button showed no props at all. A type alias shows as its name (`ButtonVariant`), not its values.
+- **Imports:** revised again after Move 11. With `react-docgen-typescript` building the manifest, Storybook 10.6.7 ignores the `@import` tag, so every snippet still said `import { Button } from 'portfolio'`. `experimentalReactComponentMeta` builds the manifest with the TypeScript language service, which reads the tag and keeps Button's allowed values. The tag first said `'src/ui/Button'`, which doesn't resolve because the project has no `src/` alias. `'../ui/Button'` is how `src/pages` imports it.
 - **Interaction tests:** a play function that clicks leaves the button focused, so that story would open with its focus ring showing.
 
 Then start Storybook in Terminal 1:
