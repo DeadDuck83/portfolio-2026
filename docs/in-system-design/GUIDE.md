@@ -355,16 +355,18 @@ npm run storybook
 
 Leave Storybook running in Terminal 1 from now on. Her tip: always start Storybook before Claude Code, because the connection drops otherwise.
 
-**Where:** Terminal 2. Type `/exit` to leave Claude Code first.
+**Where:** Terminal 2. Type `/exit` to leave Claude Code first, so you're back at the terminal prompt.
 
-**Type:**
+**Type:** both lines at the terminal prompt, not inside Claude Code:
 
 ```bash
 claude mcp add --transport http portfolio-sb http://localhost:6006/mcp --scope project
-claude
+claude --continue
 ```
 
-Then, inside Claude Code, type `/mcp`.
+`claude --continue` reopens your last conversation in this folder, now with Storybook connected. Plain `claude` starts a new one. Then, inside Claude Code, type `/mcp`.
+
+Revised on Nov 19 after running it. The original's second line was `claude`, with nothing to say where it went. In the run it was typed inside Claude Code (as `claude --resume`, then `claude`), where anything you type goes to the agent as a message and does nothing. Inside Claude Code, `/resume` does the same job.
 
 **You'll see:** `portfolio-sb` listed as connected, next to your Figma connection. If you open `http://localhost:6006/mcp` in your browser, it shows a page listing Storybook's tools.
 

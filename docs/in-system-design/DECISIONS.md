@@ -148,6 +148,19 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
   every state; the Accessibility panel reports 0 violations on all 8 stories; the
   site is unchanged (0 px after recapturing one text-antialiasing flake).
 
+## Storybook MCP (Move 10)
+
+- **Decision:** the Storybook MCP is added at project scope, so `.mcp.json` is
+  committed and every session in the repo gets `portfolio-sb`. **Why:** the guide's
+  command, so the connection doesn't depend on one machine's settings. **Status:** Done
+  (commit "Connect Storybook MCP").
+- **Decision:** Move 10 now says both lines go at the terminal prompt, and the second
+  is `claude --continue` instead of `claude`. **Why:** in the run, `claude --resume`
+  and `claude` were typed inside Claude Code, where they go to the agent as a message
+  and do nothing. Derek approved the fix. **Status:** Done.
+- **Result:** `docs-list` returns Button (4 stories), Chip (2) and Eyebrow (2), each
+  with its JSDoc description.
+
 ---
 
 ## Scope and governance (from the chat about the guide)
