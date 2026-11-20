@@ -127,6 +127,8 @@ Screenshot the home page and `/work/plmc` twice: once at full width, and once at
 
 **If not:** if `npm run dev` errors, you'll paste the error into Claude Code in the next move and ask it to explain.
 
+Note from Nov 19: Chrome draws nothing below 16,384 device pixels in one screenshot, and that includes DevTools' full-size capture. `/work/plmc` at phone width is taller than that, so a full-page shot of it comes out blank at the bottom. Claude Code's capture tool (`tools/shoot.mjs` in the case-study folder) now shoots long pages in parts and stitches them; see the note under Move 12 and DECISIONS.md.
+
 ### 4. Start Claude Code in the repo
 
 **Where:** Terminal window 2, in the same folder.
@@ -420,7 +422,7 @@ Revised on Nov 19 after running it. The original said "matches your four baselin
 
 Cloudflare builds every push to this branch but deploys only `main`, so pushing the branch doesn't change derekjmoore.com. That was checked on the live site and in the Cloudflare dashboard; see DECISIONS.md.
 
-Found later, during TextLink: Chrome won't capture more than 16,384 device pixels in one screenshot. The case studies on phone are taller than that, so the bottom of those pages (PLMC's included) is blank in every capture and was never compared. The "0 px" results here hold above that point; see DECISIONS.md.
+Found later, during TextLink: Chrome won't capture more than 16,384 device pixels in one screenshot. The case studies on phone are taller than that, so the bottom of those pages (PLMC's included) was blank in every capture and never compared. The capture tool now shoots long pages in parts and stitches them. The check against `main` was re-run in full on Nov 19 (all five pages, desktop and phone) and found nothing beyond the approved changes; see DECISIONS.md.
 
 ## Step 2: Claude Code builds your Figma library
 

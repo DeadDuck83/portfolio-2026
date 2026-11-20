@@ -331,8 +331,9 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   narrower and stays centred (All work moves 6px right, Pause motion 6px left). On
   phone the footer is 2px shorter. Its focus ring now sits 3px from the text.
   Derek asked to see the row before and after on desktop and phone, and to commit if
-  it looked right. Claude Code checked it (`step-13/textlink/footer-row.html`, opened
-  for Derek) and committed. **Status:** Done.
+  it looked right. Claude Code checked it (`step-13/textlink/footer-row.html`) and
+  committed; Derek then reviewed the footer before and after himself and approved
+  it. **Status:** Done, approved by Derek.
 - **Result:** each place was switched on its own, then checked with:
   - exact pixel diffs of home, Sage, Gallery and the gallery piece, desktop and
     phone, with reduced motion;
@@ -355,9 +356,44 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   (21,225 to 25,164 px at 3×) and Bexa on desktop (16,612 px at 2×). Every capture
   of those since Move 3 has missed the bottom of the page: on Sage's phone page, the
   last 1,809 CSS px, footer included. For TextLink, the footers were also shot on
-  their own, so the switch is covered. **Status:** Open. The earlier "0 px" results
-  for those pages hold only above the cut-off. Capturing long pages in parts would
-  close the gap.
+  their own, so the switch is covered.
+- **Decision:** full-page captures taller than the limit are shot in parts and
+  stitched. `tools/shoot.mjs` (in the case-study folder, not the repo) clips the
+  same full-page render into parts of at most 16,000 device px and joins them into
+  one PNG; shorter pages are still one shot. **Why:** Derek: "fix the capture so
+  long pages are shot in parts and compared in full." On Sage's phone page:
+  - the top 16,384 rows match the old single shot exactly;
+  - two captures match;
+  - splitting at 9,000 instead of 16,000 gives the same image, so the joins don't
+    show.
+
+  **Status:** Done (commit "Full-page captures"). The tools live in the case-study
+  folder, which isn't under git, so the commit holds these notes, not the code.
+- **Result:** the full-page check against `main` (`a987ef8`) was re-run on
+  `b78de0d`: home and the four case studies, desktop and phone, every page captured
+  in full.
+  - Home: desktop 2,746 px and phone 4,928 / 37 px, the same as Move 12.
+  - Case studies: changed height, so each was compared row by row to the first
+    difference, then shifted by the height change from where the two line up again
+    (`tools/aligndiff.mjs`, which counts every pixel). Three kinds of difference:
+    - the hero eyebrow band (Move 7);
+    - the footer's links row (TextLink's padding);
+    - small mid-page bands, 536 to 2,365 px a page: the context panel's rotated
+      tags, single pixel rows inside photos and hairlines, drawn differently after
+      the page moved up.
+  - Layout compare, all eight case-study pages: only the eyebrow line, its wrappers
+    and the footer's links row changed size, and every other element moved by
+    exactly the eyebrow's amount.
+  - In the part that had been hidden: the footer's links row on all five tall
+    pages, 7 px on Sage's wordmark full stop, and one pixel row inside the photos
+    on Bexa's phone page (137 px).
+  - Nothing unapproved. The pictures are in `step-13/fullpage/hidden.html`.
+  - Derek looked at Bexa's phone hero, 17px shorter since Move 7: "Bexa phone hero
+    looks right."
+- **Found:** `tools/pixdiff.mjs`, which every check since Move 5 has used, leaves out
+  pixels that pixelmatch classes as anti-aliasing, so its "exact" isn't every pixel.
+  `aligndiff.mjs` counts every pixel. **Status:** Open: Derek's call whether
+  pixdiff should count them too.
 
 ---
 
