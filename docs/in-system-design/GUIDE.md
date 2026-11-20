@@ -575,6 +575,8 @@ Don't change any code yet. Show me the table and the contact sheet when you're d
 
 **If not:** if it misses something you can see on the site, point to it and ask for a row.
 
+Partly run early, on Nov 19, straight after Move 12: you reviewed the list of repeated elements and a contact sheet of the small caps (`step-13/compare.html`), and decided five things, logged in DECISIONS.md under "Component inventory". The Wait rows went into a new `GAPS.md` at the repo root. `COMPONENTS.md` isn't written yet, so this move still runs.
+
 ### 21. Prompt K: the case study kit
 
 **Where:** Claude Code.
@@ -596,6 +598,8 @@ Run npm run build, npm test and npm run lint. Check each story's Accessibility t
 **You'll see:** a Case study folder in Storybook's sidebar with nine components.
 
 **Done when:** each story matches the same block on `/work/plmc`, you've approved every page that changed, and you commit with the message `Case study stories`.
+
+Note from Nov 19: the collage's open button isn't in `ImageCollage.tsx`. Both buttons there are Close buttons, and the open one ("Show me the images →") is in `CaseStudy.tsx`. Two decisions in DECISIONS.md ("Component inventory") change this prompt: flowStrip's `.eyebrow` becomes the small label component, not Chip or Eyebrow, and the open button becomes the dashed callout's link.
 
 **If not:** describe the difference, or ask Claude Code to compare the story with the live page.
 

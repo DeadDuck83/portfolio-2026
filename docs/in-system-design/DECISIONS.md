@@ -232,6 +232,68 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
   for element. Derek's look at main (:5174) and the branch (:5173): "Site looks right
   on both."
 
+## Component inventory (after Move 12)
+
+Part of Prompt J (Move 20), run early. Derek reviewed a list of every repeated element
+that isn't in `src/ui/` yet, then a contact sheet of the small caps:
+`portfolio-2026-case-study/step-13/compare.html`, 22 shots from the dev server with the
+computed font size, letter spacing and colour of each (made by `tools/labelsheet.mjs`).
+COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
+
+- **Decision:** the 11 small uppercase labels become one component with two colours,
+  green (`colors.accentBright`, `#9da767`, used by 7 of the 11) and grey
+  (`colors.textFaint`, `#6f6858`, used by 3), at one size and letter spacing chosen the
+  same way: 0.62rem and 0.18em (8 of the 11). **Why:** Derek: "The small uppercase label
+  becomes its own component with two colours, green and grey. Use the green and grey
+  most of the 11 labels use, and one size and letter spacing the same way." **Status:**
+  Agreed, not built. Its name and props are decided when it's built.
+  **What changes when it switches** (4 of the 11; the other 7 already match):
+  - `DecisionLog.tsx:102`, the column labels ("The call", "What it cost", PLMC's "The
+    payoff"): 0.6rem to 0.62rem. Stays grey.
+  - `ImageCollage.tsx:84`, "Image collage": letter spacing 0.2em to 0.18em. Stays green.
+  - `ImageCollage.tsx:289`, the collage caption tags: 0.6rem to 0.62rem and 0.16em to
+    0.18em. Stays green.
+  - `FlowStrip.tsx:279` (style at `flowStrip.module.css:27`), "Flow 01 / 05": colour
+    `#8f8674` (`textMuted`, hard-coded in the CSS) to grey. Size and spacing stay.
+  **Open:** the collage caption tags show the same `caption.tag` data as
+  PlaceholderFigure's figure tags (FIG. A, 01), which the counters decision below leaves
+  alone, but also words (APP, PHOTO, BRAND). They're counted here because they're one of
+  the 11. Derek to confirm.
+- **Decision:** Eyebrow stays as it is (0.68rem, 0.24em, `colors.textMuted`). **Why:**
+  Derek: "Eyebrow stays as is; all its uses are valid." The sheet shows all 7 uses (2 in
+  the case-study hero, 5 through ChapterHeading) with the same computed style on every
+  case study. flowStrip's `.eyebrow` isn't an Eyebrow: it's one of the 11 labels above,
+  which answers Prompt J's question about it. **Status:** Done (no change).
+- **Decision:** the dashed callout becomes one component with an option for with or
+  without a link. The two are the TL;DR box (`CaseStudy.tsx:220`) and the Feature this
+  box (`CaseStudy.tsx:491`); the link is "Show me the images →" (`CaseStudy.tsx:246`),
+  which opens the image collage and is only in the TL;DR box. **Why:** Derek: "Dashed
+  callout is one component with an option for with or without a link." The sheet shows
+  the same border, padding, label and body text in both. **Status:** Agreed, not built.
+  **Open:** the border, `rgba(132,137,69,0.45)`, has no token. It sits between
+  `border.accentSoft` (0.4) and `border.accentMed` (0.5), so it needs a token decision
+  when the component is built.
+- **Decision:** the accent-rule aside is its own component, not a style of the callout.
+  It's the ruled block in `CaseStudy.tsx:593` (one per lesson, on Sage, Bexa and Parker
+  & Ace) and `CaseStudy.tsx:626` ("If I did it again", on PLMC). **Why:** Derek: "The
+  accent-rule aside is not a callout; it becomes its own component." This replaces the
+  inventory's suggestion that it could be a second style of the callout. Both have a
+  1px `border.accentMed` rule on the left and 1.4rem of left padding; what's inside
+  differs (a bold title and body, or a small label and body). **Status:** Agreed, not
+  built.
+- **Decision:** counters stay as they are and don't become labels: the flow strip's
+  step numbers (`flowStrip.module.css:517`), the figure tags (`PlaceholderFigure.tsx:129`)
+  and the decision log's row numerals (`DecisionLog.tsx:46`). **Why:** Derek: "Counters
+  (step numbers, figure tags, row numerals) are not labels; leave them." **Status:** Done
+  (no change).
+- **Decision:** `GAPS.md` is created at the repo root now, holding the inventory's Wait
+  rows (five patterns and four components). The older entries stay in the case-study
+  folder's gaps.md, where the collage row was corrected: it called
+  `ImageCollage.tsx:119` and `:385` "open / Close", but both are Close buttons (the
+  collage's and the full-size view's), and the open control is `CaseStudy.tsx:246`.
+  **Why:** Derek asked for the Wait rows in GAPS.md and the fix in gaps.md. **Status:**
+  Done. Moving gaps.md's entries into GAPS.md is still open.
+
 ---
 
 ## Scope and governance (from the chat about the guide)
