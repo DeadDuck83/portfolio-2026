@@ -581,7 +581,7 @@ Don't change any code yet. Show me the table and the contact sheet when you're d
 
 Partly run early, on Nov 19, straight after Move 12: you reviewed the list of repeated elements and a contact sheet of the small caps (`step-13/compare.html`), and decided five things, logged in DECISIONS.md under "Component inventory". The Wait rows went into a new `GAPS.md` at the repo root. `COMPONENTS.md` isn't written yet, so this move still runs.
 
-After that, TextLink was promoted on its own (commit `TextLink`), the same way as Button: the footer links and the "← Gallery" link above a gallery piece now use `src/ui/TextLink`. EmailLink followed, moved from `src/components/` to `src/ui/`. When this move runs, list both in `src/ui/` with the others.
+After that, TextLink was promoted on its own (commit `TextLink`), the same way as Button: the footer links and the "← Gallery" link above a gallery piece now use `src/ui/TextLink`. EmailLink and Wordmark followed, moved from `src/components/` to `src/ui/`. When this move runs, list all three in `src/ui/` with the others.
 
 ### 21. Prompt K: the case study kit
 
@@ -630,7 +630,9 @@ Run the checks, check each Accessibility tab, and log anything flagged in GAPS.m
 
 **Done when:** the header collapses to Menu in its narrow story exactly as on your phone, you've approved every page that changed, and you commit with the message `Site and UI stories`.
 
-Note from Nov 19: SiteFooter's links are TextLink now (`src/ui/TextLink`, which already has stories in UI). MotionToggle has one more use to cover: `textLinkClass()` in the case footer. EmailLink is done ahead of this prompt: it moved to `src/ui/EmailLink` with stories for plain, as a button, as a text link and after copying, so skip it here. Its Accessibility flag (the accessible name doesn't contain the visible words) is in GAPS.md.
+Note from Nov 19: SiteFooter's links are TextLink now (`src/ui/TextLink`, which already has stories in UI). MotionToggle has one more use to cover: `textLinkClass()` in the case footer. EmailLink and Wordmark are done ahead of this prompt, so skip them here:
+- EmailLink moved to `src/ui/EmailLink`, with stories for plain, as a button, as a text link and after copying. Its Accessibility flag (the accessible name doesn't contain the visible words) is in GAPS.md, left as is.
+- Wordmark moved to `src/ui/Wordmark`, with stories for the home header, the footer and all four sizes the site uses (not two).
 
 **If not:** if a story crashes with a router error, ask Claude Code to add the MemoryRouter decorator to that story.
 

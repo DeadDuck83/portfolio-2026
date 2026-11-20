@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Wordmark from '../Wordmark';
+import Wordmark from '../../ui/Wordmark';
 import { border, colors, fonts, layout, radius } from '../../theme/tokens';
 import { accentLinkHover } from '../../lib/hover';
 import Button from '../../ui/Button';

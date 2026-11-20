@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router';
-import Wordmark from '../Wordmark';
+import Wordmark from '../../ui/Wordmark';
 import EmailLink from '../../ui/EmailLink';
 import { border, colors } from '../../theme/tokens';
 import { buttonClass } from '../../ui/buttonClass';

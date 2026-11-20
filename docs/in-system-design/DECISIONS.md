@@ -403,7 +403,7 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   Button, As Text Link, Copied) and 4 tests. Its four uses (hero, Contact section,
   case-study header, case footer) and the two tests that render it import it from
   `src/ui/`. **Why:** Derek: "promote EmailLink the same way." **Status:** Done;
-  Derek: "looks good to me." Not committed yet.
+  Derek: "looks good to me." Committed as `49589c2` "EmailLink".
 - **Decision:** its code stays as it was, including the inline plain-text reset;
   only the props type got a name (`EmailLinkProps`). **Why:** the hero's "Copy
   email" depends on that reset winning over classes. Its font size comes from the
@@ -433,6 +433,44 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
     already on the site. **Status:** Left as is. Derek: "thats fine, it might be
     overkill anyway." It stays in GAPS.md as a known exception to the WCAG 2.2 AA
     bar under "Scope and governance".
+
+## Wordmark (after EmailLink)
+
+- **Decision:** Wordmark moves from `src/components/` to `src/ui/Wordmark.tsx`, with
+  its styles in `Wordmark.css` using tokens.css variables (`--font-display`,
+  `--font-weight-display`, `--color-accent-bright`). It also gets a JSDoc saying
+  when to use it, an `@import` tag, 3 stories (Home Header, Footer, Sizes In Use)
+  and 2 tests. Its `size` prop is unchanged. Its four uses (home header, case-study
+  header, Gallery header, footer) import it from `src/ui/`. **Why:** Derek: "Promote
+  Wordmark the same way as TextLink and EmailLink." **Status:** Done (commit
+  "Wordmark"), after Derek's review.
+- **Decision:** the font size stays on the element (`size × 1.1rem`); everything
+  else moves to the class. **Why:** global.css shrinks the case-study header's
+  wordmark on narrow phones with `.cs-head__brand > span { font-size: … !important }`,
+  which needs the size to stay where it was. Measured: 23.2px at 375 wide and
+  20.8px at 330, the same as before. **Status:** Done.
+- **Decision:** the new file was built beside the old one, and each use switched to
+  it on its own; the old file was deleted at the end. **Why:** moving the styles
+  into CSS changes how every use is drawn, so converting the shared file would
+  have switched all four at once. **Status:** Done.
+- **Result:**
+  - Checked against `49589c2` (:5174) with `tools/switch-check.sh`, which now uses
+    `ui-round.sh` (the TextLink round plus the home page's scrolled header, desktop
+    and phone).
+  - Footer, home header, case-study header and Gallery header: each 0 px on every
+    page and in every state of the link around it, with no computed-style
+    differences.
+  - The wordmark and its dot have the same computed styles in all four places at
+    1440, 390, 375 and 330 wide (16 checks).
+  - The final round was 0 px everywhere except home desktop's decorative grid
+    (501 px). Two fresh baseline shots of home desktop each matched the final at
+    0 px, so it was the grid's other state in the first baseline shot.
+  - Build, 117 tests and lint pass.
+  - The stories render without errors, with 0 axe violations, and the Footer
+    story's styles match the live footer, dot included.
+- **Open:** the site uses four wordmark sizes (1.6, 1.5, 1.35, 1.3); Prompt L
+  expected two. Whether to settle on fewer is Derek's design call; nothing changed
+  here.
 
 ---
 

@@ -1,7 +1,7 @@
 import { useEffect, type CSSProperties, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import Grain from '../components/Grain';
-import Wordmark from '../components/Wordmark';
+import Wordmark from '../ui/Wordmark';
 import SiteFooter from '../components/SiteFooter';
 import { gallery, isGalleryPieceOpen, type GalleryPiece } from '../data/gallery';
 import { accentLinkHover } from '../lib/hover';

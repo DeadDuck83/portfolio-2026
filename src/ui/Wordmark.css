@@ -1,0 +1,23 @@
+/*
+ * Wordmark (Wordmark.tsx): "Derek Moore" and the olive dot, in the display face.
+ * The font size is set on the element by each use (the `size` prop), so the
+ * case-study header's narrow-phone rules in global.css can still override it; the
+ * dot scales with it. Uses tokens.css variables only.
+ */
+.ui-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-display);
+  letter-spacing: -0.005em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.ui-wordmark__dot {
+  display: inline-block;
+  width: 0.15em;
+  height: 0.15em;
+  margin-left: 0.05em;
+  border-radius: 50%;
+  background: var(--color-accent-bright);
+}

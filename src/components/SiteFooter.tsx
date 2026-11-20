@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import Wordmark from './Wordmark';
+import Wordmark from '../ui/Wordmark';
 import EmailLink from '../ui/EmailLink';
 import MotionToggle from './MotionToggle';
 import TextLink from '../ui/TextLink';
