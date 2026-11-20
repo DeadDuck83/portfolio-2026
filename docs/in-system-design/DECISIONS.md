@@ -627,6 +627,84 @@ grid with 1px lines, and the hand-built buttons. The review page is
   it's the full image floating. But aside from that, the review looks great."
   **Status:** Done in the docs (commit "FlowStrip variants").
 
+## Case study stories (Move 21)
+
+- **Decision:** the nine case-study blocks have stories in a "Case study" folder,
+  next to each component (`*.stories.tsx`), 20 stories in all:
+  - ChapterHeading: Process (alternate background), Solution (page background).
+  - StatBand: after its count-up.
+  - PersonaCard: the two users in their CellGrid.
+  - DecisionLog: first row open, second row open, all closed.
+  - ContextPanel: scattered, tidied.
+  - PlaceholderFigure: an image with a tag, the grey placeholder, a lead caption, an
+    inline lead caption.
+  - ImageCollage: the collage, the full-size view.
+  - NextCaseFooter: linked, "Brewing.".
+  - FlowStrip: Screens (Sage), Devices (PLMC), the flow viewer open.
+
+  All the data is PLMC's (Sage's for Screens), never invented. **Why:** Prompt K.
+- **Decision:** two states the prompt asks for aren't in today's data, so each uses
+  real copy from elsewhere:
+  - "Brewing." is PLMC's footer as it first shipped: Parker & Ace, "— the vet one.
+    Brewing.", no link (commit `2b9c515`).
+  - The grey placeholder is PLMC's hero figure without its `src` and `alt`.
+
+  **Why:** "never invented copy". **Status:** Done.
+- **Decision:** each story is as wide as its block on a case study page, on the same
+  background. `.storybook/caseStudyFrames.tsx` has two frames:
+  - `inColumn`: `CaseStudy.tsx`'s section column, `layout.maxWidth` and
+    `layout.sidePad`.
+  - `inHalfColumn(gap)`: one of two columns in a page grid, for ContextPanel and a
+    figure card.
+
+  Context, Process and Outcome sit on the alternate background; Users and Solution
+  on the page's. FlowStrip, NextCaseFooter and ImageCollage are full width.
+  **Why:** so each story wraps like the page and can be checked against it.
+  **Status:** Done.
+- **Decision:** each component's description is its doc comment: what it is, when to
+  use it, what data it needs, and an `@import` line written from `src/pages/` (as
+  `src/ui/` does). Only comments changed in the nine components; `git diff` shows no
+  code line changed. **Status:** Done.
+- **Decision:** the switches the prompt lists were all done before this move (the
+  Tidy it up toggle, both Close buttons, the open button, flowStrip's label, in "Five
+  promotions") or settled as one-offs (the "Next case study" label, the scattered
+  tags, in "COMPONENTS.md"). So this move changed nothing on the site, and no page
+  needed approving. **Status:** Done.
+- **Decision:** where a story's test clicks something, it ends at rest, as a mouse
+  click would leave it:
+  - DecisionLog's rows: the pointer moves off (their hover is JavaScript), and focus
+    leaves.
+  - The Tidy it up toggle: focus leaves.
+
+  The collage and flow viewer stories keep Button's focus ring on Close, because
+  focus starts there: it's what a keyboard user sees. **Why:** a test click leaves a
+  hover colour and a focus ring that a mouse click doesn't.
+- **Result:**
+  - All 20 stories render, and every play test passes.
+  - Each story was checked against the same block on `/work/plmc` (`/work/sage` for
+    Screens), in the same state, at 1440px. The check compared every element's
+    computed style and its box within the block. They match in all 18 stories that
+    are on a page, apart from the focus ring where focus starts (collage, flow
+    viewer).
+  - Pixel differences are left only where the block sits at a half pixel on the page
+    and a whole one in Storybook (text and photos redraw), and the 0 px ones are 0:
+    ChapterHeading, StatBand and NextCaseFooter.
+  - FlowStrip's glows drift, so it was compared with reduced motion on both sides.
+  - The "Brewing." footer and the grey placeholder aren't on any page today.
+  - Build, 125 tests and lint pass.
+  - Review page: `portfolio-2026-case-study/step-21/review.html`.
+- **Found** (logged in GAPS.md, not changed, waiting for Derek):
+  - axe flags `textFaint` italic text at 3.2 to 3.3:1 (ChapterHeading, PersonaCard,
+    ContextPanel).
+  - axe flags the flow cards' names not matching their visible words (WCAG 2.5.3).
+  - The ImageCollage test found a focus bug on the live site: opening the full-size
+    view leaves focus on the collage's Close behind it, so Enter closes everything.
+    It only shows in a production build; StrictMode hides it in dev.
+  - Writing the stories also showed that DecisionLog's rows have no `aria-expanded`
+    and use the browser's focus ring.
+- **Status:** Derek, after the review page: "Reviewed, looks right." Committed as
+  "Case study stories".
+
 ---
 
 ## Scope and governance (from the chat about the guide)

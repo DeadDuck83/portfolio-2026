@@ -3,8 +3,13 @@ import { colors, fonts, weights } from '../../theme/tokens';
 import Label from '../../ui/Label';
 
 /**
- * A persona cell in the 02 Users grid: label, serif name, italic subtitle, and
- * three em-dash needs. Rendered inside a 1px-gap grid that draws its own lines.
+ * One user in a case study's Users chapter: a Label, the user's name in the display
+ * face, an italic subtitle, and their needs, each after an em dash. Use two side by
+ * side inside a CellGrid (`min="300px"`), which draws the lines between them; the
+ * card draws none of its own. Data: a `Persona` (`label`, `name`, `subtitle`, three
+ * `needs`), from `caseStudy.users.personas`.
+ *
+ * @import import PersonaCard from '../components/casestudy/PersonaCard';
  */
 export default function PersonaCard({ persona }: { persona: Persona }) {
   return (

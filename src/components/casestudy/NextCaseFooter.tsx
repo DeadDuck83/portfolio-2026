@@ -5,9 +5,14 @@ import { noteCaseStudySource } from '../../lib/analytics';
 import { border, colors, fonts, weights } from '../../theme/tokens';
 
 /**
- * Full-width "Next case study" link block. Links to the next case study when
- * one exists (`nextCase.to`); otherwise renders as a non-linked "Brewing."
- * block. Hovering tints the background.
+ * The full-width "Next case study" row at the end of a case study, above the
+ * footer. With a route (`nextCase.to`) the whole row links to that case study, and
+ * hovering tints it; without one it's the same row with no link, for a case study
+ * that isn't published yet (the "Brewing." state). Use it once, last thing on a case
+ * study page. Data: `caseStudy.nextCase` (`label`, an optional italic `note`, and
+ * `to`). Needs React Router around it, for the link.
+ *
+ * @import import NextCaseFooter from '../components/casestudy/NextCaseFooter';
  */
 export default function NextCaseFooter({ nextCase }: { nextCase: CaseStudy['nextCase'] }) {
   const onEnter = (e: MouseEvent<HTMLElement>) =>

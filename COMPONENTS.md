@@ -50,7 +50,9 @@ Prompt L gives these stories in the UI folder; they stay where they are.
 
 ## Case study blocks
 
-Prompt K gives these stories in the Case study folder, with real data.
+All nine have stories in the Case study folder (Prompt K, 2026-11-20), with real data:
+PLMC's, plus Sage's for FlowStrip's Screens. Each story is as wide as the block is on a
+case study page, on the same background (`.storybook/caseStudyFrames.tsx`).
 
 | Component | Files | Used in | Kind | Storybook |
 |---|---|---|---|---|

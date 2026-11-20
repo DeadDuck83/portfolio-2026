@@ -4,8 +4,13 @@ import { useCountUp } from '../../hooks/useCountUp';
 import CellGrid from '../../ui/CellGrid';
 
 /**
- * 05 Outcome stat band. Numeric ("count") stats animate from 0 to their target
- * when the band scrolls into view; "static" stats render verbatim.
+ * The row of big numbers in a case study's Outcome chapter, each with a small label,
+ * in a CellGrid with faint lines. Numeric ("count") stats count up from 0 when the
+ * band scrolls into view; "static" stats show as written. Use it only when the
+ * outcome has real numbers to report; leave it out otherwise. Data: an
+ * `OutcomeStat[]` (`caseStudy.outcome.stats`), usually three.
+ *
+ * @import import StatBand from '../components/casestudy/StatBand';
  */
 export default function StatBand({ stats }: { stats: OutcomeStat[] }) {
   const { ref, p } = useCountUp();

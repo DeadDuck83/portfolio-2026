@@ -617,6 +617,11 @@ Note from Nov 20: parts of this prompt are done ahead, so skip them here (DECISI
 
 The flow viewer's Close stays with its ← → arrows, which wait on an icon-only Button. ChapterHeading, PlaceholderFigure and PersonaCard still need their Case study stories. FlowStrip needs one story per variant: Screens (Sage's data) and Devices (Bexa's or PLMC's), as COMPONENTS.md says.
 
+Run on Nov 20: the Case study folder has the nine components and 20 stories. With the switches done ahead, the move changed nothing on the site.
+- Each story matches its block on the page. The check compares each element's style and box, and diffs the pixels. A small frame file, `.storybook/caseStudyFrames.tsx`, makes each story as wide as its block on the page.
+- Two states aren't in today's data, so each uses real copy from elsewhere: "Brewing." is PLMC's footer as it first shipped, and the grey placeholder is PLMC's hero figure without its image.
+- The Accessibility tab flags the faint italic subtitles' contrast and the flow cards' names. The image collage's test found a focus bug that only shows in a production build. All are in GAPS.md, waiting on your call. See DECISIONS.md, "Case study stories".
+
 **If not:** describe the difference, or ask Claude Code to compare the story with the live page.
 
 ### 22. Prompt L: site chrome and primitives

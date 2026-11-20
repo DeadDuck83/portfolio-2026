@@ -4,10 +4,16 @@ import { useMotionOff } from '../lib/motion';
 import { fonts, colors } from '../theme/tokens';
 
 /**
- * Gray placeholder block with corner-to-corner X, top-left label, centered
- * pixel dimensions + description, and an optional caption. `<img>`-ready:
- * pass `src` (and `alt`) to drop the final asset in at the same aspect ratio.
- * `prominent` bumps the centered dimension type for feature figures.
+ * A figure in a case study: an image at a fixed aspect ratio with an optional
+ * caption (a tag, a lead, a description). Until the image exists it draws a grey
+ * placeholder in the same shape: an X from corner to corner, a "Placeholder · …"
+ * label, the size to export and what goes there. Use it for every figure in a case
+ * study's chapters; the image collage shows the same figures. Data: a `Figure`
+ * (`placeholder`, `dims`, `aspect`, `innerLabel`, and `src` and `alt` once the image
+ * exists). `prominent` sets the placeholder's type larger, for full-width figures.
+ * `src` and `alt` props override the figure's own.
+ *
+ * @import import PlaceholderFigure from '../components/PlaceholderFigure';
  */
 export default function PlaceholderFigure({
   figure,

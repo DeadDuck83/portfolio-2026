@@ -15,10 +15,15 @@ const SCATTER = [
 ];
 
 /**
- * The 01 Context interactive panel: scattered data-source chips with a
- * "Tidy it up →" button that animates them to an aligned, accent-bordered
- * state (0.8s spring, 60ms stagger) and swaps the caption. Toggles back with
- * "← Scatter it again".
+ * The interactive panel beside the text in a case study's Context chapter: the
+ * problem's pieces as scattered tags, and a "Tidy it up →" toggle (Button, with
+ * `aria-pressed`) that lines them up, turns them accent (0.8s, 60ms apart) and swaps
+ * the caption. "← Scatter it again" undoes it. Use it once, to show the mess the
+ * project started from. Data: from `caseStudy.context`: `panelLabel`, the `chips`
+ * (up to seven have their own scatter; more repeat the pattern), `captionBefore`
+ * and `captionAfter`.
+ *
+ * @import import ContextPanel from '../components/casestudy/ContextPanel';
  */
 export default function ContextPanel({
   panelLabel,

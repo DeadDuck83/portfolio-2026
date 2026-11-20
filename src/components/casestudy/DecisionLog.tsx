@@ -4,10 +4,15 @@ import { border, colors, fonts, weights } from '../../theme/tokens';
 import Label from '../../ui/Label';
 
 /**
- * The 03 Process decision log: accordion rows (numeral, serif title, rotating
- * chevron). One open at a time — opening another closes the first; clicking the
- * open one closes it. First row (index 0) is open initially. Each body is a
- * two-column call / payoff (or cost) grid.
+ * The decision log in a case study's Process chapter: one row per call that was
+ * made (numeral, title, a chevron that turns), opening to two columns: the call,
+ * and what it cost or paid off. One row open at a time: opening another closes the
+ * first, and clicking the open one closes it. The first row starts open. Use it for
+ * the few big calls in a project, not a full changelog. Data: a `Decision[]`
+ * (`caseStudy.process.decisions`); `choiceLabel` and `costLabel` rename the columns
+ * ("The call" and "What it cost" unless the case study says otherwise).
+ *
+ * @import import DecisionLog from '../components/casestudy/DecisionLog';
  */
 export default function DecisionLog({
   decisions,

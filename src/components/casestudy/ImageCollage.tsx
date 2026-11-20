@@ -7,9 +7,15 @@ import Button from '../../ui/Button';
 import Label from '../../ui/Label';
 
 /**
- * Full-viewport collage of case-study images with captions.
- * Click media to open a fill-screen lightbox; Escape backs out
- * (lightbox first, then collage). Backdrop / Close also dismiss.
+ * Every image in a case study at once, in columns with their captions, over the
+ * whole window. Clicking an image opens it full size; Escape backs out (the full-size
+ * view first, then the collage), and Close or the backdrop also closes. Focus starts
+ * on Close. Open it from the TL;DR Callout's link ("Show me the images →"), only when
+ * the case study has images. Data: a `title` (the case study's name line,
+ * `caseStudy.eyebrowRight`), the `figures` that have an image
+ * (`collectCaseStudyImages(caseStudy)`), and `onClose`.
+ *
+ * @import import ImageCollage from '../components/casestudy/ImageCollage';
  */
 export default function ImageCollage({
   title,

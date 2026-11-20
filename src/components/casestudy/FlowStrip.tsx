@@ -19,9 +19,16 @@ const SCREEN_AR: Record<FlowDevice, number> = {
 };
 
 /**
- * The finished product, first: one card per flow on a strip that runs off the
- * right edge. Scroll it sideways (trackpad or touch); click a card to see every
- * screen in that flow.
+ * The finished product, first: one card per flow on a full-width band in the
+ * product's colour, running off the right edge. Scroll it sideways (trackpad, touch
+ * or the ← → buttons); click a card to see every screen in that flow. Two variants,
+ * picked by the data: Screens (bare phone screens rising from a line) when no flow
+ * has a `frame`, and Devices (each flow's whole device picture floating on the band,
+ * with a soft glow) when they do. Use it at the end of a case study's hero, in place
+ * of the hero figure. Data: `caseStudy.flows` (`ProductFlow[]`) and
+ * `caseStudy.brand`; without a brand the band is the portfolio's olive.
+ *
+ * @import import FlowStrip from '../components/casestudy/FlowStrip';
  */
 export default function FlowStrip({ flows, brand }: { flows: ProductFlow[]; brand?: Brand }) {
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
