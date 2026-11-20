@@ -59,7 +59,7 @@ Prompt K gives these stories in the Case study folder, with real data.
 | PersonaCard | `src/components/casestudy/PersonaCard.tsx` | CaseStudy (Users, PLMC) | Block | Case study |
 | DecisionLog | `src/components/casestudy/DecisionLog.tsx` | CaseStudy (Process) | Block | Case study |
 | StatBand | `src/components/casestudy/StatBand.tsx` | CaseStudy (Outcome) | Block | Case study |
-| FlowStrip | `src/components/casestudy/FlowStrip.tsx`, `flowStrip.module.css` | CaseStudy (Sage, Bexa, PLMC) | Block | Case study |
+| FlowStrip | `src/components/casestudy/FlowStrip.tsx`, `flowStrip.module.css` | CaseStudy (Sage, Bexa, PLMC) | Block | Case study: one story per variant. **Screens**: bare phone screens rising from a line (Sage). **Devices**: the whole device picture floating on the band, with a soft glow (Bexa, PLMC). The case study's data picks the variant: a flow with a `frame` gets Devices. |
 | ImageCollage | `src/components/casestudy/ImageCollage.tsx` | CaseStudy (TL;DR's link) | Block | Case study |
 | NextCaseFooter | `src/components/casestudy/NextCaseFooter.tsx` | CaseStudy | Block | Case study |
 | ContextPanel | `src/components/casestudy/ContextPanel.tsx` | CaseStudy (Context) | Block | Case study |

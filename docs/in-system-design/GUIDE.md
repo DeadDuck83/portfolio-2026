@@ -615,7 +615,7 @@ Note from Nov 20: parts of this prompt are done ahead, so skip them here (DECISI
 - the open button is the Callout's link;
 - flowStrip's `.eyebrow` is Label.
 
-The flow viewer's Close stays with its ← → arrows, which wait on an icon-only Button. ChapterHeading, PlaceholderFigure and PersonaCard still need their Case study stories.
+The flow viewer's Close stays with its ← → arrows, which wait on an icon-only Button. ChapterHeading, PlaceholderFigure and PersonaCard still need their Case study stories. FlowStrip needs one story per variant: Screens (Sage's data) and Devices (Bexa's or PLMC's), as COMPONENTS.md says.
 
 **If not:** describe the difference, or ask Claude Code to compare the story with the live page.
 

@@ -617,6 +617,15 @@ grid with 1px lines, and the hand-built buttons. The review page is
   Derek: "Contact sheet looks right."
 - **Status:** committed as "Components list" (the guide's "Component inventory" was
   already taken by the Nov 19 decisions commit).
+- **Decision:** FlowStrip has two variants, and Prompt K gives each its own story.
+  **Screens** shows bare phone screens rising from a line (Sage). **Devices** shows
+  the whole device picture floating on the band, with a soft glow (Bexa and PLMC:
+  laptop, monitor, tablet, phone, iPad, TV). The data already picks the variant: a
+  flow with a `frame` gets Devices. So no new prop; COMPONENTS.md and the contact
+  sheet now show both. **Why:** Derek: "I think the flow strip component should have
+  2 variables. One, like the one you have in the example, and the other one where
+  it's the full image floating. But aside from that, the review looks great."
+  **Status:** Done in the docs (commit "FlowStrip variants").
 
 ---
 
