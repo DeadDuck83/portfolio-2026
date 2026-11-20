@@ -44,10 +44,11 @@ The flow viewer's Close isn't switched: it waits with the arrows (above).
 
 ### Also open
 
+The "Next case study" label and the context panel's scattered tags are settled as one-offs
+that stay inside their components (COMPONENTS.md; Derek: "They're one offs.").
+
 | Gap | Where | Now | Should become, and when |
 |---|---|---|---|
-| Context panel scatter tags | `src/components/casestudy/ContextPanel.tsx:54` | Chip-like but larger and animated, with a highlighted state | Maybe Chip with a size or tone. Decided in Prompt J (Move 20). |
-| "Next case study" label | `src/components/casestudy/NextCaseFooter.tsx:31` | .66rem / .2em uppercase, `colors.textMuted` | Undecided: Eyebrow, the small label, or a role of its own. Prompt J (Move 20), step 3. |
 | Motion tokens | `src/ui/Button.css:7` (`--ui-button-ease`, a literal curve) | | A motion token. Code only: Figma can't store easing. |
 | Layout tokens | `src/theme/tokens.ts:142` (`layout.sidePad`, a `clamp()`) | | A layout token, once there's a way to hold a `clamp()`; Figma variables can't (Move 15). |
 

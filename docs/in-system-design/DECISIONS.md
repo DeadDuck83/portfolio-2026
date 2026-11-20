@@ -132,7 +132,8 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
   **Status:** Done.
 - **Decision:** leave `patterns.ts`, `WorkList.tsx` and `AboutJourney.tsx` in place.
   **Why:** AboutJourney belongs to the Rive About journey, which may come back.
-  Deleting is a separate decision. **Status:** Open (Prompt J asks keep or delete).
+  Deleting is a separate decision. **Status:** Kept as Unused for now (see
+  "COMPONENTS.md (Move 20)").
 - **Decision:** log the three missed buttons (ContextPanel toggle, collage open and
   Close, phone Menu) to fix after Storybook. **Why:** Derek: "Log the three missed
   buttons (Tidy it up toggle, collage open and Close, phone Menu) as a gap to fix
@@ -583,6 +584,39 @@ grid with 1px lines, and the hand-built buttons. The review page is
   and spacing changes, the lighter grey, the callout link's focus ring, the four
   buttons on Button, and the shifts they cause). Derek: "I like the updates on all
   of before and after options you provided." **Status:** Approved.
+
+## COMPONENTS.md (Move 20)
+
+- **Decision:** the "Next case study" label stays inside NextCaseFooter, and the
+  scattered tags stay inside ContextPanel, as one-offs rather than components (not
+  Eyebrow, Label or Chip). COMPONENTS.md lists both under "One-offs". **Why:**
+  Derek: "They're one offs. This doesn't have to be a perfect 100% complete. It's
+  just for demo purposes." **Status:** Done. They leave GAPS.md.
+- **Decision:** `COMPONENTS.md` at the repo root lists every component in `src/ui/`,
+  `src/components/` and `src/pages/`, with its files, where it's used, its kind and
+  its Storybook folder. It also lists the one-offs, the repeated patterns that
+  aren't components yet, and what was done from GAPS.md. Kinds and folders follow
+  the guide's Prompts K to N (Experiences: Hero, AboutRail, the avatar pieces,
+  SkillsView, HealthspanSimulator, ChassisReveal, Grain; Behaviors: ScrollManager,
+  PageTransition, Reveal). Helper `.ts` files are listed with the component they
+  serve. ContactSection is a Block in the Site folder, because Prompt L puts it
+  there but it isn't chrome. **Status:** Done.
+- **Decision:** four things are Unused, checked by searching every import in
+  `src/`: WorkList, AboutJourney (with AboutJourneyBackground, its `.ts` helpers and
+  `about-journey.css`), PixelCameo, and `src/theme/patterns.ts` (used only by the
+  first two). They stay in the repo, marked Unused, for now. **Why:** Derek: "demo
+  scope, and PixelCameo may come back." **Status:** Kept. Deleting any of them later
+  is its own decision, on its own branch.
+- **Result:** 13 Primitives (10 in `src/ui/`), 10 Blocks, 3 Chrome, 8 Experiences,
+  3 Behaviors, 4 Pages, 3 Unused components plus `patterns.ts`, and 2 one-offs. A
+  fresh scan of `CaseStudy.tsx` and `Hero.tsx` found no new candidates: the repeats
+  left are the section frame (waiting in GAPS.md), text styles (`h2Style`,
+  `bodyP`), an accent `<span>` and spacing values. `Hero.tsx` has no inline styles.
+  The contact sheet, `portfolio-2026-case-study/step-20/contact-sheet.html`, has 47
+  cards, 48 shots from the dev server, desktop and phone where the layout changes.
+  Derek: "Contact sheet looks right."
+- **Status:** committed as "Components list" (the guide's "Component inventory" was
+  already taken by the Nov 19 decisions commit).
 
 ---
 

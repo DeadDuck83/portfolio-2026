@@ -579,7 +579,9 @@ Don't change any code yet. Show me the table and the contact sheet when you're d
 
 **If not:** if it misses something you can see on the site, point to it and ask for a row.
 
-Partly run early, on Nov 19, straight after Move 12: you reviewed the list of repeated elements and a contact sheet of the small caps (`step-13/compare.html`), and decided five things, logged in DECISIONS.md under "Component inventory". The Wait rows went into a new `GAPS.md` at the repo root. `COMPONENTS.md` isn't written yet, so this move still runs.
+Partly run early, on Nov 19, straight after Move 12: you reviewed the list of repeated elements and a contact sheet of the small caps (`step-13/compare.html`), and decided five things, logged in DECISIONS.md under "Component inventory". The Wait rows went into a new `GAPS.md` at the repo root.
+
+Run on Nov 20: `COMPONENTS.md` is written, with the contact sheet at `step-20/contact-sheet.html`. You settled the two open items as one-offs: the "Next case study" label and the scattered tags stay inside their components. You kept the Unused rows for now ("demo scope, and PixelCameo may come back"). The commit message `Component inventory` was already used on Nov 19, for the decisions, so this one is `Components list`.
 
 After that, TextLink was promoted on its own (commit `TextLink`), the same way as Button: the footer links and the "← Gallery" link above a gallery piece now use `src/ui/TextLink`. EmailLink and Wordmark followed, moved from `src/components/` to `src/ui/`. Then the inventory's other "promote now" items: Label, Callout, Aside and CellGrid, and four hand-built buttons moved onto Button (DECISIONS.md, "Five promotions"). When this move runs, list them all in `src/ui/` with the others.
 
