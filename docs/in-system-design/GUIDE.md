@@ -581,7 +581,7 @@ Don't change any code yet. Show me the table and the contact sheet when you're d
 
 Partly run early, on Nov 19, straight after Move 12: you reviewed the list of repeated elements and a contact sheet of the small caps (`step-13/compare.html`), and decided five things, logged in DECISIONS.md under "Component inventory". The Wait rows went into a new `GAPS.md` at the repo root. `COMPONENTS.md` isn't written yet, so this move still runs.
 
-After that, TextLink was promoted on its own (commit `TextLink`), the same way as Button: the footer links and the "← Gallery" link above a gallery piece now use `src/ui/TextLink`. EmailLink and Wordmark followed, moved from `src/components/` to `src/ui/`. When this move runs, list all three in `src/ui/` with the others.
+After that, TextLink was promoted on its own (commit `TextLink`), the same way as Button: the footer links and the "← Gallery" link above a gallery piece now use `src/ui/TextLink`. EmailLink and Wordmark followed, moved from `src/components/` to `src/ui/`. Then the inventory's other "promote now" items: Label, Callout, Aside and CellGrid, and four hand-built buttons moved onto Button (DECISIONS.md, "Five promotions"). When this move runs, list them all in `src/ui/` with the others.
 
 ### 21. Prompt K: the case study kit
 
@@ -606,6 +606,14 @@ Run npm run build, npm test and npm run lint. Check each story's Accessibility t
 **Done when:** each story matches the same block on `/work/plmc`, you've approved every page that changed, and you commit with the message `Case study stories`.
 
 Note from Nov 19: the collage's open button isn't in `ImageCollage.tsx`. Both buttons there are Close buttons, and the open one ("Show me the images →") is in `CaseStudy.tsx`. Two decisions in DECISIONS.md ("Component inventory") change this prompt: flowStrip's `.eyebrow` becomes the small label component, not Chip or Eyebrow, and the open button becomes the dashed callout's link.
+
+Note from Nov 20: parts of this prompt are done ahead, so skip them here (DECISIONS.md, "Five promotions"):
+- the Tidy it up toggle is on Button, with `aria-pressed`;
+- both Close buttons in `ImageCollage.tsx` are on Button;
+- the open button is the Callout's link;
+- flowStrip's `.eyebrow` is Label.
+
+The flow viewer's Close stays with its ← → arrows, which wait on an icon-only Button. ChapterHeading, PlaceholderFigure and PersonaCard still need their Case study stories.
 
 **If not:** describe the difference, or ask Claude Code to compare the story with the live page.
 
@@ -633,6 +641,7 @@ Run the checks, check each Accessibility tab, and log anything flagged in GAPS.m
 Note from Nov 19: SiteFooter's links are TextLink now (`src/ui/TextLink`, which already has stories in UI). MotionToggle has one more use to cover: `textLinkClass()` in the case footer. EmailLink and Wordmark are done ahead of this prompt, so skip them here:
 - EmailLink moved to `src/ui/EmailLink`, with stories for plain, as a button, as a text link and after copying. Its Accessibility flag (the accessible name doesn't contain the visible words) is in GAPS.md, left as is.
 - Wordmark moved to `src/ui/Wordmark`, with stories for the home header, the footer and all four sizes the site uses (not two).
+- The phone Menu button is on Button (outline, compact), switched on Nov 20, so skip that step too.
 
 **If not:** if a story crashes with a router error, ask Claude Code to add the MemoryRouter decorator to that story.
 

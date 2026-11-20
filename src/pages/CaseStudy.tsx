@@ -22,6 +22,10 @@ import Reveal from '../components/casestudy/Reveal';
 import ImageCollage from '../components/casestudy/ImageCollage';
 import FlowStrip from '../components/casestudy/FlowStrip';
 import Eyebrow from '../ui/Eyebrow';
+import Label from '../ui/Label';
+import Callout from '../ui/Callout';
+import Aside from '../ui/Aside';
+import CellGrid from '../ui/CellGrid';
 
 // Shared section-level style fragments.
 const sectionInner = {
@@ -217,80 +221,22 @@ export default function CaseStudy() {
             <p style={{ maxWidth: '52ch', margin: 0, ...bodyP, fontSize: '0.92rem', lineHeight: 1.7, animation: 'floatIn 0.8s 0.16s ease both' }}>
               {cs.intro}
             </p>
-            <div
-              style={{
-                display: 'flex',
-                gap: '1rem',
-                alignItems: 'baseline',
-                padding: '1.1rem 1.3rem',
-                border: '1px dashed rgba(132,137,69,0.45)',
-                animation: 'floatIn 0.8s 0.24s ease both',
-              }}
+            <Callout
+              label="TL;DR"
+              link={collageImages.length > 0 ? { label: 'Show me the images →', onClick: () => setCollageOpen(true) } : undefined}
+              style={{ animation: 'floatIn 0.8s 0.24s ease both' }}
             >
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: colors.accentBright,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                TL;DR
-              </span>
-              <div style={{ minWidth: 0 }}>
-                <p style={{ margin: 0, fontSize: '0.76rem', lineHeight: 1.7, color: colors.textBody }}>
-                  {cs.tldr}
-                </p>
-                {collageImages.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setCollageOpen(true)}
-                    style={{
-                      display: 'inline',
-                      margin: '0.55rem 0 0',
-                      padding: 0,
-                      border: 'none',
-                      background: 'none',
-                      fontFamily: fonts.text,
-                      fontStyle: 'italic',
-                      fontSize: '0.95rem',
-                      lineHeight: 1.4,
-                      color: colors.accentBright,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = colors.accentTint;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = colors.accentBright;
-                    }}
-                  >
-                    Show me the images →
-                  </button>
-                )}
-              </div>
-            </div>
+              {cs.tldr}
+            </Callout>
           </div>
 
           {/* Meta grid */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-              gap: 1,
-              marginTop: 'clamp(2.4rem, 6vh, 3.6rem)',
-              background: border.gridBg,
-              border: `1px solid ${border.gridBg}`,
-              animation: 'floatIn 0.8s 0.3s ease both',
-            }}
-          >
+          <CellGrid min="170px" style={{ marginTop: 'clamp(2.4rem, 6vh, 3.6rem)', animation: 'floatIn 0.8s 0.3s ease both' }}>
             <MetaCell label="Role" value={cs.meta.role} />
             <MetaCell label="Org" value={cs.meta.org} />
             <MetaCell label="Timeline" value={cs.meta.timeline} />
             <MetaCell label="Scope" value={cs.meta.scope} />
-          </div>
+          </CellGrid>
         </div>
 
         {/* The finished product first: a strip of flows, or the single hero figure */}
@@ -354,18 +300,11 @@ export default function CaseStudy() {
             <Reveal style={{ maxWidth: '60ch', marginTop: 'clamp(1.8rem, 4vh, 2.8rem)' }}>
               <h2 style={h2Style}>{cs.users.h2}</h2>
             </Reveal>
-            <Reveal
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: 1,
-                marginTop: 'clamp(2.2rem, 5vh, 3.2rem)',
-                background: border.gridBg,
-                border: `1px solid ${border.gridBg}`,
-              }}
-            >
-              <PersonaCard persona={cs.users.personas[0]} />
-              <PersonaCard persona={cs.users.personas[1]} />
+            <Reveal style={{ marginTop: 'clamp(2.2rem, 5vh, 3.2rem)' }}>
+              <CellGrid min="300px">
+                <PersonaCard persona={cs.users.personas[0]} />
+                <PersonaCard persona={cs.users.personas[1]} />
+              </CellGrid>
             </Reveal>
             <Reveal>
               <p
@@ -444,74 +383,45 @@ export default function CaseStudy() {
             <ChapterHeading meta={cs.solution.chapter} />
           </Reveal>
           {/* Principles strip */}
-          <Reveal
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: 1,
-              marginTop: 'clamp(2rem, 5vh, 3rem)',
-              background: border.gridBg,
-              border: `1px solid ${border.gridBg}`,
-            }}
-          >
-            {cs.solution.principles.map((pr) => (
-              <div key={pr.numeral} style={{ background: colors.bg, padding: '1.4rem' }}>
-                <div style={{ fontFamily: fonts.display, fontWeight: weights.display, fontSize: '1.2rem', color: colors.accentBright }}>
-                  {pr.numeral}
-                </div>
-                {pr.title && (
+          <Reveal style={{ marginTop: 'clamp(2rem, 5vh, 3rem)' }}>
+            <CellGrid min="280px">
+              {cs.solution.principles.map((pr) => (
+                <div key={pr.numeral} style={{ background: colors.bg, padding: '1.4rem' }}>
+                  <div style={{ fontFamily: fonts.display, fontWeight: weights.display, fontSize: '1.2rem', color: colors.accentBright }}>
+                    {pr.numeral}
+                  </div>
+                  {pr.title && (
+                    <div
+                      style={{
+                        fontFamily: fonts.text,
+                        fontWeight: 600,
+                        fontSize: '1.05rem',
+                        lineHeight: 1.3,
+                        color: colors.text,
+                        marginTop: '0.55rem',
+                      }}
+                    >
+                      {pr.title}
+                    </div>
+                  )}
                   <div
                     style={{
-                      fontFamily: fonts.text,
-                      fontWeight: 600,
-                      fontSize: '1.05rem',
-                      lineHeight: 1.3,
-                      color: colors.text,
-                      marginTop: '0.55rem',
+                      fontSize: '0.78rem',
+                      lineHeight: 1.65,
+                      color: colors.textBody,
+                      marginTop: pr.title ? '0.55rem' : '0.6rem',
                     }}
                   >
-                    {pr.title}
+                    {pr.text}
                   </div>
-                )}
-                <div
-                  style={{
-                    fontSize: '0.78rem',
-                    lineHeight: 1.65,
-                    color: colors.textBody,
-                    marginTop: pr.title ? '0.55rem' : '0.6rem',
-                  }}
-                >
-                  {pr.text}
                 </div>
-              </div>
-            ))}
+              ))}
+            </CellGrid>
           </Reveal>
 
           {cs.solution.feature && (
-            <Reveal
-              style={{
-                display: 'flex',
-                gap: '1rem',
-                alignItems: 'baseline',
-                marginTop: 'clamp(2rem, 5vh, 3rem)',
-                padding: '1.1rem 1.3rem',
-                border: '1px dashed rgba(132,137,69,0.45)',
-              }}
-            >
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: colors.accentBright,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {cs.solution.feature.label ?? 'Feature this'}
-              </span>
-              <p style={{ margin: 0, fontSize: '0.76rem', lineHeight: 1.7, color: colors.textBody }}>
-                {cs.solution.feature.text}
-              </p>
+            <Reveal style={{ marginTop: 'clamp(2rem, 5vh, 3rem)' }}>
+              <Callout label={cs.solution.feature.label ?? 'Feature this'}>{cs.solution.feature.text}</Callout>
             </Reveal>
           )}
 
@@ -578,22 +488,10 @@ export default function CaseStudy() {
           )}
           {cs.outcome.lessons && cs.outcome.lessons.length > 0 ? (
             <Reveal style={{ marginTop: 'clamp(2.4rem, 5vh, 3.4rem)', maxWidth: '62ch' }}>
-              <div
-                style={{
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: colors.accentBright,
-                }}
-              >
-                {cs.outcome.asideLabel ?? 'What I learned'}
-              </div>
+              <Label>{cs.outcome.asideLabel ?? 'What I learned'}</Label>
               <div style={{ display: 'grid', gap: '1.6rem', marginTop: '1.2rem' }}>
                 {cs.outcome.lessons.map((lesson) => (
-                  <div
-                    key={lesson.title}
-                    style={{ borderLeft: `1px solid ${border.accentMed}`, paddingLeft: '1.4rem' }}
-                  >
+                  <Aside key={lesson.title}>
                     <div
                       style={{
                         fontFamily: fonts.text,
@@ -606,7 +504,7 @@ export default function CaseStudy() {
                       {lesson.title}
                     </div>
                     <p style={{ ...bodyP, margin: '0.55rem 0 0' }}>{lesson.text}</p>
-                  </div>
+                  </Aside>
                 ))}
               </div>
             </Reveal>
@@ -623,19 +521,10 @@ export default function CaseStudy() {
                 }}
               >
                 <p style={{ ...bodyP, margin: 0 }}>{cs.outcome.closingParagraph}</p>
-                <div style={{ borderLeft: `1px solid ${border.accentMed}`, paddingLeft: '1.4rem' }}>
-                  <div
-                    style={{
-                      fontSize: '0.62rem',
-                      letterSpacing: '0.18em',
-                      textTransform: 'uppercase',
-                      color: colors.accentBright,
-                    }}
-                  >
-                    {cs.outcome.asideLabel ?? 'If I did it again'}
-                  </div>
+                <Aside>
+                  <Label>{cs.outcome.asideLabel ?? 'If I did it again'}</Label>
                   <p style={{ ...bodyP, margin: '0.8rem 0 0' }}>{cs.outcome.ifIDidItAgain}</p>
-                </div>
+                </Aside>
               </Reveal>
             )
           )}
@@ -659,9 +548,7 @@ export default function CaseStudy() {
 function MetaCell({ label, value }: { label: string; value: string }) {
   return (
     <div style={{ background: colors.bg, padding: '1.2rem' }}>
-      <div style={{ fontSize: '0.62rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: colors.textFaint }}>
-        {label}
-      </div>
+      <Label tone="muted">{label}</Label>
       <div style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>{value}</div>
     </div>
   );

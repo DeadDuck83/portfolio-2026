@@ -26,6 +26,7 @@
   --olive-500: #848945;
   --olive-500-a14: rgba(132,137,69,0.14);
   --olive-500-a40: rgba(132,137,69,0.4);
+  --olive-500-a45: rgba(132,137,69,0.45);
   --olive-500-a50: rgba(132,137,69,0.5);
   --olive-500-a60: rgba(132,137,69,0.6);
 
@@ -73,6 +74,7 @@
   --border-control: var(--sand-100-a15);
   --border-accent-soft: var(--olive-500-a40);
   --border-accent-med: var(--olive-500-a50);
+  --border-callout: var(--olive-500-a45);
   --border-accent-strong: var(--olive-500-a60);
   --border-grid-bg: var(--sand-100-a10);
   --border-grid-bg-faint: var(--sand-100-a08);

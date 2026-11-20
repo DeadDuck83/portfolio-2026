@@ -5,6 +5,7 @@ import { useGuideFocus } from '../../lib/guide';
 import { motionOff, subscribeMotion } from '../../lib/motion';
 import { border, colors, fonts, layout } from '../../theme/tokens';
 import Button from '../../ui/Button';
+import CellGrid from '../../ui/CellGrid';
 import Chip from '../../ui/Chip';
 import CompanyPopover from './CompanyPopover';
 import { createSquares, type SquaresController } from './aboutRailSquares';
@@ -318,14 +319,14 @@ export default function AboutRail() {
           {aboutToday.titleLead} <em>{aboutToday.titleEm}</em>
         </h3>
         <p className="about-rail__lede">{aboutToday.body}</p>
-        <dl className="about-rail__stats">
+        <CellGrid as="dl" className="about-rail__stats">
           {aboutToday.stats.map((s) => (
             <div key={s.label} className="about-rail__stat">
               <dt>{s.big}</dt>
               <dd>{s.label}</dd>
             </div>
           ))}
-        </dl>
+        </CellGrid>
         <SkillsButton />
       </div>
     </section>

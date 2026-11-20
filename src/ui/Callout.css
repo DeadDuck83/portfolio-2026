@@ -1,0 +1,46 @@
+/*
+ * Callout (Callout.tsx): a short note in a dashed box, with a Label beside it and,
+ * optionally, a link underneath (TL;DR with "Show me the images →", Feature this).
+ * Taken from the two hand-built boxes in CaseStudy.tsx, which matched. Uses
+ * tokens.css variables only.
+ */
+.ui-callout {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1.1rem 1.3rem;
+  border: 1px dashed var(--border-callout);
+}
+.ui-callout__label {
+  white-space: nowrap;
+}
+.ui-callout__body {
+  min-width: 0;
+}
+.ui-callout__text {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.7;
+  color: var(--color-text-body);
+}
+.ui-callout__link {
+  display: inline;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--color-accent-bright);
+  cursor: pointer;
+  text-align: left;
+}
+.ui-callout__link:hover {
+  color: var(--color-accent-tint);
+}
+.ui-callout__link:focus-visible {
+  outline: 2px solid var(--color-accent-bright);
+  outline-offset: 3px;
+}

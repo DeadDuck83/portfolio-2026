@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Wordmark from '../../ui/Wordmark';
-import { border, colors, fonts, layout, radius } from '../../theme/tokens';
+import { border, colors, layout } from '../../theme/tokens';
 import { accentLinkHover } from '../../lib/hover';
 import Button from '../../ui/Button';
 import { track } from '../../lib/analytics';
@@ -123,23 +123,9 @@ export default function SiteHeader() {
         )}
 
         {isMobile && (
-          <button
-            onClick={() => setMenuOpen((o) => !o)}
-            style={{
-              background: 'none',
-              border: `1px solid ${border.menuButton}`,
-              borderRadius: radius.control,
-              color: colors.text,
-              fontFamily: fonts.text,
-              fontSize: '0.68rem',
-              letterSpacing: '0.16em',
-              textTransform: 'uppercase',
-              padding: '0.55rem 0.9rem',
-              cursor: 'pointer',
-            }}
-          >
+          <Button variant="outline" size="compact" onClick={() => setMenuOpen((o) => !o)}>
             {menuOpen ? 'Close' : 'Menu'}
-          </button>
+          </Button>
         )}
       </div>
 

@@ -1,0 +1,21 @@
+/*
+ * CellGrid (CellGrid.tsx): cells in a grid with 1px lines between them and around
+ * them, drawn by the grid's own background showing through a 1px gap. Each cell sets
+ * its own background. Taken from the five hand-built grids (case-study meta row,
+ * personas, principles, StatBand, the About rail's stats). Uses tokens.css variables
+ * only.
+ *
+ * :where() keeps these at zero specificity, so a class on the same element (the
+ * About rail's .about-rail__stats) can set its own columns and line colour whichever
+ * stylesheet loads first.
+ */
+:where(.ui-cell-grid) {
+  display: grid;
+  gap: 1px;
+  background: var(--border-grid-bg);
+  border: 1px solid var(--border-grid-bg);
+}
+:where(.ui-cell-grid--faint) {
+  background: var(--border-grid-bg-faint);
+  border-color: var(--border-grid-bg-faint);
+}

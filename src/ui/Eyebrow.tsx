@@ -3,8 +3,9 @@ import './Eyebrow.css';
 
 /**
  * The small uppercase label that introduces a section or headline: a case study's
- * chapter names, and the "Case study 04" line above its title. Not for nav links,
- * field labels (Role, Org, Timeline) or stat labels; those are other roles. Styles
+ * chapter names, and the "Case study 04" line above its title. Not for field and
+ * panel labels (Role, Org, TL;DR, What I learned: use Label), nav links or stat
+ * labels. Styles
  * are in Eyebrow.css. Import Eyebrow (a default export) from src/ui/Eyebrow with a
  * relative path; the project has no `src/` alias.
  *

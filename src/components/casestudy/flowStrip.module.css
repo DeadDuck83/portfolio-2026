@@ -24,13 +24,6 @@
   animation: floatIn 0.9s 0.36s ease both;
 }
 
-.eyebrow {
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #8f8674;
-}
-
 .arrow,
 .close {
   font: inherit;
@@ -552,7 +545,7 @@
 }
 @media (max-height: 500px) {
   .bar { align-items: center; }
-  .barText .eyebrow { display: none; }
+  .barText .counter { display: none; }
   .viewTitle { font-size: 1.25rem; margin: 0; }
   .row { --label: 1.6rem; }
   .stepLabel { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Decision } from '../../data/caseStudies/types';
 import { border, colors, fonts, weights } from '../../theme/tokens';
+import Label from '../../ui/Label';
 
 /**
  * The 03 Process decision log: accordion rows (numeral, serif title, rotating
@@ -99,17 +100,9 @@ export default function DecisionLog({
 function Column({ label, text }: { label: string; text: string }) {
   return (
     <div>
-      <div
-        style={{
-          fontSize: '0.6rem',
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: colors.textFaint,
-          marginBottom: '0.6rem',
-        }}
-      >
+      <Label tone="muted" style={{ marginBottom: '0.6rem' }}>
         {label}
-      </div>
+      </Label>
       <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.7, color: colors.textBody }}>{text}</p>
     </div>
   );

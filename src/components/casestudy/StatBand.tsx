@@ -1,6 +1,7 @@
 import type { OutcomeStat } from '../../data/caseStudies/types';
-import { border, colors, fonts, weights } from '../../theme/tokens';
+import { colors, fonts, weights } from '../../theme/tokens';
 import { useCountUp } from '../../hooks/useCountUp';
+import CellGrid from '../../ui/CellGrid';
 
 /**
  * 05 Outcome stat band. Numeric ("count") stats animate from 0 to their target
@@ -16,16 +17,7 @@ export default function StatBand({ stats }: { stats: OutcomeStat[] }) {
   };
 
   return (
-    <div
-      ref={ref}
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: 1,
-        background: border.gridBgFaint,
-        border: `1px solid ${border.gridBgFaint}`,
-      }}
-    >
+    <CellGrid ref={ref} min="200px" line="faint">
       {stats.map((s) => (
         <div key={s.label} style={{ background: colors.bgAlt, padding: '1.6rem 1.4rem' }}>
           <div style={{ fontFamily: fonts.display, fontWeight: weights.display, fontSize: '2.4rem', color: colors.accentBright }}>
@@ -44,6 +36,6 @@ export default function StatBand({ stats }: { stats: OutcomeStat[] }) {
           </div>
         </div>
       ))}
-    </div>
+    </CellGrid>
   );
 }

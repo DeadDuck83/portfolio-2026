@@ -267,10 +267,10 @@
   max-width: 14ch;
 }
 
+/* The shared CellGrid (src/ui/CellGrid.css) draws the 1px lines; this sets the two
+   fixed columns and the rail's own line colour. */
 .about-rail__stats {
-  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
   width: 100%;
   max-width: 34rem;
   margin: 0.4rem 0 0;

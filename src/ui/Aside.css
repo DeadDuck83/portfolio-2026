@@ -1,0 +1,9 @@
+/*
+ * Aside (Aside.tsx): a block set off by a thin accent rule on its left, for a lesson
+ * or a reflection at the end of a case study. Taken from the two hand-built blocks
+ * in CaseStudy.tsx. Uses tokens.css variables only.
+ */
+.ui-aside {
+  border-left: 1px solid var(--border-accent-med);
+  padding-left: 1.4rem;
+}

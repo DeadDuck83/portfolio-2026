@@ -4,6 +4,7 @@ import type { Brand, FlowDevice, ProductFlow } from '../../data/caseStudies/type
 import { motionOff } from '../../lib/motion';
 import { colors, fonts, weights } from '../../theme/tokens';
 import styles from './flowStrip.module.css';
+import Label from '../../ui/Label';
 
 const num = (i: number) => String(i + 1).padStart(2, '0');
 
@@ -276,9 +277,10 @@ function FlowViewer({
     >
       <div className={styles.bar}>
         <div className={styles.barText}>
-          <span className={styles.eyebrow}>
+          {/* .counter: hidden on very short screens (flowStrip.module.css) */}
+          <Label tone="muted" as="span" className={styles.counter}>
             Flow {num(index)} / {num(last)}
-          </span>
+          </Label>
           <h2 id={titleId} className={styles.viewTitle} style={{ fontFamily: fonts.display, fontWeight: weights.display }}>
             {f.title}
             <span style={{ color: colors.accent }}>.</span>

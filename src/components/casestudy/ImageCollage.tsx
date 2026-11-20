@@ -3,6 +3,8 @@ import type { Figure } from '../../data/caseStudies/types';
 import { isVideoFigure } from '../../data/caseStudies/figures';
 import { useMotionOff } from '../../lib/motion';
 import { border, colors, fonts, weights } from '../../theme/tokens';
+import Button from '../../ui/Button';
+import Label from '../../ui/Label';
 
 /**
  * Full-viewport collage of case-study images with captions.
@@ -81,17 +83,7 @@ export default function ImageCollage({
           }}
         >
           <div>
-            <div
-              style={{
-                fontSize: '0.62rem',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: colors.accentBright,
-                marginBottom: '0.35rem',
-              }}
-            >
-              Image collage
-            </div>
+            <Label style={{ marginBottom: '0.35rem' }}>Image collage</Label>
             <h2
               id={titleId}
               style={{
@@ -106,34 +98,16 @@ export default function ImageCollage({
               {title}
             </h2>
           </div>
-          <button
+          <Button
             ref={closeRef}
-            type="button"
+            variant="outline"
+            size="compact"
             onClick={onClose}
             aria-label="Close image collage"
-            style={{
-              flex: '0 0 auto',
-              fontFamily: fonts.text,
-              fontSize: '0.7rem',
-              letterSpacing: '0.16em',
-              textTransform: 'uppercase',
-              color: colors.textBody,
-              background: 'none',
-              border: `1px solid ${border.hairlineStronger}`,
-              padding: '0.7rem 1rem',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = colors.accentTint;
-              e.currentTarget.style.borderColor = border.accentMed;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = colors.textBody;
-              e.currentTarget.style.borderColor = border.hairlineStronger;
-            }}
+            style={{ flex: '0 0 auto' }}
           >
             Close
-          </button>
+          </Button>
         </header>
 
         <div
@@ -286,17 +260,7 @@ function CollageItem({ figure, onOpen }: { figure: Figure; onOpen: () => void })
       {(cap?.tag || cap?.lead || cap?.desc || figure.innerLabel) && (
         <figcaption style={{ marginTop: '0.75rem' }}>
           {cap?.tag && (
-            <div
-              style={{
-                fontSize: '0.6rem',
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: colors.accentBright,
-                marginBottom: '0.35rem',
-              }}
-            >
-              {cap.tag}
-            </div>
+            <Label style={{ marginBottom: '0.35rem' }}>{cap.tag}</Label>
           )}
           {cap?.lead ? (
             <div
@@ -373,25 +337,9 @@ function Lightbox({ figure, onClose }: { figure: Figure; onClose: () => void }) 
           marginBottom: '0.6rem',
         }}
       >
-        <button
-          ref={closeRef}
-          type="button"
-          onClick={onClose}
-          aria-label="Close full-size media"
-          style={{
-            fontFamily: fonts.text,
-            fontSize: '0.7rem',
-            letterSpacing: '0.16em',
-            textTransform: 'uppercase',
-            color: colors.textBody,
-            background: 'none',
-            border: `1px solid ${border.hairlineStronger}`,
-            padding: '0.65rem 0.95rem',
-            cursor: 'pointer',
-          }}
-        >
+        <Button ref={closeRef} variant="outline" size="compact" onClick={onClose} aria-label="Close full-size media">
           Close
-        </button>
+        </Button>
       </div>
       <div
         style={{

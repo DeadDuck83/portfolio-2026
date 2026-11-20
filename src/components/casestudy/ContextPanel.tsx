@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { border, colors, fonts, radius } from '../../theme/tokens';
+import { border, colors, fonts } from '../../theme/tokens';
+import Button from '../../ui/Button';
+import Label from '../../ui/Label';
 
 /** Fixed scatter transforms per chip (rotation + offset), from the reference. */
 const SCATTER = [
@@ -33,16 +35,7 @@ export default function ContextPanel({
 
   return (
     <div style={{ border: `1px solid ${border.hairlineStrong}`, padding: 'clamp(1.4rem, 3vw, 2.2rem)' }}>
-      <div
-        style={{
-          fontSize: '0.62rem',
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: colors.textFaint,
-        }}
-      >
-        {panelLabel}
-      </div>
+      <Label tone="muted">{panelLabel}</Label>
 
       <div
         style={{
@@ -89,25 +82,9 @@ export default function ContextPanel({
           flexWrap: 'wrap',
         }}
       >
-        <button
-          onClick={() => setHerded((h) => !h)}
-          style={{
-            background: 'none',
-            border: `1px solid ${border.accentStrong}`,
-            borderRadius: radius.control,
-            color: colors.accentTint,
-            fontFamily: fonts.text,
-            fontSize: '0.66rem',
-            letterSpacing: '0.16em',
-            textTransform: 'uppercase',
-            padding: '0.6rem 1rem',
-            cursor: 'pointer',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(132,137,69,0.14)')}
-          onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
-        >
+        <Button variant="outline" size="compact" aria-pressed={herded} onClick={() => setHerded((h) => !h)}>
           {herded ? '← Scatter it again' : 'Tidy it up →'}
-        </button>
+        </Button>
         <span
           style={{
             fontFamily: fonts.text,

@@ -39,6 +39,7 @@ export const primitive = {
   olive500: '#848945',
   olive500A14: 'rgba(132,137,69,0.14)',
   olive500A40: 'rgba(132,137,69,0.4)',
+  olive500A45: 'rgba(132,137,69,0.45)',
   olive500A50: 'rgba(132,137,69,0.5)',
   olive500A60: 'rgba(132,137,69,0.6)',
 
@@ -108,6 +109,7 @@ export const border = {
   control: primitive.sand100A15, // outline-button border
   accentSoft: primitive.olive500A40,
   accentMed: primitive.olive500A50,
+  callout: primitive.olive500A45, // the dashed callout's border (TL;DR, Feature this)
   accentStrong: primitive.olive500A60,
   gridBg: primitive.sand100A10,
   gridBgFaint: primitive.sand100A08,

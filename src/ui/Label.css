@@ -1,0 +1,16 @@
+/*
+ * Label (Label.tsx): the small uppercase label for a field, a panel or a short
+ * aside (Role, TL;DR, What I learned, User 01). Taken from the 8 of the 11 hand-built
+ * labels that already matched (0.62rem, 0.18em). Green, or the muted grey: the
+ * fainter grey most of them used failed WCAG AA contrast, so Derek chose this one.
+ * Uses tokens.css variables only.
+ */
+.ui-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent-bright);
+}
+.ui-label--muted {
+  color: var(--color-text-muted);
+}

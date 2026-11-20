@@ -136,7 +136,8 @@ and heavy token use in Figma) come only from the chat and couldn't be checked.
 - **Decision:** log the three missed buttons (ContextPanel toggle, collage open and
   Close, phone Menu) to fix after Storybook. **Why:** Derek: "Log the three missed
   buttons (Tidy it up toggle, collage open and Close, phone Menu) as a gap to fix
-  after Storybook." **Status:** Agreed; logged in gaps.md, and in Prompts K and L.
+  after Storybook." **Status:** Agreed; logged in gaps.md (now in GAPS.md, since
+  2026-11-20), and in Prompts K and L.
 
 ## Storybook (Move 8)
 
@@ -242,7 +243,8 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
 
 - **Decision:** the 11 small uppercase labels become one component with two colours,
   green (`colors.accentBright`, `#9da767`, used by 7 of the 11) and grey
-  (`colors.textFaint`, `#6f6858`, used by 3), at one size and letter spacing chosen the
+  (`colors.textFaint`, `#6f6858`, used by 3; later `colors.textMuted`, for contrast:
+  see "Five promotions"), at one size and letter spacing chosen the
   same way: 0.62rem and 0.18em (8 of the 11). **Why:** Derek: "The small uppercase label
   becomes its own component with two colours, green and grey. Use the green and grey
   most of the 11 labels use, and one size and letter spacing the same way." **Status:**
@@ -255,10 +257,10 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
     0.18em. Stays green.
   - `FlowStrip.tsx:279` (style at `flowStrip.module.css:27`), "Flow 01 / 05": colour
     `#8f8674` (`textMuted`, hard-coded in the CSS) to grey. Size and spacing stay.
-  **Open:** the collage caption tags show the same `caption.tag` data as
+  **Settled:** the collage caption tags show the same `caption.tag` data as
   PlaceholderFigure's figure tags (FIG. A, 01), which the counters decision below leaves
-  alone, but also words (APP, PHOTO, BRAND). They're counted here because they're one of
-  the 11. Derek to confirm.
+  alone, but also words (APP, PHOTO, BRAND). They stay one of the 11 labels. Derek:
+  "I would say their labels."
 - **Decision:** Eyebrow stays as it is (0.68rem, 0.24em, `colors.textMuted`). **Why:**
   Derek: "Eyebrow stays as is; all its uses are valid." The sheet shows all 7 uses (2 in
   the case-study hero, 5 through ChapterHeading) with the same computed style on every
@@ -292,7 +294,16 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   `ImageCollage.tsx:119` and `:385` "open / Close", but both are Close buttons (the
   collage's and the full-size view's), and the open control is `CaseStudy.tsx:246`.
   **Why:** Derek asked for the Wait rows in GAPS.md and the fix in gaps.md. **Status:**
-  Done. Moving gaps.md's entries into GAPS.md is still open.
+  Done.
+- **Decision:** gaps.md's open entries move into GAPS.md, under "Older gaps", updated
+  with the decisions since. The flow viewer's counter becomes the small label, and
+  "Show me the images →" becomes the dashed callout's link. Three line numbers now
+  point at the element instead of its style (`ContextPanel.tsx:92` and `:61`,
+  `SiteHeader.tsx:126`). gaps.md keeps a note at the top saying where they went, with
+  its old text kept below for the case study. **Why:** CLAUDE.md sends every session
+  to the repo's GAPS.md, so gaps outside the repo were invisible to them. Derek: "I
+  think that's fine to update the the gaps MD." **Status:** Done (commit "Five
+  promotions").
 
 ## TextLink (after the component inventory)
 
@@ -392,8 +403,10 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
     looks right."
 - **Found:** `tools/pixdiff.mjs`, which every check since Move 5 has used, leaves out
   pixels that pixelmatch classes as anti-aliasing, so its "exact" isn't every pixel.
-  `aligndiff.mjs` counts every pixel. **Status:** Open: Derek's call whether
-  pixdiff should count them too.
+  `aligndiff.mjs` counts every pixel. **Status:** Left as is for now; a possible
+  later improvement. Derek: "Honestly, I just want to get this working. We can always
+  enhance it later." Moves, resizes and colour changes reach far past edge pixels,
+  and the layout and computed-style checks don't use pixels at all.
 
 ## EmailLink (after TextLink)
 
@@ -468,9 +481,108 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   - Build, 117 tests and lint pass.
   - The stories render without errors, with 0 axe violations, and the Footer
     story's styles match the live footer, dot included.
-- **Open:** the site uses four wordmark sizes (1.6, 1.5, 1.35, 1.3); Prompt L
-  expected two. Whether to settle on fewer is Derek's design call; nothing changed
-  here.
+- **Decision:** the four wordmark sizes stay (1.6, 1.5, 1.35, 1.3), although Prompt L
+  expected two. **Why:** Derek: "4 for word mark is fine." **Status:** Done (no
+  change).
+
+## Five promotions (after Wordmark)
+
+Derek: "Let's promote the 5 that are ready to go now." These are the inventory's
+"promote now" items: the small label, the dashed callout, the accent-rule aside, the
+grid with 1px lines, and the hand-built buttons. The review page is
+`step-13/batch/review.html`.
+
+- **Decision:** the small uppercase label is `src/ui/Label`, with `tone` (`accent`,
+  the green `colors.accentBright`, by default; `muted`, the grey `colors.textMuted`)
+  and `as` (`div` or `span`). Spacing around it stays with the caller. All 11
+  places use it. Seven were 0 px; three change size or spacing as decided under
+  "Component inventory": the decision log's labels, "Image collage" and the
+  caption tags. The flow viewer's counter keeps a `counter` class, so the
+  short-screen rule in flowStrip.module.css can still hide it; its hard-coded
+  colour rule is gone. **Why:** Derek's inventory decision; the names are new.
+  "Label" says what it is, and the JSDoc says it isn't a form `<label>` or an
+  Eyebrow. Eyebrow's JSDoc now points field labels to Label. **Status:** Done (commit
+  "Five promotions").
+- **Decision:** Label's grey is `colors.textMuted` (`#8f8674`, 4.96 to 5.28:1), not
+  the fainter grey most of the labels used (`textFaint`, `#6f6858`). The tone is
+  named `muted` to match (it was briefly `faint`). **Why:** `textFaint` is 3.2 to
+  3.4:1 on the site's backgrounds, under WCAG AA's 4.5:1 for small text, and axe
+  flagged it. The labels that used it were already under AA, and it would have
+  taken the flow counter from 5.28:1 to 3.44:1. Derek: "I'm fine with the gray label
+  updates that you suggest. I have a feeling I'll update the design in the future,
+  but this is just for getting the components completed." **Result:**
+  - Role/Org/Timeline/Scope, the panel label and the decision log's labels are a
+    little lighter.
+  - The flow counter is its original colour again: 0 px against the live site on
+    desktop. On phone the page behind the viewer's 97% background shows through;
+    the counter's own styles are identical.
+  - axe reports 0 violations.
+
+  **Status:** Done (commit "Five promotions").
+- **Decision:** the dashed callout is `src/ui/Callout`, with `label`, `children`
+  (the text) and an optional `link` (`{ label, onClick }`, drawn as an italic accent
+  link but a button, because it opens something on the page). Its border is a new
+  token, `border.callout` (`olive500A45`, the exact colour it had), added the way
+  Move 6 added Button's. The TL;DR box and "Feature this" box use it, both 0 px.
+  "Show me the images →" lost its JavaScript hover for CSS, and on keyboard focus it
+  gets Button's ring, as TextLink's links did. **Why:** Derek: "Dashed callout is
+  one component with an option for with or without a link." **Status:** Done, approved by
+  Derek (below); commit
+  "Five promotions".
+- **Decision:** the accent-rule aside is `src/ui/Aside`, only the frame (the 1px
+  `border.accentMed` rule and 1.4rem padding), rendered as a `div` so a case study
+  doesn't gain a landmark per lesson. The lessons and PLMC's "If I did it again" use
+  it, 0 px. **Why:** Derek: "The accent-rule aside is not a callout; it becomes its
+  own component." **Status:** Done (commit "Five promotions").
+- **Decision:** the grid with 1px lines is `src/ui/CellGrid`, with `min` (the
+  narrowest column before it wraps), `line` (`default` or `faint`) and `as` (`div`
+  or `dl`). Its styles sit in `:where()`, so the About rail's class can set its own
+  two columns and line colour. The meta row, personas, principles, StatBand and the
+  About rail's stats use it, all 0 px. **Why:** the inventory marked it "promote
+  now". **Status:** Done (commit "Five promotions").
+- **Decision:** four hand-built buttons move onto Button's outline compact style, the
+  header Contact's look:
+  - the Tidy it up toggle, which also gains `aria-pressed`;
+  - the image collage's Close;
+  - the full-size view's Close;
+  - the phone Menu.
+
+  Each changes visibly (olive outline, 0.7rem, rounded, eased hover, Button's
+  focus ring). The toggle is 2.2px shorter, so everything below the context panel
+  moves up 2.19px. The full-size image sits 2.4px higher. The phone header is
+  0.59px shorter. **Why:** gaps.md's three missed buttons and the inventory's
+  Close buttons; Prompts K and L planned the same switches. **Status:** Done, approved by
+  Derek (below); commit
+  "Five promotions".
+- **Decision:** the flow viewer's Close isn't promoted. **Why:** it's styled as one
+  set with the ← → arrows beside it (plain-case, 0.95rem, 2.4rem tall), and the
+  arrows wait on an icon-only Button. Moving the Close alone would put two button
+  styles in one bar. **Status:** Waiting, with the arrows, in GAPS.md.
+- **Decision:** a story that renders another documented component declares it in
+  `subcomponents` (CellGrid and Aside declare Label). **Why:** in Storybook 10.6.7
+  the manifest reads only the story's own component's `@import` tag. Other
+  components in a snippet came out as `import { Label } from 'portfolio'`.
+  Declaring them gives their real import and adds their docs to the page.
+  **Status:** Done.
+- **Result:**
+  - Checked against `8f5fc85` (:5174), one place at a time, with
+    `tools/batch-round.sh` and `batch-cmp.sh`: every page in full, the scrolled home
+    header, and `overlay-shots.mjs` (collage, full-size view, flow viewer, tidied
+    panel, open phone menu) on Sage and Bexa.
+  - The control round was 0 px everywhere.
+  - Flakes, each re-shot to 0 px: the About rail's squares on home phone, which
+    settle one of two ways per load; anti-aliasing on home desktop and two desktop
+    overlay shots; Bexa desktop's top.
+  - Layout check by content (`tools/landmarks.mjs`): only the toggle and the phone
+    Menu changed size on any page; everything else stayed or moved up 2.19px below
+    the context panel.
+  - Build, 125 tests and lint pass.
+  - 8 new stories render without errors, and the Callout link test passes. axe
+    shows 0 violations once the grey is `textMuted` (above).
+- **Approval:** Derek saw every before and after on the review page (the Label size
+  and spacing changes, the lighter grey, the callout link's focus ring, the four
+  buttons on Button, and the shifts they cause). Derek: "I like the updates on all
+  of before and after options you provided." **Status:** Approved.
 
 ---
 
@@ -504,8 +616,9 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   about is starting to branch off." **Status:** Agreed 2026-11-19, when Derek asked
   for the build docs to go into the repo; Done in `87c0522`, and the branch was pushed.
   gaps.md stays outside the repo for now; the guide's GAPS.md (Moves 18 to 19) is
-  where it lands. The old DECISIONS.md in the case-study folder was deleted, so this
-  file is the only copy.
+  where it lands. (It landed earlier, on 2026-11-20: see "Component inventory".) The
+  old DECISIONS.md in the case-study folder was deleted, so this file is the only
+  copy.
 - **Decision:** fix the guide where it drifted from what was run: Move 5 stages files
   by name, the "Done when" lines for Moves 6 and 7 point to the approved differences,
   the intro's counts are corrected (223 style blocks; the patterns weren't used),
