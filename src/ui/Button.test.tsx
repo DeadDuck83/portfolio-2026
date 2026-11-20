@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Button from './Button';
 import { buttonClass } from './buttonClass';
-import EmailLink from '../components/EmailLink';
+import EmailLink from './EmailLink';
 
 describe('Button', () => {
   it('renders a link when given href', () => {

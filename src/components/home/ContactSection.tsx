@@ -1,5 +1,5 @@
 import { border, colors, fonts, weights } from '../../theme/tokens';
-import EmailLink from '../EmailLink';
+import EmailLink from '../../ui/EmailLink';
 import Button from '../../ui/Button';
 import { buttonClass } from '../../ui/buttonClass';
 import { CONTACT_EMAIL, RESUME_URL } from '../../data/site';

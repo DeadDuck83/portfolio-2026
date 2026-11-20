@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import TextLink from './TextLink';
 import { textLinkClass } from './textLinkClass';
-import EmailLink from '../components/EmailLink';
+import EmailLink from './EmailLink';
 import MotionToggle from '../components/MotionToggle';
 
 describe('TextLink', () => {

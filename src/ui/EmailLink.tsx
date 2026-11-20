@@ -26,18 +26,7 @@ async function copyEmail() {
   document.body.removeChild(ta);
 }
 
-/**
- * Copies the contact email on click. Label stays selectable so visitors can
- * also highlight and copy manually — avoids inconsistent mailto handlers.
- */
-export default function EmailLink({
-  children,
-  source,
-  onClick,
-  style,
-  plain = true,
-  ...rest
-}: Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & {
+export type EmailLinkProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & {
   children: ReactNode;
   /** where this copy button sits, for the EmailCopied event */
   source: AnalyticsEvents['EmailCopied']['source'];
@@ -47,7 +36,31 @@ export default function EmailLink({
    * these inline styles would override the class.
    */
   plain?: boolean;
-}) {
+};
+
+/**
+ * The site's way to give out the contact email: a button that copies it, never a
+ * mailto link (mail handlers are inconsistent). The label stays selectable, so a
+ * visitor can also highlight and copy it, and "Copied!" shows for 1.6s in the same
+ * space, so the button never changes size. Each use reports EmailCopied with its
+ * `source`.
+ *
+ * Plain by default: it takes the surrounding font and colour, as the hero's "Copy
+ * email" does. To look like a button or a text link, pass `plain={false}` with
+ * `buttonClass()` (the Contact email, the case-study header's Contact) or
+ * `textLinkClass()` (the case footer's Contact). Import EmailLink (a default export)
+ * from src/ui/EmailLink with a relative path; the project has no `src/` alias.
+ *
+ * @import import EmailLink from '../ui/EmailLink';
+ */
+export default function EmailLink({
+  children,
+  source,
+  onClick,
+  style,
+  plain = true,
+  ...rest
+}: EmailLinkProps) {
   const [copied, setCopied] = useState(false);
   const timer = useRef(0);
 

@@ -395,6 +395,45 @@ COMPONENTS.md isn't written yet. "Derek:" below quotes his review.
   `aligndiff.mjs` counts every pixel. **Status:** Open: Derek's call whether
   pixdiff should count them too.
 
+## EmailLink (after TextLink)
+
+- **Decision:** EmailLink moves from `src/components/` to `src/ui/EmailLink.tsx`
+  (a git rename), with a JSDoc saying when to use it and how `plain` works with
+  `buttonClass()` and `textLinkClass()`, an `@import` tag, 4 stories (Plain, As
+  Button, As Text Link, Copied) and 4 tests. Its four uses (hero, Contact section,
+  case-study header, case footer) and the two tests that render it import it from
+  `src/ui/`. **Why:** Derek: "promote EmailLink the same way." **Status:** Done;
+  Derek: "looks good to me." Not committed yet.
+- **Decision:** its code stays as it was, including the inline plain-text reset;
+  only the props type got a name (`EmailLinkProps`). **Why:** the hero's "Copy
+  email" depends on that reset winning over classes. Its font size comes from the
+  parent, because the inline `font: inherit` beats `.hx__link`'s 0.95rem. Its colour
+  is set on `.hx__links` for the same reason, and its hover needs `!important`.
+  Moving the reset into a CSS class would change the hero. Button and TextLink
+  already style EmailLink through `plain={false}`. **Status:** Done.
+- **Decision:** the stories import `buttonClass` and `textLinkClass` as
+  `'../ui/…'`. **Why:** the docs manifest copies a story file's imports into every
+  snippet, and `'./buttonClass'` only works inside `src/ui/`; `'../ui/…'` matches
+  the `@import` tags. **Status:** Done.
+- **Result:**
+  - Switched one place at a time against `7368b1b` (:5174), with
+    `tools/switch-check.sh`. Each round compared every page (home, Sage, Gallery,
+    the gallery piece, desktop and phone, now captured in full), the footers on
+    their own, and each EmailLink at rest, on hover, after hover and on focus,
+    plus its computed styles.
+  - Every place was 0 px, with no computed-style differences. The hero's "Copy
+    email" has no phone states: it isn't shown at phone width.
+  - The final round, with the old path gone, was 0 px on every page. Home desktop's
+    decorative grid drew one of its two ways in some rounds (501 px).
+  - Build, 115 tests and lint pass.
+  - The stories render without errors and the Copied play test passes. On the
+    site, the header Contact stays 99.06px wide when it changes to "Email copied".
+  - axe flags `label-content-name-mismatch` (WCAG 2.5.3) on every EmailLink story:
+    the name is always "Copy" plus the address, whatever the button says. It was
+    already on the site. **Status:** Left as is. Derek: "thats fine, it might be
+    overkill anyway." It stays in GAPS.md as a known exception to the WCAG 2.2 AA
+    bar under "Scope and governance".
+
 ---
 
 ## Scope and governance (from the chat about the guide)

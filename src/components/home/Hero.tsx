@@ -23,7 +23,7 @@ import { work, type WorkItem } from '../../data/work';
 import { RESUME_URL } from '../../data/site';
 import { noteCaseStudySource, projectIdFromPath, track } from '../../lib/analytics';
 import { motionOff, useMotionOff } from '../../lib/motion';
-import EmailLink from '../EmailLink';
+import EmailLink from '../../ui/EmailLink';
 import Button from '../../ui/Button';
 import HeroAvatar from '../avatar/HeroAvatar';
 // PixelCameo (the camera that brings out pixel Derek) is off for this
